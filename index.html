@@ -138,6 +138,47 @@ textarea{min-height:84px;resize:vertical}
 .search svg{width:18px;height:18px;flex:none;color:var(--sub)}
 .search input{border:0!important;padding:12px 0!important;background:none!important;outline:none}
 .clamp1{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+
+.trace{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+.trace.mine{border-color:var(--accent);background:var(--accent-soft)}
+.trace.held{border-style:dashed;opacity:.85}
+.tr-h{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--sub)}.tr-h b{color:var(--fg);font-size:13px}
+.tr-l{margin:0;font-size:15px;line-height:1.5}
+.tr-b{font-size:14px;background:var(--sunk);border-radius:10px;padding:8px 10px;line-height:1.45}.tr-bt{display:block;font-size:11.5px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.tr-res{font-size:12.5px;color:var(--fg);background:var(--accent-soft);border-radius:8px;padding:6px 9px}.tr-res.lock{background:transparent;color:var(--faint);padding:0}
+.tr-held{font-size:12.5px;color:var(--sub)}
+.tr-f{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rx{border:1px solid var(--line);background:transparent;color:var(--sub);border-radius:999px;padding:4px 10px;font-size:12.5px;font-family:inherit}.rx.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:700}.rx:disabled{opacity:.6}
+.linkbtn{border:0;background:none;color:var(--accent);font:inherit;font-size:13px;padding:2px 0;cursor:pointer}.linkbtn.faint{color:var(--faint);margin-left:auto;font-size:12px}
+.dist{display:flex;gap:4px;align-items:flex-end;height:64px;padding-top:6px}.dcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}.dcol i{display:block;width:100%;max-width:22px;background:var(--line);border-radius:4px 4px 2px 2px}.dcol span{font-size:10px;color:var(--faint)}.dcol.me i{background:var(--accent)}.dcol.me span{color:var(--accent);font-weight:700}
+.mark{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.mark img{width:74px;border-radius:6px;flex:none;border:1px solid var(--line)}.mark-t{margin:0;font-size:15px;line-height:1.5}
+.mwrap{border-radius:12px;overflow:hidden;border:1px solid var(--line);touch-action:none;background:#000}.mwrap canvas{display:block;width:100%;touch-action:none}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1b1d24;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+
+.tlrow{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;scroll-snap-type:x mandatory;scrollbar-width:none}.tlrow::-webkit-scrollbar{display:none}
+.tlc{position:relative;flex:none;width:126px;aspect-ratio:9/16;border:0;border-radius:14px;overflow:hidden;padding:0;scroll-snap-align:start;background:#222;text-align:left;color:#fff;font:inherit;cursor:pointer}
+.tlc-art,.tlc-art svg{position:absolute;inset:0;width:100%;height:100%}
+.tlc-sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.78))}
+.tlc-tag{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px}
+.tlc-t{position:absolute;left:10px;right:10px;bottom:10px;display:flex;flex-direction:column;gap:3px}.tlc-t b{font-size:13px;line-height:1.35}
+.tl{position:fixed;inset:0;z-index:40;background:#111;color:#fff;overflow:hidden;display:flex;flex-direction:column;user-select:none;-webkit-user-select:none}
+.tl-art{position:absolute;inset:-6%;animation:kb 16s ease-in-out infinite alternate}.tl-art svg{width:100%;height:100%}
+@keyframes kb{from{transform:scale(1) translateY(0)}to{transform:scale(1.12) translateY(-2%)}}
+.tl.quiet .tl-art{animation:none;filter:grayscale(.6) brightness(.7)}
+.tl-sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.15) 30%,rgba(0,0,0,.25) 55%,rgba(0,0,0,.85))}
+.tl-top{position:relative;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 0;display:flex;flex-direction:column;gap:10px}
+.tl-bar{display:flex;gap:4px}.tl-bar span{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}.tl-bar i{display:block;height:100%;width:0;background:#fff}
+.tl-x{border:0;background:none;color:#fff;font:inherit;font-size:15px;padding:4px 0;cursor:pointer}
+.tl-caps{position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:0 34px}
+.tl-cap{position:absolute;left:34px;right:34px;margin:0;text-align:center;font-size:24px;font-weight:700;line-height:1.45;text-shadow:0 2px 12px rgba(0,0,0,.6);opacity:0;transform:translateY(12px);transition:opacity .5s,transform .5s}.tl-cap.on{opacity:1;transform:none}
+.tl.quiet .tl-cap{font-weight:500;font-size:21px}
+.tl-pz{position:absolute;top:66%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);padding:8px 14px;border-radius:999px;font-size:13px}
+.tl-side{position:absolute;right:12px;bottom:calc(200px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
+.tl-side button{border:0;background:none;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;font:inherit;font-size:10.5px;cursor:pointer}.tl-side i{font-style:normal;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}.tl-side button.on i{background:#e2556b}
+.tl-bot{position:relative;padding:0 20px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}.tl-bot b{font-size:21px}.tl-bot>span{font-size:12.5px;opacity:.85}
+.tl.end{background:#12131a}.tl-endin{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 24px}.tl-endin .btn{max-width:340px}.tl-q{opacity:.85;text-align:center}
+.tl-sec{background:transparent!important;color:#fff!important;border-color:rgba(255,255,255,.4)!important}
+.tl.end .tl-x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:16px}
 .banner{border:0;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;text-align:left;background:linear-gradient(120deg,var(--accent),#6a4fd6);color:#fff;width:100%}
 .banner .covers{display:flex;flex:none}
 .banner .covers>*{margin-left:-14px;box-shadow:0 4px 10px rgba(0,0,0,.25)}
@@ -194,6 +235,7 @@ textarea{min-height:84px;resize:vertical}
 
 <div id="app"></div>
 <input id="coverfile" type="file" accept="image/*" hidden>
+<input id="markfile" type="file" accept="image/*" capture="environment" hidden>
 
 <script>
 (function(){
@@ -329,14 +371,14 @@ const BADGES=[
 
 /* ---------- 상태 ---------- */
 const KEY='chaekbeot-demo-v1';
-const fresh=()=>({onboarded:false,user:{name:'',grade:'중1',guardian:false,guardianPhone:'',shareQuote:false},dayOffset:0,goal:10,goalSet:false,focusDefault:false,speed:false,books:{},sessions:[],badges:{},title:'',reviews:0,timer:null,lastBook:null,covers:{}});
+const fresh=()=>({onboarded:false,user:{nick:makeNick(),name:'',grade:'중1',guardian:false,guardianPhone:'',shareQuote:false},dayOffset:0,goal:10,goalSet:false,focusDefault:false,speed:false,books:{},sessions:[],badges:{},title:'',reviews:0,timer:null,lastBook:null,covers:{},traces:[],reacts:{},reported:{},marks:[],wish:[],tlDay:null});
 let S=load();
 function migrate(o){const idOf={};BOOKS.forEach(b=>{idOf[tkey(b.title)]=b.id;});const map=id=>{if(!/^c\d+$/.test(id))return BOOKS.some(b=>b.id===id)?id:null;const r=OLDCAT[+id.slice(1)];return r?idOf[tkey(r[1])]||null:null;};
  const nb={};Object.keys(o.books||{}).forEach(id=>{const n=map(id);if(n)nb[n]=o.books[id];});o.books=nb;
  const nc={};Object.keys(o.covers||{}).forEach(id=>{const n=map(id);if(n)nc[n]=o.covers[id];});o.covers=nc;
  o.sessions=(o.sessions||[]).map(x=>x.book?Object.assign({},x,{book:map(x.book)}):x);
  if(o.timer&&o.timer.book)o.timer.book=map(o.timer.book);if(o.lastBook)o.lastBook=map(o.lastBook);}
-function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&typeof v==='object'){const o=Object.assign(fresh(),v);o.covers=o.covers||{};migrate(o);return o;}}catch(e){}return fresh();}
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&typeof v==='object'){const o=Object.assign(fresh(),v);o.covers=o.covers||{};migrate(o);if(!o.user.nick)o.user.nick=makeNick();return o;}}catch(e){}return fresh();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
 /* ---------- 유틸 ---------- */
@@ -376,7 +418,7 @@ function notifyBadges(){const g=checkBadges();if(g.length){ui.badgeQ=(ui.badgeQ|
 let stack=[];let route={n:'home'};let sheet=null;let ui={};
 function go(n,p){stack.push(route);route=Object.assign({n},p||{});sheet=null;render();window.scrollTo(0,0);}
 function tab(n){stack=[];route={n};sheet=null;render();window.scrollTo(0,0);}
-function back(){route=stack.pop()||{n:'home'};sheet=null;render();}
+function back(){if(route.n==='mark'){ui.mstep=null;ui.mcancel=true;}if(route.n==='trailer'){stopTl();ui.tlPause=false;}route=stack.pop()||{n:'home'};sheet=null;render();}
 function replace(n,p){route=Object.assign({n},p||{});sheet=null;render();window.scrollTo(0,0);}
 
 /* ---------- 아이콘 ---------- */
@@ -400,14 +442,14 @@ function cardNo(b){return BOOKS.filter(x=>x.card).indexOf(b)+1;}
 function cardFront(b,size){const q=b.card.quiet;const big=size==='big';
  return `<div class="cf ${q?'quiet':''}" style="--ink:${b.ink};--cbg:${q?'#d9d9dc':b.cardBg}"><div class="cf-top"><span>${q?'기억 카드':'책 카드'}</span><span>No.${String(cardNo(b)).padStart(2,'0')}</span></div><div class="cf-art">${scene(b,'100%','100%')}</div><div class="cf-name serif">${esc(b.card.name)}</div><div class="cf-sub">${esc(b.title)}</div><div class="cf-title">칭호 · ${esc(b.card.title)}</div>${big?'<div class="shine"></div>':''}</div>`;}
 function cardBack(b){const st=bs(b.id);const r=st.review||{};const q=b.card.quiet;
- return `<div class="cb" style="--ink:${b.ink};--cbg:${q?'#d9d9dc':b.cardBg}"><div class="cf-top"><span>뒷면</span><span>${st.cardDate?fmtDate(st.cardDate)+' 받음':''}</span></div><div class="cb-body"><span class="cb-l">나의 한 줄</span><p class="serif cb-q">${r.line?'"'+esc(r.line)+'"':'아직 없어요'}</p><span class="cb-l">나의 장면</span><p class="cb-s">${r.scene!=null?esc(b.scenes[r.scene]):'고르지 않았어요. 떠들기에서 고르면 새겨져요'}</p></div><div class="cf-sub">${esc(b.title)} · ${esc(b.author)}</div><div class="cf-title">칭호 · ${esc(b.card.title)}</div></div>`;}
+ return `<div class="cb" style="--ink:${b.ink};--cbg:${q?'#d9d9dc':b.cardBg}"><div class="cf-top"><span>뒷면</span><span>${st.cardDate?fmtDate(st.cardDate)+' 받음':''}</span></div><div class="cb-body"><span class="cb-l">나의 한 줄</span><p class="serif cb-q">${r.line?'"'+esc(r.line)+'"':'아직 없어요'}</p><span class="cb-l">나의 장면</span><p class="cb-s">${(()=>{const mk=r.mark&&S.marks.find(m=>m.id===r.mark);return (r.scene!=null?esc(b.scenes[r.scene]):'')+(mk?`${r.scene!=null?'<br>':''}<span class="serif">"${esc(mk.text.length>70?mk.text.slice(0,70)+'…':mk.text)}"</span>${mk.page?' · '+mk.page+'쪽':''}`:'')||'고르지 않았어요. 떠들기에서 고르면 새겨져요';})()}</p></div><div class="cf-sub">${esc(b.title)} · ${esc(b.author)}</div><div class="cf-title">칭호 · ${esc(b.card.title)}</div></div>`;}
 function bookCard(b,big){if(!b.card)return '';const st=bs(b.id);
  if(!st.cardGot)return `<div class="bookcard locked"><b style="font-size:20px">?</b><span class="tiny">${esc(b.title)}</span><span class="tiny">다 읽으면 열려요</span></div>`;
  return `<button class="cardbtn" data-a="cardview" data-v="${b.id}" aria-label="${esc(b.card.name)} 카드 크게 보기">${cardFront(b,'small')}</button>`;}
 function flipCard(b,flipped,anim){return `<div class="flip ${anim||''}" data-a="flip"><div class="flip-in ${flipped?'flipped':''}"><div class="face">${cardFront(b,'big')}</div><div class="face back">${cardBack(b)}</div></div></div>`;}
 
 function coverBtns(b){return `<div class="row" style="gap:12px"><button class="btn ghost" style="font-size:12.5px;padding:2px 0" data-a="coverpick" data-v="${b.id}">${S.covers&&S.covers[b.id]?'표지 사진 바꾸기':'내 책 표지 사진 넣기'}</button>${S.covers&&S.covers[b.id]?`<button class="btn ghost" style="font-size:12.5px;padding:2px 0;color:var(--sub)" data-a="coverdel" data-v="${b.id}">원래대로</button>`:''}</div>`;}
-function bookRow(b){const st=bs(b.id);const lab=st.status==='reading'?'<span class="pill">읽는 중</span>':st.status==='done'?'<span class="pill good">다 읽음</span>':'';const who=[b.author,b.pub].filter(Boolean).join(' · ');const meta=[b.lv?'Lv.'+b.lv:'',b.genre,b.topic&&b.topic!=='기타'?b.topic:'',b.adult?'성인':gradeRange(b.grades)].filter(Boolean).join(' · ');return `<button class="li" data-a="book" data-v="${b.id}">${cover(b,50,72)}<div class="col grow"><b class="serif" style="font-size:16px">${esc(b.title)}</b>${who?`<span class="small">${esc(who)}</span>`:b.desc?`<span class="small clamp1">${esc(b.desc)}</span>`:''}<span class="tiny">${meta}${b.places>1?' · '+b.places+'곳 추천':''}${Object.keys(b.contents).length?' · <b class="acc">콘텐츠 있음</b>':''}</span></div>${lab}</button>`;}
+function bookRow(b){const st=bs(b.id);const lab=st.status==='reading'?'<span class="pill">읽는 중</span>':st.status==='done'?'<span class="pill good">다 읽음</span>':'';const who=[b.author,b.pub].filter(Boolean).join(' · ');const meta=[b.lv?'Lv.'+b.lv:'',b.genre,b.topic&&b.topic!=='기타'?b.topic:'',b.adult?'성인':gradeRange(b.grades)].filter(Boolean).join(' · ');return `<button class="li" data-a="book" data-v="${b.id}">${cover(b,50,72)}<div class="col grow"><b class="serif" style="font-size:16px">${esc(b.title)}</b>${who?`<span class="small">${esc(who)}</span>`:b.desc?`<span class="small clamp1">${esc(b.desc)}</span>`:''}<span class="tiny">${meta}${b.places>1?' · '+b.places+'곳 추천':''}${Object.keys(b.contents).length?' · <b class="acc">콘텐츠 있음</b>':''}${isFocus(b)?' · <b class="acc">함께 읽기</b>':''}</span></div>${lab}</button>`;}
 function moreBtn(act,shown,total){return shown<total?`<button class="btn ghost" style="margin-top:4px" data-a="${act}">더 보기 (${shown} / ${total}권)</button>`:'';}
 function norm(t){return String(t).toLowerCase().replace(/[\s,·.:!?]/g,'');}
 function searchResults(){const q=norm(ui.q||'');if(!q)return '';const r=BOOKS.filter(b=>norm(b.title+b.author+b.pub+b.topic).includes(q)).sort((a,c)=>(norm(c.title).startsWith(q)?1:0)-(norm(a.title).startsWith(q)?1:0)||(a.listOnly?1:0)-(c.listOnly?1:0)||byPop(a,c));const n=ui.qn||30;
@@ -428,6 +470,9 @@ function render(){
  const modal=sheet&&MODALS[sheet.n];
  app.innerHTML=h+(sheet?(modal?`<div class="modal-wrap" role="dialog" aria-modal="true">${MODALS[sheet.n]()}</div>`:`<div class="sheet-wrap" data-a="sheetbg"><div class="sheet" role="dialog" aria-modal="true">${SHEETS[sheet.n]()}</div></div>`):'');
  if(route.n==='timer')tick();
+ if(route.n==='trailer')startTl();else stopTl();
+ if(route.n==='mark'&&(ui.mstep||'paint')==='paint')setupMark();
+ if(ui.toast){const tt=document.createElement('div');tt.className='toast';tt.textContent=ui.toast;document.body.appendChild(tt);ui.toast=null;setTimeout(()=>tt.remove(),2200);}
  if(sheet&&sheet.n==='badgeview')fx('burst');
 }
 
@@ -454,19 +499,33 @@ const VIEWS={
     <button class="btn" data-a="timerstart" data-v="${main.id}">이어서 읽기 (타이머) <span class="tag" style="background:rgba(255,255,255,.25);color:inherit">MVP 이후</span></button>
     <div class="btns"><button class="btn sec" data-a="checkin" data-v="${main.id}">읽은 곳 체크인</button><button class="btn sec" data-a="pagesheet" data-v="${main.id}">쪽만 기록</button></div></div>`;
    if(others.length)h+=`<p class="h3" style="margin:4px 0 0">함께 읽는 책 ${others.length}권</p>`+others.map(b=>{const s2=bs(b.id);return `<button class="card row" style="text-align:left" data-a="book" data-v="${b.id}">${cover(b,38,54)}<div class="col grow"><b>${esc(b.title)}</b><span class="small num">${s2.chapter} / ${b.chapters.length}장</span><div class="track" style="height:5px"><i style="width:${s2.chapter/b.chapters.length*100}%"></i></div></div><span class="sub">›</span></button>`;}).join('');}
+  {const ws=S.wish.map(id=>B(id)).filter(b=>b&&bs(b.id).status==='none');if(ws.length)h+=`<p class="h3" style="margin:4px 0 0">보고 싶어요 ${ws.length}권</p><div class="card" style="padding-block:4px"><div class="list">${ws.map(bookRow).join('')}</div></div>`;}
   h+=`<button class="card row" style="justify-content:center;border-style:dashed;color:var(--sub)" data-a="tab" data-v="books">+ 다음에 읽을 책 찾기</button>`;
   if(S.timer)h=`<button class="card soft row" data-a="go" data-v="timer"><b class="grow acc">읽는 중 · 타이머가 돌아가고 있어요</b><span class="acc">›</span></button>`+h;
   return shell('홈',h);},
 
  books(){const f=ui.bookFilter||'mine';const g=S.user.grade;const kg=g==='성인'?'중3':g;
-  const row=bookRow;const poc=BOOKS.filter(b=>!b.listOnly);const pocMine=poc.filter(b=>b.grades.includes(g));const pocOthers=poc.filter(b=>!b.grades.includes(g)&&!(b.adult&&g!=='성인'));const pop=BOOKS.filter(b=>b.listOnly&&b.grades.includes(kg)).sort(byPop);
+  const row=bookRow;const poc=BOOKS.filter(b=>!b.listOnly&&!(b.adult&&g!=='성인'));const pop=BOOKS.filter(b=>b.listOnly&&b.grades.includes(kg)).sort(byPop);
   const bc=pop.slice(0,3);const total=BOOKS.filter(b=>!b.adult).length;
   let h=`<label class="search" for="q">${IC.books}<input id="q" type="search" placeholder="책 제목, 지은이, 갈래로 찾기" value="${esc(ui.q||'')}" autocomplete="off"></label><div id="results">${searchResults()}</div><div id="browse" ${ui.q?'hidden':''}>
-   <div class="col" style="gap:14px"><button class="banner" data-a="go" data-v="gradelist"><div class="covers">${bc.map(b=>cover(b,40,56)).join('')}</div><div class="col grow" style="gap:2px"><b style="font-size:16px">학년별 추천 도서</b><span style="font-size:12.5px;opacity:.9">초5부터 중3까지 ${total}권 · 난이도별로 골라 보기</span></div><span style="font-size:20px">›</span></button>
-   <div class="seg"><button class="${f==='mine'?'on':''}" data-a="bf" data-v="mine">나를 위한 추천</button><button class="${f==='all'?'on':''}" data-a="bf" data-v="all">전체</button></div>`;
-  if(f==='mine'){const top=pop.slice(0,12);h+=(pocMine.length?`<p class="h3" style="margin:0">콘텐츠가 있는 책</p><div class="card" style="padding-block:4px"><div class="list">${pocMine.map(row).join('')}</div></div>`:'')+`<div class="row between" style="margin-top:4px"><p class="h3" style="margin:0">${esc(kg)} 학생이 많이 읽는 책</p><button class="btn ghost" style="width:auto;font-size:13px;padding:6px 10px" data-a="go" data-v="gradelist">전체 ${pop.length}권 ›</button></div><div class="card" style="padding-block:4px"><div class="list">${top.map(row).join('')}</div></div>`+(pocOthers.length?`<p class="h3" style="margin:6px 0 0">콘텐츠가 있는 다른 책</p><div class="card" style="padding-block:4px"><div class="list">${pocOthers.map(row).join('')}</div></div>`:'');}
+   <div class="col" style="gap:16px"><div class="seg"><button class="${f==='mine'?'on':''}" data-a="bf" data-v="mine">나를 위한 추천</button><button class="${f==='all'?'on':''}" data-a="bf" data-v="all">전체</button></div>`;
+  if(f==='mine'){const tl=trailerList();const fb=focusFor(lvlOf(g));const rec=[...fb,...poc.filter(b=>b.grades.includes(g)),...poc.filter(b=>!b.grades.includes(g))].filter((b,i,a)=>a.indexOf(b)===i);const nr=nextReads(kg);
+   h+=(tl.length?`<div class="col" style="gap:8px"><div class="row between"><p class="h3" style="margin:0">예고편</p><span class="tiny">누르면 세로로 넘겨 봐요</span></div><div class="tlrow">${tl.map((b,i)=>tlCard(b,i)).join('')}</div></div>`:'')
+    +`<div class="col" style="gap:2px"><p class="h3" style="margin:0">추천 도서</p><span class="small">${esc(lvlOf(g))} 친구들이 같이 읽는 책과 콘텐츠가 있는 책</span></div><div class="card" style="padding-block:4px"><div class="list">${rec.map(row).join('')}</div></div>`
+    +`<button class="banner" data-a="go" data-v="gradelist"><div class="covers">${bc.map(b=>cover(b,40,56)).join('')}</div><div class="col grow" style="gap:2px"><b style="font-size:16px">학년별 추천 도서</b><span style="font-size:12.5px;opacity:.9">초5부터 중3까지 ${total}권 · 난이도별로 골라 보기</span></div><span style="font-size:20px">›</span></button>`
+    +`<div class="col" style="gap:2px"><p class="h3" style="margin:0">이어 읽기 좋은 책</p><span class="small">${esc(nr.why)}</span></div><div class="card" style="padding-block:4px"><div class="list">${nr.list.map(row).join('')}</div></div>`;}
   else{const all=poc.concat(BOOKS.filter(b=>b.listOnly).sort((a,c)=>a.title.localeCompare(c.title,'ko')));const n=ui.an||30;h+=`<p class="small" style="margin:0">가나다순 · 전체 ${all.length}권</p><div class="card" style="padding-block:4px"><div class="list">${all.slice(0,n).map(row).join('')}</div></div>${moreBtn('amore',Math.min(n,all.length),all.length)}<p class="tiny">콘텐츠가 있는 책은 3권(예시)이에요. 나머지는 추천 목록 데이터(534권)로 읽은 기록만 남아요.</p>`;}
   return shell('책 찾기',h+'</div></div>');},
+
+ trailer(){const b=B(ui.tlList[route.i]);const L=TRAILER[b.title];const q=b.card&&b.card.quiet;const w=S.wish.includes(b.id);const c=cohort(b);
+  const meta=[b.author,b.genre,b.lv?'Lv.'+b.lv:'',c.n?`${lvlOf(S.user.grade)} 동기 ${c.n}명`:''].filter(Boolean).join(' · ');
+  if(ui.tlEnd)return `<div class="tl end ${q?'quiet':''}"><button class="tl-x" data-a="back">× 닫기</button><div class="tl-endin">${ui.tlLimit?`<b class="h2" style="color:#fff">오늘의 예고편은 여기까지</b><span style="opacity:.8;text-align:center">하루 ${TL_MAX}개까지 볼 수 있어요. 마음에 든 책을 골라 읽어 볼까요?</span><button class="btn" data-a="back">책 찾기로</button>`:`${cover(b,120,170)}<b class="h2" style="color:#fff">${esc(b.title)}</b><span class="tl-q">${esc(L[L.length-1])}</span>
+   <button class="btn" data-a="tlbook" data-v="${b.id}">이 책 읽기 시작</button>${ui.tlOut?'<span style="opacity:.75">예고편을 모두 봤어요</span>':`<button class="btn sec tl-sec" data-a="tlnext">다음 예고편 (${Math.min(tlCount()+1,TL_MAX)} / ${TL_MAX})</button>`}<button class="linkbtn" style="color:#cfd3ff" data-a="wish" data-v="${b.id}">${w?'보고 싶어요에 담았어요':'보고 싶어요에 담기'}</button>`}</div></div>`;
+  return `<div class="tl ${q?'quiet':''}" data-a="tlpause"><div class="tl-art">${scene(b,375,812)}</div><div class="tl-sh"></div>
+   <div class="tl-top"><div class="tl-bar">${L.map(()=>'<span><i></i></span>').join('')}</div><div class="row between"><button class="tl-x" data-a="back">× 닫기</button><span class="tiny" style="color:#ddd">소리 꺼짐 · 자막</span></div></div>
+   <div class="tl-caps">${L.map((t,j)=>`<p class="tl-cap ${j===0?'on':''}">${esc(t)}</p>`).join('')}</div><div class="tl-pz" hidden>일시정지 · 다시 누르면 이어서</div>
+   <div class="tl-side"><button data-a="wish" data-v="${b.id}" class="${w?'on':''}"><i>${w?'♥':'♡'}</i><span>보고 싶어요</span></button><button data-a="tlinfo" data-v="${b.id}"><i>i</i><span>책 정보</span></button></div>
+   <div class="tl-bot"><b>${esc(b.title)}</b><span>${esc(meta)}</span><button class="btn" data-a="tlbook" data-v="${b.id}">이 책 읽기 시작</button><span class="tiny" style="color:#bbb;text-align:center">위로 넘기면 다음 예고편 · ${route.i+1} / ${ui.tlList.length}</span></div></div>`;},
 
  gradelist(){const g=ui.gl||(GRADES.slice(0,5).includes(S.user.grade)?S.user.grade:'중1');const lv=ui.glv||0;const ty=ui.gty||'all';const so=ui.gso||'pop';
   let list=BOOKS.filter(b=>b.grades.includes(g)&&!b.adult);const base=list.length;
@@ -484,6 +543,7 @@ const VIEWS={
   if(st.status==='none'){const gd=ui.goalDays||(b.pages>300?21:b.pages>200?14:10);
    return shell('책 정보',`<div class="row" style="align-items:flex-start">${cover(b,84,120)}<div class="col grow"><b class="h2 serif">${esc(b.title)}</b>${(b.author||b.pub)?`<span class="small">${esc([b.author,b.pub].filter(Boolean).join(' · '))}</span>`:''}<span class="small">${b.genre}${b.topic&&b.topic!=='기타'?' · '+b.topic:''} · ${b.adult?'성인':gradeRange(b.grades)} · ${b.chapters.length}장 · ${b.pages}쪽(예시)</span>${b.lv?`<div class="row" style="gap:6px;flex-wrap:wrap"><span class="pill">난이도 Lv.${b.lv}</span>${b.places>1?`<span class="pill">${b.places}곳에서 추천</span>`:''}</div>`:''}${coverBtns(b)}</div></div>
     <div class="card"><b class="h3">${b.listOnly?'이 책은요':'이런 이야기예요'}</b><p style="margin:0">${esc(b.intro)}</p>${!b.listOnly&&b.desc?`<span class="small">추천 리스트 평: ${esc(b.desc)}</span>`:''}</div>
+    ${isFocus(b)?`<div class="card soft"><b class="acc">함께 읽기 책</b><span class="small">PoC 기간에 ${esc(lvlOf(S.user.grade))} 친구들이 같이 읽는 책이에요. 체크인할 때마다 친구들의 흔적과 떡밥이 열려요.</span></div>`:''}${cohortCard(b,0)}
     ${b.missions.length?`<div class="card soft"><b class="h3 acc">이 책의 미션 ${b.missions.length}개</b>${b.missions.map(m=>`<div class="col" style="gap:0"><b>${esc(m.name)}</b><span class="small">${esc(m.desc)}</span></div>`).join('')}</div>`:`<div class="note">${b.adult?'이 책은 콘텐츠 · 미션 · 카드 없이 읽은 기록만 남아요 (성인 확장 시험).':'추천 목록 책이에요. 아직 콘텐츠 · 미션 · 카드가 없어서 체크인과 기록만 남아요.'}</div>`}
     <div class="card"><b class="h3">언제까지 다 읽어 볼까요?</b><div class="chips">${[7,10,14,21,30].map(d=>`<button class="chip ${gd===d?'on':''}" data-a="gd" data-v="${d}">${d}일</button>`).join('')}</div><span class="small">완독 목표일 ${fmtDate(addDays(dk(),gd))}. 하루 분량은 정하지 않아요.</span></div>
     <button class="btn" data-a="startbook" data-v="${b.id}">이 책 읽기 시작</button>`,{back:true,tabs:false});}
@@ -495,6 +555,8 @@ const VIEWS={
    h+=oc.length?`<div class="cards" style="grid-template-columns:repeat(2,1fr)">${oc.map(x=>`<button class="card plain" style="text-align:left;gap:4px" data-a="content" data-v="${b.id}" data-w="${x.key}"><span class="tiny">${esc(b.chapters[x.ch-1])}${st.contents.includes(x.key)?' · 봤어요':''}</span><b>${esc(x.title)}</b><span class="small">${esc(x.sub)}</span></button>`).join('')}</div>`:`<p class="small" style="margin:0">첫 장을 체크인하면 콘텐츠가 열려요.</p>`;
    if(next)h+=`<div class="card row" style="border-style:dashed"><span class="small grow">${esc(b.chapters[next.ch-1])}까지 체크인하면 「${esc(next.title)}」이 열려요</span></div>`;}
   else h+=`<div class="note">콘텐츠가 없는 책이에요. 체크인과 기록만 남아요.</div>`;
+  {const tv=visibleTraces(b,st.chapter).vis.filter(t=>!t.mine).length;const mn=S.traces.filter(t=>t.book===b.id).length;h+=cohortCard(b,st.chapter,true)+`<button class="card row" style="text-align:left" data-a="go" data-v="traces" data-w="${b.id}"><div class="col grow" style="gap:0"><b>흔적 · 떡밥</b><span class="small">읽은 곳까지 친구 흔적 ${tv}개 · 내 흔적 ${mn}개</span></div><span class="sub">›</span></button>`;
+   const ms=marksOf(b.id);h+=`<div class="row between"><b class="h3">책갈피 ${ms.length}</b><span class="tiny">나만 봐요</span></div>`+(ms.length?ms.slice(-3).map(m=>markCard(m)).join('')+(ms.length>3?`<button class="linkbtn" data-a="go" data-v="marks">책갈피 전체 보기 ›</button>`:''):'')+markBtn(b.id);}
   if(st.status==='reading')h+=`<button class="btn" data-a="timerstart" data-v="${b.id}">이어서 읽기 (타이머)</button><button class="btn sec" data-a="checkin" data-v="${b.id}">읽은 곳 체크인</button>`;
   else if(st.status==='done'&&!st.confirmed)h+=`<button class="btn" data-a="go" data-v="review" data-w="${b.id}">한 줄 감상 남기고 ${b.card?'카드 받기':'완독 확인하기'}</button>`;
   return shell(esc(b.title),h,{back:true,tabs:false});},
@@ -510,7 +572,7 @@ const VIEWS={
    <div class="chips">${b.chapters.map((c,i)=>{const n=i+1;const dis=n<=st.chapter;return `<button class="chip ${sel===n?'on':''}" data-a="ckch" data-v="${n}" ${dis?'disabled style="opacity:.35"':''}>${esc(c)}</button>`;}).join('')}</div>
    ${sel===tot?'<div class="card soft"><b class="acc">마지막 장이에요. 체크인하면 완독으로 표시돼요.</b></div>':''}
    <div class="col"><label class="small" for="ckp">마지막으로 읽은 쪽 (선택)</label><input id="ckp" type="number" inputmode="numeric" placeholder="${b.pageEnds[sel-1]}"></div>
-   <div class="col"><label class="small" for="ckn">한 줄 소감 (선택)</label><input id="ckn" type="text" maxlength="60" placeholder="떠오른 키워드나 한 줄"></div>
+   <div class="note">체크인하면 같은 곳을 지난 친구들의 흔적이 열리고, 내 흔적과 떡밥을 남길 수 있어요.</div>
    <button class="btn" data-a="cksave" data-v="${b.id}">체크인</button>`,{back:true,tabs:false});},
 
  quiz(){const b=B(route.id);const qs=b.quiz[route.ch]||[];const i=route.i||0;const q=qs[i];const pick=ui.qpick;const shown=ui.qshown;
@@ -522,7 +584,11 @@ const VIEWS={
  ckdone(){const b=B(route.id);const st=bs(b.id);const opened=allContents(b).filter(x=>x.ch>route.from&&x.ch<=st.chapter);const last=st.chapter===b.chapters.length;
   return shell('체크인 완료',`<div class="card soft" style="align-items:flex-start"><span class="pill">${esc(b.chapters[st.chapter-1])}까지</span><b class="h2">${last?'마지막 장까지 읽었어요':'잘 읽고 있어요'}</b><span class="small">연속 ${streak()}일째 기록 중${b.missions.length?' · 미션 '+missionCount(b)+' / '+b.missions.length:''}</span></div>
    ${opened.length?`<b class="h3">새로 열린 콘텐츠</b>${opened.map(x=>`<button class="card row" style="text-align:left" data-a="content" data-v="${b.id}" data-w="${x.key}"><div class="col grow" style="gap:0"><span class="tiny">${esc(b.chapters[x.ch-1])}</span><b>${esc(x.title)}</b><span class="small">${esc(x.sub)}</span></div><span class="sub">›</span></button>`).join('')}`:(Object.keys(b.contents).length?'<p class="small">이번 장에는 새 콘텐츠가 없어요.</p>':'')}
-   ${last?`<button class="btn" data-a="go" data-v="finish" data-w="${b.id}">완독 기록 보기</button>`:`<button class="btn" data-a="tab" data-v="home">홈으로</button>`}`,{back:false,tabs:false});},
+   ${myOpenBaits(b,st.chapter).map(t=>`<div class="card soft"><b class="acc">네 떡밥, ${t.bt==='p'?'맞았어?':'답을 찾았어?'}</b><span class="small">${esc(chName(b,t.ch))}에서 남긴 떡밥 · 「${esc(t.bait)}」</span><div class="btns">${(t.bt==='p'?[['yes','맞았다'],['no','빗나갔다'],['idk','모르겠어']]:[['yes','찾았다'],['no','못 찾았다'],['idk','모르겠어']]).map(([k,l])=>`<button class="btn sec" data-a="bres" data-v="${t.id}" data-w="${k}">${l}</button>`).join('')}</div></div>`).join('')}
+   ${traceSection(b,st,route.from||0)}
+   ${(()=>{const m=S.traces.find(t=>t.book===b.id&&t.ch===st.chapter);return m?traceCard(b,Object.assign({},m,{mine:true,lvl:lvlOf(S.user.grade),nick:S.user.nick,n:{like:0,cur:0,hit:0}}),st.chapter):`<button class="btn" data-a="go" data-v="trace" data-w="${b.id}">내 흔적 · 떡밥 남기기</button>`;})()}
+   ${markBtn(b.id)}
+   ${last?`<button class="btn" data-a="go" data-v="finish" data-w="${b.id}">완독 기록 보기</button>`:`<button class="btn ${S.traces.some(t=>t.book===b.id&&t.ch===st.chapter)?'':'sec'}" data-a="tab" data-v="home">홈으로</button>`}`,{back:false,tabs:false});},
 
  content(){const b=B(route.id);const x=allContents(b).find(c=>c.key===route.key);const st=bs(b.id);
   let body='';
@@ -543,6 +609,7 @@ const VIEWS={
  review(){const b=B(route.id);const st=bs(b.id);const v=ui.rv!=null?ui.rv:'';const sc=ui.rsc;const ok=validLine(v);
   return shell('완독 후 떠들기',`<div class="col"><label class="h3" for="rvl">한 줄 감상 <span class="small">(필수 · 10자 이상)</span></label><textarea id="rvl" maxlength="120" placeholder="책을 덮고 가장 먼저 떠오른 생각">${esc(v)}</textarea><span class="small" id="rvh">${v?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'예: 규칙이 조금씩 바뀌는데 아무도 막지 못하는 게 무서웠다'}</span></div>
    ${b.scenes.length?`<div class="col"><span class="h3">기억에 남는 장면 <span class="small">(선택)</span></span><span class="small">고르면 카드 뒷면에 「나의 장면」으로 새겨져요</span><div class="col">${b.scenes.map((s,i)=>`<button class="opt ${sc===i?'sel':''}" data-a="rsc" data-v="${i}">${esc(s)}</button>`).join('')}</div></div>`:''}
+   ${marksOf(b.id).length?`<div class="col"><span class="h3">내 책갈피에서 고르기 <span class="small">(선택)</span></span><span class="small">${b.card?'고르면 카드 뒷면 「나의 장면」에 내 책갈피 글귀가 새겨져요 (나만 봐요)':'고르면 완독 기록에 함께 남아요'}</span><div class="col">${marksOf(b.id).map(m=>`<button class="opt ${ui.rmk===m.id?'sel':''}" data-a="rmk" data-v="${m.id}" style="text-align:left"><span class="tiny">${m.page?m.page+'쪽':''}</span> ${esc(m.text.length>60?m.text.slice(0,60)+'…':m.text)}</button>`).join('')}</div></div>`:''}
    <button class="btn" id="rvbtn" data-a="rsave" data-v="${b.id}" ${ok?'':'disabled'}>${b.card?'감상 남기고 카드 받기':'감상 남기기'}</button>`,{back:true,tabs:false});},
 
  reward(){const b=B(route.id);const g=route.badges||[];const q=b.card&&b.card.quiet;
@@ -567,7 +634,8 @@ const VIEWS={
   return shell('내 서재',h);},
 
  my(){const u=S.user;const tm=minutesOn(dk());
-  return shell('마이',`<div class="row"><div style="width:52px;height:52px;border-radius:50%;background:var(--sunk);display:flex;align-items:center;justify-content:center;font-weight:700" class="acc">${esc((u.name||'?').slice(0,1))}</div><div class="col grow" style="gap:0"><b class="h2">${esc(u.name)}</b><span class="small">${esc(u.grade)}${S.title?' · 칭호 '+esc(S.title):''}</span></div></div>
+  return shell('마이',`<div class="row"><div style="width:52px;height:52px;border-radius:50%;background:var(--sunk);display:flex;align-items:center;justify-content:center;font-weight:700" class="acc">${esc((u.name||'?').slice(0,1))}</div><div class="col grow" style="gap:0"><b class="h2">${esc(u.name)}</b><span class="small">${esc(u.grade)} · ${esc(lvlOf(u.grade))}${S.title?' · 칭호 '+esc(S.title):''}</span><span class="tiny">친구들에게 보이는 이름 · ${esc(u.nick)} (바꿀 수 없어요)</span></div></div>
+   <button class="card row" style="text-align:left" data-a="go" data-v="marks"><div class="col grow" style="gap:0"><b>내 책갈피</b><span class="small">${S.marks.length}개 · 나만 봐요</span></div><span class="sub">›</span></button>
    <button class="card row" style="text-align:left" data-a="go" data-v="records"><div class="col grow"><div class="row between"><b>나의 독서 기록 <span class="tag">MVP 이후</span></b><span class="acc small">자세히 ›</span></div>${weekBars(70)}</div></button>
    <div class="card" style="padding-block:4px"><div class="list">
     <button class="li" data-a="goalsheet"><div class="col grow" style="gap:0"><b>하루 읽기 목표 <span class="tag">MVP 이후</span></b><span class="small">${S.goal?S.goal+'분 · 오늘 '+tm+'분':'꺼져 있어요'}</span></div><span class="sub">›</span></button>
@@ -607,12 +675,43 @@ const VIEWS={
    ${quote?`<div class="card plain"><span class="tiny">아이가 남긴 한 줄 (공개를 허락한 경우)</span><b class="serif">"${esc(quote)}"</b></div>`:''}
    <span class="tiny">점수, 정답률, 다른 아이와의 비교는 보여 드리지 않아요.</span>`,{back:true,tabs:false});},
 
+ trace(){const b=B(route.id);const st=bs(b.id);const ed=route.edit?S.traces.find(t=>t.id===route.edit):null;const ty=ui.trType!=null?ui.trType:(ed?ed.bt:'');const v=ui.trLine!=null?ui.trLine:(ed?ed.line:'');const bv=ui.trBait!=null?ui.trBait:(ed?ed.bait:'');const ok=validLine(v);
+  return shell('내 흔적 남기기',`<div class="card soft"><span class="pill">${esc(chName(b,ed?ed.ch:st.chapter))}에서</span><span class="small">흔적은 지금 읽은 위치에 고정돼요. 나보다 덜 읽은 친구에게는 보이지 않아요.</span></div>
+   <div class="col"><label class="h3" for="trl">지금까지 한 줄 <span class="small">(10자 이상)</span></label><textarea id="trl" maxlength="100" placeholder="여기까지 읽고 든 생각">${esc(v)}</textarea><span class="small" id="trh">${v?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'예: 돼지들이 일은 안 하고 감독만 하는 게 수상하다'}</span></div>
+   <div class="col"><span class="h3">떡밥 <span class="small">(선택)</span></span><span class="small">다음 친구가 궁금해지게 만들어 봐요. 뒤를 읽고 나면 맞았는지 물어볼게요.</span>
+    <div class="seg"><button class="${ty===''?'on':''}" data-a="trty" data-v="">없음</button><button class="${ty==='p'?'on':''}" data-a="trty" data-v="p">예측</button><button class="${ty==='q'?'on':''}" data-a="trty" data-v="q">궁금</button></div>
+    ${ty?`<input id="trb" type="text" maxlength="60" value="${esc(bv)}" placeholder="${ty==='p'?'예: 복서는 끝까지 충성할 것 같다':'예: 짜낸 우유는 누가 마신 거지?'}">`:''}</div>
+   <div class="note">친구들에게는 자동으로 만든 닉네임 「${esc(S.user.nick)}」과 학교급(${esc(lvlOf(S.user.grade))})만 보여요. 학교, 연락처, 결말은 쓰지 않아요. 같은 학교급 친구만 볼 수 있어요.</div>
+   ${ui.trErr?`<div class="card plain" style="border-color:var(--warn,#c0392b)"><b>${esc(ui.trErr)}</b></div>`:''}
+   <button class="btn" id="trbtn" data-a="trsave" data-v="${b.id}" ${ok?'':'disabled'}>${ed?'고쳐서 올리기':'흔적 남기기'}</button>`,{back:true,tabs:false});},
+
+ traces(){const b=B(route.id);const st=bs(b.id);const {vis,hiddenLvl,ahead}=visibleTraces(b,st.chapter);const byCh={};vis.forEach(t=>{(byCh[t.ch]=byCh[t.ch]||[]).push(t);});
+  const chs=Object.keys(byCh).map(Number).sort((a,c)=>a-c);
+  return shell('흔적 모아 보기',`<span class="small">${esc(b.title)} · ${esc(chName(b,st.chapter))}까지 읽은 만큼만 보여요</span>${chs.map(c=>`<b class="h3" style="margin-top:6px">${esc(chName(b,c))}</b>${byCh[c].map(t=>traceCard(b,t,st.chapter)).join('')}`).join('')||'<div class="card plain"><b>아직 흔적이 없어요</b></div>'}
+   <span class="tiny">${[hiddenLvl?`다른 학교급 흔적 ${hiddenLvl}개는 보이지 않아요`:'',ahead?`앞 구간 흔적 ${ahead}개는 그곳을 지나면 열려요`:''].filter(Boolean).join(' · ')}</span>`,{back:true,tabs:false});},
+
+ mark(){const b=B(route.id);const stp=ui.mstep||'paint';
+  if(stp==='paint')return shell('기록 남기기',`<span class="small">${esc(b.title)} · 남기고 싶은 줄을 손가락으로 칠해 주세요</span>
+   <div class="mwrap"><canvas id="mcv"></canvas></div>
+   <div class="btns"><button class="btn sec" data-a="mclear">다시 칠하기</button><button class="btn" data-a="mocr">글자로 바꾸기</button></div>
+   <span class="tiny">찍은 사진은 저장하지 않아요. 칠한 부분의 작은 이미지와 글자만 내 책갈피에 남고, 친구들에게는 보이지 않아요.</span>`,{back:true,tabs:false});
+  if(stp==='ocr')return shell('기록 남기기',`<div class="card plain" style="align-items:center;text-align:center;padding:28px 16px"><b class="h3">칠한 부분의 글자를 읽는 중</b><span class="small" id="mprog">글자 인식기를 준비하고 있어요 (처음 한 번은 약 6MB를 내려받아요)</span>${ui.mthumb?`<img src="${ui.mthumb}" alt="" style="max-width:100%;border-radius:8px;margin-top:10px">`:''}</div><button class="btn sec" data-a="mskip">기다리지 않고 직접 쓰기</button>`,{back:false,tabs:false});
+  const st=bs(b.id);return shell('기록 남기기',`${ui.mthumb?`<img src="${ui.mthumb}" alt="칠한 부분" style="max-width:100%;border-radius:10px;border:1px solid var(--line)">`:''}
+   ${ui.merr?`<div class="note">${esc(ui.merr)}</div>`:(ui.mthumb?'<span class="small">인식한 글자예요. 틀린 곳은 고쳐 주세요.</span>':'')}
+   <div class="col"><label class="h3" for="mtx">글귀</label><textarea id="mtx" maxlength="400" placeholder="남기고 싶은 문장">${esc(ui.mtext||'')}</textarea></div>
+   <div class="row" style="gap:10px"><div class="col" style="flex:0 0 96px"><label class="small" for="mpg">쪽</label><input id="mpg" type="number" inputmode="numeric" value="${ui.mpage||st.lastPage||''}"></div><div class="col grow"><label class="small" for="mnt">내 생각 (선택)</label><input id="mnt" type="text" maxlength="60" placeholder="왜 남기고 싶었는지"></div></div>
+   <button class="btn" data-a="msave" data-v="${b.id}">책갈피에 남기기</button><span class="tiny">책갈피는 나만 봐요. 글귀는 친구들에게 공유되지 않아요.</span>`,{back:true,tabs:false});},
+
+ marks(){const ids=[...new Set(S.marks.map(m=>m.book))];
+  return shell('내 책갈피',ids.length?ids.map(id=>`<b class="h3" style="margin-top:4px">${esc(B(id).title)} · ${marksOf(id).length}개</b>${marksOf(id).map(m=>markCard(m)).join('')}`).join(''):'<div class="card plain"><b>아직 책갈피가 없어요</b><span class="small">책 정보나 타이머 화면의 「기록 남기기」로 마음에 드는 글귀를 찍어 남겨 보세요.</span></div>',{back:true,tabs:false});},
+
  timer(){const t=S.timer;if(!t)return shell('읽는 중','<p>타이머가 꺼져 있어요.</p><button class="btn" data-a="tab" data-v="home">홈으로</button>',{back:false,tabs:false});
   const b=t.book?B(t.book):null;const tm=minutesOn(dk());
   return shell('읽는 중 <span class="tag">MVP 이후</span>',`<div class="row" style="justify-content:center"><button class="chip on" data-a="bookchip">${b?esc(b.title):'책 없이'} ▾</button></div>
    <div class="clock"><b id="clk">00:00</b><span class="small">${t.pausedAt?'잠깐 멈춤':'읽는 중'}${S.speed?' · 빠르게':''}</span></div>
    ${S.goal?`<div class="card plain row between"><span class="small">오늘 목표 ${S.goal}분</span><b class="num" id="goalnow">${tm} / ${S.goal}분</b></div>`:''}
    <button class="card row ${t.focus?'soft':''}" style="text-align:left" data-a="focus"><div class="col grow" style="gap:0"><b class="${t.focus?'acc':''}">집중 모드 (iOS)</b><span class="small">${t.focus?'다른 앱이 잠겨 있어요 · 전화는 받을 수 있어요 (시연)':'켜면 읽는 동안 다른 앱을 잠가요 (시연)'}</span></div><span class="switch ${t.focus?'on':''}"></span></button>
+   ${b?markBtn(b.id,'기록 남기기 · 타이머는 계속 돌아가요'):'<span class="tiny" style="text-align:center">책을 고르면 기록 남기기를 쓸 수 있어요</span>'}
    <div style="flex:1"></div><button class="btn" data-a="tend">그만 읽기</button><button class="btn sec" data-a="tpause">${t.pausedAt?'다시 읽기':'잠깐 멈춤'}</button>`,{back:false,tabs:false});}
 };
 
@@ -626,6 +725,8 @@ function fx(kind){if(matchMedia('(prefers-reduced-motion: reduce)').matches)retu
 
 /* ---------- 시트 ---------- */
 const SHEETS={
+ marksrc(){return `<b class="h2">어떻게 남길까요?</b><div class="col"><button class="opt" data-a="markadd" data-v="${sheet.id}">사진 찍기 · 앨범에서 고르기</button><button class="opt" data-a="marksample" data-v="${sheet.id}">예시 페이지로 해 보기 (시연)</button><button class="opt" data-a="marktext" data-v="${sheet.id}">사진 없이 직접 쓰기</button></div><button class="btn ghost" data-a="closesheet">닫기</button>`;},
+
  goal(){const g=ui.goalPick!=null?ui.goalPick:(S.goal||10);return `<b class="h2">하루에 얼마나 읽어 볼까요?</b><span class="small">못 채운 날이 있어도 괜찮아요. 언제든 바꾸거나 끌 수 있어요. 쪽 · 장 같은 분량 목표는 없어요.</span><div class="chips">${[5,10,20,30,45].map(m=>`<button class="chip ${g===m?'on':''}" data-a="gpick2" data-v="${m}">${m}분</button>`).join('')}</div><div class="btns"><button class="btn sec" data-a="goaloff">목표 끄기</button><button class="btn" data-a="goalok">${g}분으로 정하기</button></div>`;},
  focusOff(){return `<b class="h2">정말 집중 모드를 끌까요?</b><span class="small">끄면 다른 앱을 쓸 수 있어요. 타이머는 계속 돌아가요.</span><button class="btn sec" id="hold" style="position:relative;overflow:hidden"><span id="holdfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent-soft)"></span><span style="position:relative">5초 길게 눌러 끄기</span></button><button class="btn" data-a="closesheet">계속 집중하기</button>`;},
  tend(){const t=S.timer;const r=reading();const bid=ui.endBook!==undefined?ui.endBook:t.book;const b=bid?B(bid):null;const st=b?bs(b.id):null;const pg=ui.endPage!=null?ui.endPage:(st?(st.lastPage||0):0);const min=elapsedMin();
@@ -644,6 +745,86 @@ const SHEETS={
 function pgHint(b,st,pg){const ch=pg?chapterForPage(b,pg):0;return ch>st.chapter?`<div class="card soft"><b class="acc">${esc(b.chapters[ch-1])}까지 끝났어요</b><span class="small acc">이어서 체크인하면 퀴즈와 콘텐츠가 열려요 (판본이 등록된 책만 장 안내)</span></div>`:'';}
 function cheer(b){const st=bs(b.id);if(b.id==='farm')return '계명이 바뀌는 순간을 '+Math.min(st.mission.m1||0,4)+'개 찾았어요. 어떤 장면이 제일 기억에 남았는지 들려줄래요?';if(b.id==='econ')return '두꺼운 책을 끝까지 왔어요. 같은 문제를 다르게 보는 눈이 하나 생겼을 거예요.';return '끝까지 읽은 이야기를 한 줄로 들려줄래요?';}
 function validLine(v){v=(v||'').trim();if(v.replace(/\s/g,'').length<10)return false;if(/(.)\1{4,}/.test(v.replace(/\s/g,'')))return false;return true;}
+
+/* ===== 흔적 · 떡밥 · 책 동기 ===== */
+const NICK_A=['새벽의','바람의','달빛','조용한','반짝이는','느긋한','용감한','푸른','졸린','단단한'];const NICK_B=['고래','여우','부엉이','수달','고슴도치','펭귄','다람쥐','거북','올빼미','너구리'];
+function makeNick(){const A=['새벽의','바람의','달빛','조용한','반짝이는','느긋한','용감한','푸른','졸린','단단한'],N=['고래','여우','부엉이','수달','고슴도치','펭귄','다람쥐','거북','올빼미','너구리'];const r=Math.random;return A[Math.floor(r()*A.length)]+' '+N[Math.floor(r()*N.length)]+' '+(10+Math.floor(r()*90));}
+function lvlOf(g){g=String(g||'');if(g.startsWith('초'))return '초등';if(g.startsWith('중'))return '중등';if(g.startsWith('고'))return '고등';return '성인';}
+const FOCUS={'초등':['긴긴밤','마당을 나온 암탉'],'중등':['아몬드','페인트','기억의 전달자'],'고등':[],'성인':[]};
+function isFocus(b){return Object.values(FOCUS).some(a=>a.includes(b.title));}
+function focusFor(l){return (FOCUS[l]||[]).map(t=>BOOKS.find(b=>b.title===t)).filter(Boolean);}
+/* 시드 흔적: [장, 학교급, 한 줄, 떡밥종류(p예측/q궁금/''), 떡밥, 결과가 열리는 장, 결과(yes/no/''), 공감, 궁금, 맞았다] — 결과는 쓴 친구의 자기 답이에요 */
+const SEED={
+ '동물농장':[[1,'중등','메이저 영감 연설 듣고 나까지 혁명하고 싶어졌다','p','근데 결국 돼지들이 다 차지할 것 같은데?',10,'yes',14,9,11],[2,'중등','벽에 계명 일곱 개를 쓰는 장면이 멋있었다','q','짜낸 우유는 누가 마신 거지?',3,'yes',8,12,6],[3,'중등','돼지들이 일은 안 하고 감독만 하는 게 수상하다','p','복서는 끝까지 충성할 것 같다',9,'yes',10,5,7],[4,'중등','외양간 전투 장면이 영화처럼 읽혔다','','',0,'',6,0,0],[5,'중등','개들이 튀어나오는 장면에서 소름 돋았다','p','스노볼이 다시 돌아와서 복수할 것 같다',10,'no',9,7,2],[6,'중등','풍차가 무너진 걸 스노볼 탓으로 돌리는 게 너무 억지다','p','계명이 몰래 바뀔 것 같다',8,'yes',13,6,9],[8,'중등','계명 글자가 바뀐 걸 아무도 눈치 못 채는 게 답답했다','','',0,'',11,0,0]],
+ '소년이 온다':[[1,'중등','동호가 끝까지 그 자리에 남아 있던 장면이 계속 생각난다','q','동호는 왜 집에 돌아가지 않았을까?',0,'',12,8,0],[2,'중등','말하는 사람이 바뀌어서 처음엔 헷갈렸는데 다시 읽으니 알겠다','q','이 장에서는 누가 누구에게 말하고 있는 걸까?',3,'yes',7,9,0],[3,'중등','일곱 개의 뺨이 무슨 뜻인지 알게 되고 한참 멈춰 있었다','','',0,'',10,0,0],[6,'중등','어머니의 목소리로 읽으니 더 아팠다','','',0,'',9,0,0]],
+ '장하준의 경제학 강의':[[1,'중등','경제학이 하나가 아니라는 말이 신기했다','q','그럼 어떤 경제학이 맞는 거지?',11,'yes',6,8,0],[3,'중등','역사 부분이 생각보다 재밌었다','','',0,'',4,0,0],[6,'중등','학파가 많아서 표로 정리하면서 읽었다','q','마지막에 작가는 어떤 입장을 고를까?',11,'yes',5,6,0]],
+ '긴긴밤':[[1,'초등','노든이 혼자 남겨진 게 너무 슬펐다','q','노든은 다시 친구를 만날 수 있을까?',4,'yes',9,7,0],[2,'중등','노든의 지난 이야기가 생각보다 길게 나와서 놀랐다','','',0,'',5,0,0],[4,'중등','알에서 누가 나올지 계속 궁금했다','q','노든과 아기 펭귄은 어디로 가는 걸까?',8,'yes',8,10,0],[4,'초등','짧아서 금방 읽혔는데 마음은 오래 남는다','','',0,'',7,0,0],[7,'초등','제목이 왜 긴긴밤인지 조금 알 것 같다','','',0,'',10,0,0]],
+ '마당을 나온 암탉':[[1,'초등','잎싹이 알을 품고 싶어 하는 마음이 이해됐다','p','잎싹이 결국 마당을 나갈 것 같다',2,'yes',11,4,9],[3,'초등','청둥오리 나그네가 좋은 친구 같다','q','족제비는 왜 자꾸 따라오는 걸까?',10,'yes',6,8,0],[5,'중등','초록머리가 자기가 누군지 고민하는 게 꼭 우리 같다','','',0,'',8,0,0]],
+ '아몬드':[[1,'중등','윤재가 감정을 잘 못 느낀다는 설정이 처음부터 끌렸다','q','윤재는 언젠가 감정을 느끼게 될까?',10,'yes',12,11,0],[2,'초등','할머니가 윤재를 대하는 방식이 따뜻했다','','',0,'',7,0,0],[4,'중등','곤이가 처음엔 무서웠는데 점점 궁금해진다','q','곤이는 왜 저렇게 화가 나 있을까?',7,'yes',10,9,0],[6,'중등','챕터가 짧아서 한 번에 많이 읽게 된다','','',0,'',6,0,0]],
+ '페인트':[[1,'중등','부모를 면접 본다는 설정이 신박하다','q','나라면 어떤 부모를 고를까?',0,'',13,10,0],[3,'초등','면접 장면이 웃기면서도 좀 슬펐다','','',0,'',5,0,0],[5,'중등','제누가 계속 망설이는 이유를 알 것 같다','q','제누는 왜 쉽게 고르지 못할까?',9,'yes',8,7,0]],
+ '기억의 전달자':[[1,'중등','모든 게 정해진 마을이 처음엔 평화로워 보였다','q','왜 아무도 색깔 이야기를 안 하지?',6,'yes',9,11,0],[3,'중등','열두 살 기념식 장면에서 긴장됐다','p','조너스가 특별한 일을 맡을 것 같다',4,'yes',10,5,8],[5,'초등','기억을 받는다는 게 어떤 느낌일지 상상해 봤다','','',0,'',6,0,0],[7,'중등','임무 해제라는 말이 계속 마음에 걸린다','q','임무 해제가 정확히 뭘까?',8,'yes',11,12,0]]
+};
+function seedNick(t,i){return NICK_A[hashN(t+'a'+i)%NICK_A.length]+' '+NICK_B[hashN(t+'b'+i*7)%NICK_B.length]+' '+(10+hashN(t+'c'+i*13)%90);}
+function allTraces(b){const seed=(SEED[b.title]||[]).map((r,i)=>({id:'sd-'+b.id+'-'+i,book:b.id,ch:r[0],lvl:r[1],line:r[2],bt:r[3],bait:r[4],resCh:r[5],res:r[6],n:{like:r[7],cur:r[8],hit:r[9]},nick:seedNick(b.title,i),seed:true}));
+ const mine=S.traces.filter(t=>t.book===b.id).map(t=>Object.assign({},t,{mine:true,lvl:lvlOf(S.user.grade),nick:S.user.nick,n:{like:0,cur:0,hit:0}}));return seed.concat(mine);}
+function rCount(t,k){return (t.n[k]||0)+(S.reacts[t.id+':'+k]?1:0);}
+function visibleTraces(b,upTo){const me=lvlOf(S.user.grade);const all=allTraces(b);const vis=all.filter(t=>t.ch<=upTo&&(t.mine||(t.lvl===me&&!S.reported[t.id]))&&(!t.mine||t.status==='shown'||t.mine));const hiddenLvl=all.filter(t=>!t.mine&&t.ch<=upTo&&t.lvl!==me).length;return {vis,hiddenLvl,ahead:all.filter(t=>!t.mine&&t.lvl===me&&t.ch>upTo).length};}
+function chName(b,ch){return b.chapters[ch-1]||ch+'장';}
+function traceCard(b,t,myCh){const quiet=b.card&&b.card.quiet;const btl=t.bt==='p'?'예측':'궁금';
+ let res='';if(t.bt&&t.resCh){res=myCh>=t.resCh?`<div class="tr-res"><b>떡밥 결과</b> · ${t.bt==='p'?(t.res==='yes'?'쓴 친구가 「맞았다」고 했어요':'쓴 친구가 「빗나갔다」고 했어요'):(t.res==='yes'?'쓴 친구가 「답을 찾았다」고 했어요':'쓴 친구는 아직 답을 못 찾았대요')}</div>`:`<div class="tr-res lock">떡밥 결과는 ${esc(chName(b,t.resCh))}을 지나면 열려요</div>`;}
+ if(t.mine&&t.bt&&t.myRes)res=`<div class="tr-res"><b>내 떡밥 결과</b> · ${t.bt==='p'?(t.myRes==='yes'?'맞았다':t.myRes==='no'?'빗나갔다':'아직 모르겠다'):(t.myRes==='yes'?'답을 찾았다':t.myRes==='no'?'아직 못 찾았다':'아직 모르겠다')}</div>`;
+ const R=(k,l)=>`<button class="rx ${S.reacts[t.id+':'+k]?'on':''}" data-a="react" data-v="${t.id}" data-w="${k}" ${t.mine?'disabled':''}>${l} ${rCount(t,k)}</button>`;
+ const held=t.mine&&t.status==='held';
+ return `<div class="trace ${t.mine?'mine':''} ${held?'held':''}"><div class="tr-h"><b>${esc(t.nick)}</b><span>${esc(t.lvl)} · ${esc(chName(b,t.ch))}에서</span>${t.mine?'<span class="pill">나</span>':''}</div>
+  <p class="tr-l">${esc(t.line)}</p>${t.bt?`<div class="tr-b"><span class="tr-bt">떡밥 · ${btl}</span>${esc(t.bait)}</div>`:''}${res}
+  ${held?`<div class="tr-held">자동 필터: ${esc(t.reason)} 친구들에게는 보이지 않아요. <button class="linkbtn" data-a="tredit" data-v="${t.id}">고쳐서 다시 올리기</button></div>`:`<div class="tr-f">${R('like','공감')}${t.bt?R('cur','나도 궁금'):''}${t.bt==='p'&&myCh>=(t.resCh||99)?R('hit','떡밥 맞았다'):''}${t.mine?'':`<button class="linkbtn faint" data-a="report" data-v="${t.id}">신고</button>`}</div>`}</div>`;}
+function cohort(b){const h=hashN(b.title+'cohort');const focus=isFocus(b)||!b.listOnly;const n=focus?12+h%18:(h%4);const tot=b.chapters.length;const dist=Array.from({length:tot},(_,i)=>focus?((h>>>(i%20))%4)+(i<tot/2?1:0):0);let k=n-dist.reduce((a,x)=>a+x,0);for(let i=0;k>0;i=(i+1)%tot){dist[i]++;k--;}return {n,dist};}
+function cohortCard(b,myCh,started){const c=cohort(b);const me=lvlOf(S.user.grade);if(!c.n)return `<div class="card plain"><b class="h3">책 동기</b><span class="small">아직 비슷한 시기에 이 책을 시작한 ${me} 친구가 없어요. 「함께 읽기 책」을 고르면 동기가 많아요.</span></div>`;
+ const mx=Math.max(1,...c.dist);return `<div class="card plain"><div class="row between"><b class="h3">책 동기 · ${me} ${c.n}명</b><span class="tiny">최근 4주 안에 시작</span></div><div class="dist">${c.dist.map((x,i)=>`<div class="dcol ${i+1===myCh?'me':''}"><i style="height:${Math.max(4,x/mx*44)}px"></i><span>${i+1}</span></div>`).join('')}</div><span class="small">${myCh?`나는 ${esc(chName(b,myCh))}까지 · 나보다 앞선 친구 ${c.dist.slice(myCh).reduce((a,x)=>a+x,0)}명`:started?`방금 시작했어요 · 먼저 읽고 있는 친구 ${c.n}명`:'지금 시작하면 이 친구들과 함께 읽어요'}</span></div>`;}
+const BAN=['시발','씨발','ㅅㅂ','ㅆㅂ','병신','ㅂㅅ','좆','존나','개새','닥쳐','꺼져','미친놈','미친년'];
+function autoFilter(t){const x=String(t||'');const z=x.replace(/\s/g,'');
+ if(/01[016789][-.\s]?\d{3,4}[-.\s]?\d{4}/.test(x)||/\d{3,4}[-.]\d{4}/.test(x))return '전화번호로 보이는 내용이 있어요.';
+ if(/@[A-Za-z0-9_.]{3,}/.test(x)||/(인스타|카톡|카카오톡|오픈채팅|디엠|DM|페메|틱톡|디스코드)/i.test(x))return 'SNS나 연락처로 보이는 내용이 있어요.';
+ if(/[가-힣]{1,8}(초등학교|중학교|고등학교)/.test(z)||/[가-힣]{2,6}(초|중|고)\d학년/.test(z))return '학교 이름으로 보이는 내용이 있어요.';
+ if(BAN.some(w=>z.includes(w)))return '친구에게 상처가 될 수 있는 말이 있어요.';
+ if(/(결말은|결말이|범인은|마지막에\s?(죽|사라))/.test(x))return '결말을 알려 주는 내용 같아요.';return '';}
+function myOpenBaits(b,ch){return S.traces.filter(t=>t.book===b.id&&t.bt&&!t.myRes&&t.status==='shown'&&(ch>=t.ch+2||ch>=b.chapters.length));}
+function traceSection(b,st,from){const myCh=st.chapter;const {vis,hiddenLvl,ahead}=visibleTraces(b,myCh);const near=vis.filter(t=>!t.mine&&t.ch>from&&t.ch<=myCh);const pick=(near.length?near:vis.filter(t=>!t.mine)).sort((a,c)=>c.ch-a.ch).slice(0,3);
+ let h=`<div class="row between"><b class="h3">${near.length?'같은 곳을 지난 친구들':'앞에서 남긴 친구들의 흔적'}</b>${vis.length?`<button class="linkbtn" data-a="go" data-v="traces" data-w="${b.id}">전체 ${vis.filter(t=>!t.mine).length}개 ›</button>`:''}</div>`;
+ h+=pick.length?pick.map(t=>traceCard(b,t,myCh)).join(''):`<div class="card plain"><b>아직 이 구간에 흔적이 없어요</b><span class="small">이 구간의 첫 흔적을 남겨 줘. 다음에 읽는 친구가 보게 돼요.</span></div>`;
+ const notes=[];if(hiddenLvl)notes.push(`다른 학교급 친구의 흔적 ${hiddenLvl}개는 보이지 않아요`);if(ahead)notes.push(`앞으로 읽을 구간에 흔적 ${ahead}개가 기다려요`);if(notes.length)h+=`<span class="tiny">${notes.join(' · ')}</span>`;return h;}
+
+/* ===== 예고편 (쇼츠형) ===== */
+const TRAILER={
+ '아몬드':['감정을 잘 느끼지 못하는 소년, 윤재.','남들이 웃을 때, 윤재는 왜 웃는지 모른다.','어느 날, 분노로 가득 찬 아이가 나타난다.','둘은 서로를 바꿀 수 있을까?'],
+ '페인트':['아이가 부모를 고르는 세상.','면접을 보는 쪽은 부모다.','좋은 부모란 어떤 사람일까?','너라면, 누구를 고를래?'],
+ '기억의 전달자':['고통도, 차별도 없는 마을.','모든 것이 정해져 있고, 모두가 평온하다.','열두 살 조너스에게 특별한 임무가 주어진다.','완벽함 뒤에는 무엇이 숨어 있을까?'],
+ '긴긴밤':['혼자 남은 코뿔소, 노든.','그리고 아직 깨어나지 않은 알 하나.','길고 긴 밤을 함께 건너는 이야기.','둘은 어디에 닿게 될까?'],
+ '마당을 나온 암탉':['알을 품고 싶은 암탉, 잎싹.','닭장 밖 세상은 넓고, 위험했다.','그래도 잎싹은 꿈을 놓지 않는다.','꿈을 품는다는 건 어떤 걸까?'],
+ '동물농장':['인간을 몰아낸 동물들.','벽에 쓴 약속, 「모든 동물은 평등하다」.','그런데 규칙이 조금씩 바뀌기 시작한다.','누가, 왜 바꾸는 걸까?'],
+ '소년이 온다':['1980년 5월, 광주.','열다섯 살 동호는 그곳에 남아 있었다.','남겨진 사람들의 목소리로 이어지는 이야기.','우리는 무엇을 기억해야 할까?'],
+ '장하준의 경제학 강의':['경제학은 하나가 아니다.','시장을 믿는 사람, 정부를 믿는 사람.','같은 문제를 전혀 다르게 본다.','경제를 보는 눈, 너는 어떤 걸 고를래?']};
+const TL_SEG=4000,TL_MAX=10;
+function trailerList(){const l=lvlOf(S.user.grade);const g=S.user.grade;const f=focusFor(l);const poc=BOOKS.filter(b=>!b.listOnly&&!b.adult);const rest=BOOKS.filter(b=>TRAILER[b.title]&&!f.includes(b)&&!poc.includes(b));
+ return [...f,...poc.filter(b=>b.grades.includes(g)),...poc.filter(b=>!b.grades.includes(g)),...rest].filter((b,i,a)=>TRAILER[b.title]&&a.indexOf(b)===i);}
+function tlCount(){return S.tlDay&&S.tlDay.date===dk()?S.tlDay.n:0;}
+function tlCard(b,i){const L=TRAILER[b.title];return `<button class="tlc" data-a="tlopen" data-v="${i}" aria-label="${esc(b.title)} 예고편 보기"><span class="tlc-art">${scene(b,130,231)}</span><span class="tlc-sh"></span>${isFocus(b)?'<span class="tlc-tag">함께 읽기</span>':''}<span class="tlc-t"><span class="tiny" style="opacity:.85">0:${String(L.length*TL_SEG/1000).padStart(2,'0')}</span><b>${esc(L[0])}</b><span class="tiny" style="opacity:.85">${esc(b.title)}</span></span></button>`;}
+function nextReads(kg){const done=BOOKS.filter(b=>['reading','done'].includes(bs(b.id).status));const base=(S.lastBook&&B(S.lastBook))||done[0];
+ if(base&&base.lv){const c=BOOKS.filter(b=>b.listOnly&&bs(b.id).status==='none'&&b.genre===base.genre&&(base.topic==='기타'||b.topic===base.topic)&&b.lv>=base.lv&&b.lv<=base.lv+1&&b.grades.includes(kg)).sort(byPop).slice(0,4);if(c.length)return {why:`「${base.title}」을 읽고 있어서 · 같은 갈래, 같거나 한 단계 위 난이도`,list:c};}
+ return {why:`${kg} 학생에게 많이 추천된 책`,list:BOOKS.filter(b=>b.listOnly&&b.grades.includes(kg)&&bs(b.id).status==='none').sort(byPop).slice(0,4)};}
+function stopTl(){if(window._tlT){clearInterval(window._tlT);window._tlT=null;}}
+function startTl(){stopTl();const el=$('.tl');if(!el||ui.tlEnd)return;const L=TRAILER[B(ui.tlList[route.i]).title];const tot=L.length*TL_SEG;
+ const paint=()=>{const t=ui.tlT||0;const k=Math.min(L.length-1,Math.floor(t/TL_SEG));el.querySelectorAll('.tl-bar i').forEach((x,j)=>{x.style.width=(j<k?100:j>k?0:((t-k*TL_SEG)/TL_SEG*100))+'%';});el.querySelectorAll('.tl-cap').forEach((x,j)=>x.classList.toggle('on',j===k));const pz=el.querySelector('.tl-pz');if(pz)pz.hidden=!ui.tlPause;};
+ paint();window._tlT=setInterval(()=>{if(ui.tlPause)return;ui.tlT=(ui.tlT||0)+100;if(ui.tlT>=tot){ui.tlT=tot;stopTl();ui.tlEnd=true;render();return;}paint();},100);
+ let y0=null;el.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;},{passive:true});el.addEventListener('touchend',e=>{if(y0==null)return;const d=e.changedTouches[0].clientY-y0;y0=null;if(Math.abs(d)>60)tlMove(d<0?1:-1);},{passive:true});
+ el.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)<30||window._tlW)return;window._tlW=setTimeout(()=>{window._tlW=null;},600);tlMove(e.deltaY>0?1:-1);},{passive:true});}
+function tlMove(d){const n=route.i+d;if(n<0)return;if(d>0){if(tlCount()>=TL_MAX){ui.tlEnd=true;ui.tlLimit=true;stopTl();render();return;}if(n>=ui.tlList.length){ui.tlEnd=true;ui.tlOut=true;stopTl();render();return;}}
+ route.i=n;ui.tlT=0;ui.tlEnd=false;ui.tlPause=false;ui.tlOut=false;tlSeen();render();}
+function tlSeen(){const d=dk();if(!S.tlDay||S.tlDay.date!==d)S.tlDay={date:d,n:0};S.tlDay.n++;save();}
+/* ===== 책갈피 ===== */
+function marksOf(id){return S.marks.filter(m=>m.book===id).sort((a,c)=>(a.page||0)-(c.page||0));}
+function markCard(m,withBook){const b=B(m.book);return `<div class="mark">${m.thumb?`<img src="${m.thumb}" alt="찍은 부분">`:''}<div class="col grow" style="gap:4px"><span class="tiny">${withBook?esc(b.title)+' · ':''}${m.page?m.page+'쪽':'쪽 없음'} · ${fmtDate(m.date)}</span><p class="serif mark-t">${esc(m.text)}</p>${m.note?`<span class="small">내 생각 · ${esc(m.note)}</span>`:''}</div><button class="linkbtn faint" data-a="markdel" data-v="${m.id}" aria-label="책갈피 지우기">지우기</button></div>`;}
+function markBtn(id,label){return `<button class="btn sec" data-a="marksheet" data-v="${id}">${label||'기록 남기기 · 사진으로 글귀 담기'}</button>`;}
 function weekBars(h){const today=dk();const d=now().getDay();const mon=addDays(today,-((d+6)%7));const days=Array.from({length:7},(_,i)=>addDays(mon,i));const vals=days.map(minutesOn);const mx=Math.max(S.goal||10,...vals,1);const act=activityDays();const tot=vals.reduce((a,x)=>a+x,0);const met=S.goal?vals.filter(v=>v>=S.goal).length:0;
  return `<div class="row between"><span class="small">이번 주 읽은 시간</span><b class="small num">${tot}분${S.goal?' · 목표 달성 '+met+'일':''}</b></div><div class="bars" style="height:${h}px">${days.map((k,i)=>`<div class="b"><i class="${vals[i]?'':'zero'} ${k===today?'today':''}" style="height:${Math.max(3,vals[i]/mx*(h-22))}px"></i><span class="tiny">${'월화수목금토일'[i]}${act.has(k)&&!vals[i]?'·':''}</span></div>`).join('')}</div>`;}
 
@@ -687,7 +868,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
   case 'gcheck':{const b=B(route.id);const x=allContents(b).find(c=>c.key===route.key);const st=bs(b.id);const ok=ui.gpick===x.a;ui.gshown=true;if(ok&&st.games[x.key]==null){st.games[x.key]=true;st.mission[x.mission]=(st.mission[x.mission]||0)+1;save();const m=b.missions.find(m=>m.id===x.mission);toast(m.name+' '+Math.min(st.mission[x.mission],m.goal)+' / '+m.goal);}render();break;}
   case 'csave':{const t=(($('#cin')||{}).value||'').trim();if(t.length<5){toast('조금만 더 적어 볼까요? (5자 이상)');break;}const st=bs(v);const x=allContents(B(v)).find(c=>c.key===w);st.inputs[w]=t;st.mission[x.mission]=true;save();toast('저장했어요 · 미션 완료');render();break;}
   case 'rsc':ui.rv=($('#rvl')||{}).value;ui.rsc=ui.rsc===+v?null:+v;render();break;
-  case 'rsave':{const b=B(v);const st=bs(v);const line=(($('#rvl')||{}).value||'').trim();if(!validLine(line))break;const first=!st.confirmed;st.review={line,scene:ui.rsc!=null?ui.rsc:null};st.confirmed=true;if(first)S.reviews++;b.missions.forEach(m=>{if(m.type==='review')st.mission[m.id]=true;});let isNew=false;if(b.card&&!st.cardGot){st.cardGot=true;st.cardDate=dk();isNew=true;if(!S.title)S.title=b.card.title;}save();const g=checkBadges();save();ui.flipped=false;replace('reward',{id:v,badges:g});if(b.card&&!b.card.quiet)setTimeout(()=>fx('confetti'),700);break;}
+  case 'rsave':{const b=B(v);const st=bs(v);const line=(($('#rvl')||{}).value||'').trim();if(!validLine(line))break;const first=!st.confirmed;st.review={line,scene:ui.rsc!=null?ui.rsc:null,mark:ui.rmk||null};st.confirmed=true;if(first)S.reviews++;b.missions.forEach(m=>{if(m.type==='review')st.mission[m.id]=true;});let isNew=false;if(b.card&&!st.cardGot){st.cardGot=true;st.cardDate=dk();isNew=true;if(!S.title)S.title=b.card.title;}save();const g=checkBadges();save();ui.flipped=false;replace('reward',{id:v,badges:g});if(b.card&&!b.card.quiet)setTimeout(()=>fx('confetti'),700);break;}
   case 'st':ui.shelfTab=v;render();break;
   case 'ssel':ui.shelfSel=v;render();break;
   case 'title':S.title=v;save();render();break;
@@ -710,6 +891,34 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
   case 'psave':{const b=B(sheet.id);const st=bs(b.id);const pg=parseInt(($('#pgin')||{}).value,10)||0;if(pg>(st.lastPage||0))st.lastPage=pg;st.pages.push({date:dk(),page:pg});save();const id=b.id;sheet=null;notifyBadges();if(v==='1'){ui.ckCh=chapterForPage(b,pg);go('checkin',{id});}else{render();toast(pg+'쪽까지 기록했어요');}break;}
   case 'goalchange':sheet={n:'goalchange',id:v};render();break;
   case 'gcset':{const st=bs(sheet.id);st.goalDate=addDays(st.goalDate,+v);st.goalChanges=(st.goalChanges||0)+1;save();sheet=null;render();toast('목표일을 '+fmtDate(st.goalDate)+'로 바꿨어요');break;}
+  case 'trty':ui.trType=v;ui.trLine=($('#trl')||{}).value;ui.trBait=($('#trb')||{}).value||ui.trBait;render();break;
+  case 'trsave':{const b=B(v);const st=bs(v);const line=(($('#trl')||{}).value||'').trim();const ty=ui.trType!=null?ui.trType:'';const bait=ty?((($('#trb')||{}).value)||'').trim():'';if(!validLine(line))break;if(ty&&bait.length<4){ui.trLine=line;ui.trErr='떡밥을 4자 이상 써 주세요. 없으면 「없음」을 골라요.';render();break;}
+   const reason=autoFilter(line+' '+bait);const ed=route.edit?S.traces.find(t=>t.id===route.edit):null;
+   if(ed){Object.assign(ed,{line,bt:ty,bait,status:reason?'held':'shown',reason});}else S.traces.push({id:'my-'+Date.now(),book:v,ch:st.chapter,line,bt:ty,bait,date:dk(),status:reason?'held':'shown',reason,myRes:null});
+   save();ui.trType=null;ui.trLine=null;ui.trBait=null;ui.trErr=null;back();break;}
+  case 'tredit':{const t=S.traces.find(x=>x.id===v);if(!t)break;ui.trType=t.bt;ui.trLine=t.line;ui.trBait=t.bait;ui.trErr=null;go('trace',{id:t.book,edit:t.id});break;}
+  case 'bres':{const t=S.traces.find(x=>x.id===v);if(t){t.myRes=w;save();}render();break;}
+  case 'react':{const k=v+':'+w;if(S.reacts[k])delete S.reacts[k];else S.reacts[k]=1;save();render();break;}
+  case 'report':S.reported[v]=true;save();ui.toast='신고했어요. 운영자가 확인해요 (시연)';render();break;
+  case 'rmk':ui.rv=($('#rvl')||{}).value;ui.rmk=ui.rmk===v?null:v;render();break;
+  case 'markadd':{const inp=$('#markfile');ui.markBook=v;if(inp){inp.value='';inp.click();}break;}
+  case 'marksample':{const id=v||ui.markBook;sampleImage().then(im=>{startMark(id,im);});break;}
+  case 'marktext':{const id=v||ui.markBook;ui.mstep='edit';ui.mthumb=null;ui.merr=null;ui.mtext='';ui.mpage=null;sheet=null;go('mark',{id});break;}
+  case 'mclear':ui.mstrokes=[];drawMark();break;
+  case 'mocr':runOcr();break;
+  case 'mskip':ui.mcancel=true;ui.mstep='edit';ui.merr='직접 적어 주세요.';ui.mtext='';render();break;
+  case 'msave':{const text=(($('#mtx')||{}).value||'').trim();if(!text){const t=$('#mtx');if(t){t.focus();t.placeholder='글귀를 한 글자 이상 적어 주세요';}break;}const pg=parseInt(($('#mpg')||{}).value,10)||null;const note=(($('#mnt')||{}).value||'').trim();
+   S.marks.push({id:'mk-'+Date.now(),book:v,page:pg,text,note,date:dk(),thumb:ui.mthumb||null});save();
+   try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){const m=S.marks[S.marks.length-1];m.thumb=null;save();}
+   ui.mstep=null;ui.mthumb=null;ui.mtext='';ui.mstrokes=[];ui.toast='책갈피에 남겼어요';back();break;}
+  case 'markdel':S.marks=S.marks.filter(m=>m.id!==v);save();render();break;
+  case 'marksheet':ui.markBook=v;sheet={n:'marksrc',id:v};render();break;
+  case 'tlopen':{ui.tlList=trailerList().map(b=>b.id);ui.tlT=0;ui.tlEnd=false;ui.tlPause=false;ui.tlLimit=false;ui.tlOut=false;if(tlCount()>=TL_MAX){ui.tlEnd=true;ui.tlLimit=true;}else tlSeen();go('trailer',{i:+v});break;}
+  case 'tlpause':{if(e.target.closest('button'))break;ui.tlPause=!ui.tlPause;const pz=$('.tl-pz');if(pz)pz.hidden=!ui.tlPause;break;}
+  case 'tlnext':tlMove(1);break;
+  case 'tlbook':stopTl();replace('book',{id:v});break;
+  case 'tlinfo':stopTl();ui.tlPause=true;go('book',{id:v});break;
+  case 'wish':{const i=S.wish.indexOf(v);if(i>=0)S.wish.splice(i,1);else S.wish.push(v);save();if(route.n==='trailer'&&!ui.tlEnd){const bt=e.target.closest('button');if(bt){bt.classList.toggle('on',i<0);bt.querySelector('i').textContent=i<0?'♥':'♡';}}else render();break;}
   case 'closesheet':sheet=null;render();break;
   case 'sheetbg':if(e.target===el){sheet=null;render();}break;
   case 'nextday':S.dayOffset++;save();render();toast(fmtDate(dk())+'로 넘어갔어요');break;
@@ -731,7 +940,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
   case 'coverdel':delete S.covers[v];save();render();break;
   case 'share':S.user.shareQuote=!S.user.shareQuote;save();render();break;
  }});
-document.addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;ui.qn=30;const r=$('#results'),br=$('#browse');if(r)r.innerHTML=searchResults();if(br)br.hidden=!!ui.q.trim();return;}if(e.target.id==='rvl'){ui.rv=e.target.value;const ok=validLine(ui.rv);const b=$('#rvbtn');if(b)b.disabled=!ok;const h=$('#rvh');if(h)h.textContent=ui.rv?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'';}if(e.target.id==='pgin'){ui.endPage=parseInt(e.target.value,10)||0;const hb=$('#pghint');const bid=sheet&&sheet.n==='page'?sheet.id:(ui.endBook!==undefined?ui.endBook:(S.timer&&S.timer.book));if(hb&&bid)hb.innerHTML=pgHint(B(bid),bs(bid),ui.endPage);}});
+document.addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;ui.qn=30;const r=$('#results'),br=$('#browse');if(r)r.innerHTML=searchResults();if(br)br.hidden=!!ui.q.trim();return;}if(e.target.id==='trl'){const ok=validLine(e.target.value);const b=$('#trbtn');if(b)b.disabled=!ok;const h=$('#trh');if(h)h.textContent=e.target.value?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'';}if(e.target.id==='rvl'){ui.rv=e.target.value;const ok=validLine(ui.rv);const b=$('#rvbtn');if(b)b.disabled=!ok;const h=$('#rvh');if(h)h.textContent=ui.rv?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'';}if(e.target.id==='pgin'){ui.endPage=parseInt(e.target.value,10)||0;const hb=$('#pghint');const bid=sheet&&sheet.n==='page'?sheet.id:(ui.endBook!==undefined?ui.endBook:(S.timer&&S.timer.book));if(hb&&bid)hb.innerHTML=pgHint(B(bid),bs(bid),ui.endPage);}});
 function bindHold(){const h=$('#hold'),f=$('#holdfill');if(!h)return;let t0=0,raf=0;const stop=()=>{cancelAnimationFrame(raf);if(f)f.style.width='0';};const step=()=>{const p=Math.min(1,(Date.now()-t0)/5000);if(f)f.style.width=p*100+'%';if(p>=1){S.timer.focus=false;save();sheet=null;render();toast('집중 모드를 껐어요');return;}raf=requestAnimationFrame(step);};
  const down=e=>{e.preventDefault();t0=Date.now();step();};h.addEventListener('pointerdown',down);['pointerup','pointerleave','pointercancel'].forEach(x=>h.addEventListener(x,stop));h.addEventListener('contextmenu',e=>e.preventDefault());}
 document.getElementById('coverfile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];const id=e.target.dataset.id;if(!f||!id)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const W=300,H=Math.round(300*im.height/im.width);const c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(im,0,0,W,H);try{S.covers[id]=c.toDataURL('image/jpeg',.8);save();toast('표지 사진을 넣었어요');}catch(err){toast('사진을 넣지 못했어요. 다른 사진으로 해 보세요');}render();};im.src=rd.result;};rd.readAsDataURL(f);e.target.value='';});
@@ -739,7 +948,42 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 if(S.onboarded){route={n:S.timer?'timer':'home'};}
 render();
+/* ===== 사진 책갈피 엔진 ===== */
+function loadImg(src){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=src;});}
+function startMark(id,im){const MAX=1600;const k=Math.min(1,MAX/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+ window._mimg=c;ui.mstrokes=[];ui.mstep='paint';ui.mthumb=null;ui.merr=null;ui.mtext='';sheet=null;if(route.n==='mark'){route.id=id;render();}else go('mark',{id});}
+async function sampleImage(){try{await Promise.race([document.fonts.load('40px "Gowun Batang"'),new Promise(r=>setTimeout(r,1500))]);}catch(e){}const c=document.createElement('canvas');c.width=1000;c.height=1300;const g=c.getContext('2d');g.fillStyle='#f6f1e6';g.fillRect(0,0,1000,1300);g.fillStyle='#2a2620';g.font='34px "Gowun Batang", "Noto Serif CJK KR", serif';
+ const L=['창문 너머로 첫눈이 내리기 시작했다.','나는 읽던 책을 덮지 못하고','같은 줄을 몇 번이나 다시 읽었다.','어떤 문장은 처음 읽을 때보다','두 번째에 더 오래 남는다.','그날 밤 그 문장은','내 공책 맨 앞장으로 옮겨졌다.','다음 날 아침, 눈은 그쳐 있었다.','하지만 문장은 그치지 않았다.'];
+ L.forEach((t,i)=>g.fillText(t,90,170+i*104));g.font='24px serif';g.fillStyle='#8a8070';g.fillText('48',480,1240);g.fillText('예시 페이지 · 시연용으로 직접 쓴 문장',90,90);return loadImg(c.toDataURL('image/jpeg',.92));}
+document.getElementById('markfile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{loadImg(rd.result).then(im=>startMark(ui.markBook,im)).catch(()=>{ui.toast='사진을 열지 못했어요';render();});};rd.readAsDataURL(f);});
+function markScale(){const cv=$('#mcv');return cv?window._mimg.width/cv.width:1;}
+function brush(){return Math.max(24,Math.round((window._mimg?window._mimg.width:1000)/22));}
+function drawMark(){const cv=$('#mcv');if(!cv||!window._mimg)return;const g=cv.getContext('2d');g.clearRect(0,0,cv.width,cv.height);g.drawImage(window._mimg,0,0,cv.width,cv.height);const s=markScale();
+ g.save();g.globalAlpha=.42;g.strokeStyle='#ffd400';g.lineCap='round';g.lineJoin='round';g.lineWidth=brush()/s;(ui.mstrokes||[]).forEach(st=>{g.beginPath();st.forEach((p,i)=>{const x=p[0]/s,y=p[1]/s;i?g.lineTo(x,y):g.moveTo(x,y);});if(st.length===1)g.lineTo(st[0][0]/s+.1,st[0][1]/s);g.stroke();});g.restore();}
+function setupMark(){const cv=$('#mcv');if(!cv||!window._mimg)return;const wrap=cv.parentElement;const W=wrap.clientWidth;cv.width=W;cv.height=Math.round(W*window._mimg.height/window._mimg.width);drawMark();let cur=null;
+ const pt=e=>{const r=cv.getBoundingClientRect();const s=markScale();return [(e.clientX-r.left)*s,(e.clientY-r.top)*s];};
+ cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);cur=[pt(e)];(ui.mstrokes=ui.mstrokes||[]).push(cur);drawMark();});
+ cv.addEventListener('pointermove',e=>{if(!cur)return;e.preventDefault();cur.push(pt(e));drawMark();});
+ const end=()=>{cur=null;};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);}
+function cropPainted(){const im=window._mimg;const ss=ui.mstrokes||[];if(!ss.length)return null;const r=brush()/2;let x0=1e9,y0=1e9,x1=-1,y1=-1;ss.forEach(st=>st.forEach(p=>{x0=Math.min(x0,p[0]-r);y0=Math.min(y0,p[1]-r);x1=Math.max(x1,p[0]+r);y1=Math.max(y1,p[1]+r);}));
+ x0=Math.max(0,Math.floor(x0));y0=Math.max(0,Math.floor(y0));x1=Math.min(im.width,Math.ceil(x1));y1=Math.min(im.height,Math.ceil(y1));const w=x1-x0,h=y1-y0;if(w<8||h<8)return null;
+ const m=document.createElement('canvas');m.width=w;m.height=h;const g=m.getContext('2d');g.lineCap='round';g.lineJoin='round';g.lineWidth=r*2;g.strokeStyle='#000';ss.forEach(st=>{g.beginPath();st.forEach((p,i)=>{const x=p[0]-x0,y=p[1]-y0;i?g.lineTo(x,y):g.moveTo(x,y);});if(st.length===1)g.lineTo(st[0][0]-x0+.1,st[0][1]-y0);g.stroke();});
+ g.globalCompositeOperation='source-in';g.drawImage(im,x0,y0,w,h,0,0,w,h);
+ const k=h<120?2:1;const o=document.createElement('canvas');o.width=w*k;o.height=h*k;const og=o.getContext('2d');og.fillStyle='#fff';og.fillRect(0,0,o.width,o.height);og.drawImage(m,0,0,o.width,o.height);
+ const t=document.createElement('canvas');const tw=Math.min(360,w);t.width=tw;t.height=Math.round(h*tw/w);t.getContext('2d').drawImage(im,x0,y0,w,h,0,0,t.width,t.height);return {ocr:o,thumb:t.toDataURL('image/jpeg',.6)};}
+function loadTess(){if(window.Tesseract)return Promise.resolve(window.Tesseract);return new Promise((ok,no)=>{const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';sc.onload=()=>window.Tesseract?ok(window.Tesseract):no(new Error('no Tesseract'));sc.onerror=()=>no(new Error('load failed'));document.head.appendChild(sc);});}
+function cleanOcr(t){return String(t||'').replace(/\n+/g,' ').replace(/([가-힣])\s(?=[가-힣]\s[가-힣])/g,'$1 ').replace(/\s{2,}/g,' ').replace(/[|_~^]/g,'').trim();}
+async function runOcr(){const c=cropPainted();if(!c){ui.toast='먼저 남기고 싶은 줄을 칠해 주세요';render();return;}
+ ui.mthumb=c.thumb;ui.mstep='ocr';ui.mcancel=false;render();const prog=t=>{const el=$('#mprog');if(el)el.textContent=t;};
+ const timeout=new Promise((_,no)=>setTimeout(()=>no(new Error('timeout')),90000));
+ try{const T=await Promise.race([loadTess(),timeout]);prog('인식기를 불러오는 중이에요');
+  if(!window._ocrW)window._ocrW=await Promise.race([T.createWorker('kor',1,{logger:m=>{if(m.status==='recognizing text')prog('글자를 읽는 중 '+Math.round(m.progress*100)+'%');else if(m.status)prog('준비 중 · '+m.status);}}),timeout]);
+  const r=await Promise.race([window._ocrW.recognize(c.ocr),timeout]);if(ui.mcancel)return;const txt=cleanOcr(r.data&&r.data.text);
+  ui.mtext=txt;ui.merr=txt?null:'글자를 읽지 못했어요. 직접 적어 주세요.';}
+ catch(e){if(ui.mcancel)return;ui.mtext='';ui.merr='이 화면에서는 글자 인식기를 불러오지 못했어요. 직접 적어 주세요. (GitHub Pages 등으로 연 단독 HTML에서 다시 시도해 보세요)';}
+ if(route.n==='mark'){ui.mstep='edit';render();}}
 })();
+
 </script>
 
 </body></html>
