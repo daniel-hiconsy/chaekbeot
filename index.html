@@ -355,6 +355,16 @@ function gradeRange(gs){const o=['초5','초6','중1','중2','중3'];const ix=gs
 function byPop(a,c){return (c.places||0)-(a.places||0)||(a.lv||0)-(c.lv||0)||a.title.localeCompare(c.title,'ko');}
 function byLv(a,c){return (a.lv||0)-(c.lv||0)||byPop(a,c);}
 const GRADES=['초5','초6','중1','중2','중3','성인'];
+const MINOR_GRADES=['초4 이하','초5','초6','중1','중2','중3','고등'];
+function curYear(){return now().getFullYear();}
+function ageMin(by){return curYear()-by-1;}
+function ageMax(by){return curYear()-by;}
+function isAdult(by){return ageMin(by)>=19;}
+function needConsent(by){return ageMin(by)<14;}
+function locked(){return S.user.consent==='pending';}
+function kgOf(g){return (g==='성인'||g==='고등')?'중3':g==='초4 이하'?'초5':g;}
+function hm(t){const d=new Date(t);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function endRead(id){const t=S.timer;if(!t||(id&&t.book!==id))return null;const end=Date.now();const min=Math.max(1,elapsedMin());S.sessions.push({date:dk(),book:t.book,min,start:t.start,end});S.timer=null;try{wakeOff();}catch(e){}return {start:t.start,end,min};}
 const UNDER14=['초5','초6','중1'];
 const BADGES=[
  {id:'story2',name:'이야기 여행자',short:'이야기',desc:'문학 책 2권을 다 읽고 감상을 남겨요'},
@@ -371,14 +381,14 @@ const BADGES=[
 
 /* ---------- 상태 ---------- */
 const KEY='chaekbeot-demo-v1';
-const fresh=()=>({onboarded:false,user:{nick:makeNick(),name:'',grade:'중1',guardian:false,guardianPhone:'',shareQuote:false},dayOffset:0,goal:10,goalSet:false,focusDefault:false,speed:false,books:{},sessions:[],badges:{},title:'',reviews:0,timer:null,lastBook:null,covers:{},traces:[],reacts:{},reported:{},marks:[],wish:[],tlDay:null});
+const fresh=()=>({onboarded:false,user:{nick:makeNick(),name:'',grade:'',by:null,school:'',consent:'none',loginVia:'',guardian:false,guardianPhone:'',shareQuote:false},readStart:null,dayOffset:0,goal:10,goalSet:false,focusDefault:false,speed:false,books:{},sessions:[],badges:{},title:'',reviews:0,timer:null,lastBook:null,covers:{},traces:[],reacts:{},reported:{},marks:[],wish:[],tlDay:null});
 let S=load();
 function migrate(o){const idOf={};BOOKS.forEach(b=>{idOf[tkey(b.title)]=b.id;});const map=id=>{if(!/^c\d+$/.test(id))return BOOKS.some(b=>b.id===id)?id:null;const r=OLDCAT[+id.slice(1)];return r?idOf[tkey(r[1])]||null:null;};
  const nb={};Object.keys(o.books||{}).forEach(id=>{const n=map(id);if(n)nb[n]=o.books[id];});o.books=nb;
  const nc={};Object.keys(o.covers||{}).forEach(id=>{const n=map(id);if(n)nc[n]=o.covers[id];});o.covers=nc;
  o.sessions=(o.sessions||[]).map(x=>x.book?Object.assign({},x,{book:map(x.book)}):x);
  if(o.timer&&o.timer.book)o.timer.book=map(o.timer.book);if(o.lastBook)o.lastBook=map(o.lastBook);}
-function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&typeof v==='object'){const o=Object.assign(fresh(),v);o.covers=o.covers||{};migrate(o);if(!o.user.nick)o.user.nick=makeNick();return o;}}catch(e){}return fresh();}
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&typeof v==='object'){const o=Object.assign(fresh(),v);o.covers=o.covers||{};migrate(o);if(o.onboarded&&!o.user.consent)o.user.consent='done';if(!o.user.nick)o.user.nick=makeNick();return o;}}catch(e){}return fresh();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
 /* ---------- 유틸 ---------- */
@@ -477,34 +487,53 @@ function render(){
 }
 
 const VIEWS={
- onboard(){const s=route.step||0;
+ onboard(){const s=route.step||0;const u=S.user;
   if(s===0)return `<main class="main notab"><div class="hero"><span class="pill">시연용 앱 · 콘텐츠는 예시</span><div class="logo">책벗</div><p class="sub" style="margin:0;font-size:16px">책 한 권을 끝까지, 같이 읽는 친구.<br>읽은 만큼 체크인하면 다음 장의 콘텐츠가 열려요.</p></div>
-   <div class="card plain"><div class="small">실제 서비스는 카카오 · Apple · 이메일로 가입해요. 시연에서는 닉네임만 정하면 바로 시작해요. 기록은 이 기기에만 저장돼요.</div></div>
-   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="1">시작하기</button></main>`;
-  if(s===1)return shell('가입 정보',`<div class="col"><label class="h3" for="nm">닉네임</label><input id="nm" type="text" maxlength="12" value="${esc(S.user.name||'책읽는고래')}"></div>
-   <div class="col"><span class="h3">학년</span><div class="chips">${GRADES.map(g=>`<button class="chip ${S.user.grade===g?'on':''}" data-a="grade" data-v="${g}">${g}</button>`).join('')}</div><span class="small">학년에 맞춰 "나를 위한 추천"을 보여 줘요. 「성인」은 성인 확장 시험용이에요.</span></div>
-   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="2">다음</button>`,{back:false,tabs:false});
-  const need=UNDER14.includes(S.user.grade);
-  return shell('보호자 동의',`<div class="card">${need?`<p class="h3" style="margin:0">만 14세 미만은 보호자 동의가 필요해요</p><p class="small" style="margin:0">실제 서비스는 보호자 휴대폰 본인인증으로 동의를 받아요. 시연에서는 체크만 하면 돼요.</p>`:`<p class="h3" style="margin:0">보호자 연결은 선택이에요</p><p class="small" style="margin:0">연결하면 보호자가 주간 리포트를 받아요 (MVP 이후 기능).</p>`}
-   <button class="row opt ${S.user.guardian?'sel':''}" data-a="guardian"><span class="grow">${need?'보호자가 동의했어요 (시연)':'보호자와 연결할래요'}</span><b>${S.user.guardian?'✓':''}</b></button>
-   <label class="small" for="gp">보호자 휴대폰 (선택, 리포트 미리보기에만 쓰여요)</label><input id="gp" type="tel" placeholder="010-0000-0000" value="${esc(S.user.guardianPhone)}"></div>
-   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="3" ${need&&!S.user.guardian?'disabled':''}>책벗 시작하기</button>`,{back:false,tabs:false});
+   <div style="flex:1"></div>
+   <div class="col" style="gap:8px"><button class="btn" style="background:#fee500;color:#191919" data-a="login" data-v="카카오">카카오로 시작하기</button><button class="btn" style="background:#000;color:#fff" data-a="login" data-v="Apple">Apple로 시작하기</button><button class="btn sec" data-a="login" data-v="이메일">이메일로 시작하기</button></div>
+   <span class="tiny" style="text-align:center">시연에서는 실제 로그인 없이 넘어가요. 기록은 이 기기에만 저장돼요.</span>
+   <button class="btn ghost" style="align-self:center" data-a="ob" data-v="9">내부 검토용 · 아이디 + 핀으로 시작</button></main>`;
+  if(s===9)return shell('내부 검토용 로그인',`<div class="note">프로토타입 검토(내부)에서만 쓰는 방식이에요. 실제 서비스에서는 쓰지 않아요.</div>
+   <div class="col"><label class="h3" for="lid">아이디</label><input id="lid" type="text" maxlength="16" autocomplete="off" placeholder="영문 · 숫자"></div>
+   <div class="col"><label class="h3" for="lpin">핀 4자리</label><input id="lpin" type="tel" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="0000"></div>
+   <div style="flex:1"></div><button class="btn" data-a="login" data-v="아이디">다음</button>`,{back:true,tabs:false});
+  if(s===1){const by=u.by;const ok=by&&by>=1920&&by<=curYear();const adult=ok&&isAdult(by);const minor=ok&&!adult;
+   return shell('가입 정보',`<div class="col" style="gap:2px"><b class="h2">시작하기 전에 몇 가지만 알려 주세요</b><span class="small">${esc(u.loginVia||'')}${u.loginVia?'로 가입 중':''}</span></div>
+   <div class="col"><label class="h3" for="by">태어난 해 <span class="small">(필수)</span></label><input id="by" type="number" inputmode="numeric" placeholder="예: 2013" value="${by||''}"></div>
+   ${minor?`<div class="col"><span class="h3">학년 <span class="small">(필수)</span></span><div class="chips">${MINOR_GRADES.map(g=>`<button class="chip ${u.grade===g?'on':''}" data-a="grade" data-v="${g}">${g}</button>`).join('')}</div><span class="small">학년에 맞춰 「나를 위한 추천」을 보여 주고, 흔적은 같은 학교급끼리만 보여요.</span></div>
+   <div class="col"><label class="h3" for="sc">학교 이름 <span class="small">(선택)</span></label><input id="sc" type="text" maxlength="20" placeholder="예: 한빛중학교" value="${esc(u.school||'')}"><span class="small">다른 사람에게는 보이지 않아요.</span></div>`:''}
+   ${adult?`<div class="card plain"><span class="small">만 19세 이상은 학년을 묻지 않아요. 성인용 추천과 흔적(성인끼리)을 보여 줘요.</span></div>`:''}
+   ${ok?`<div class="card"><span class="small">내 닉네임 · 자동으로 정해져요</span><b class="h2">${esc(u.nick)}</b><span class="small">흔적에는 이 이름만 보여요. 바꿀 수 없어요.</span></div>`:''}
+   ${ok&&needConsent(by)?`<div class="card" style="background:var(--warn-soft);border-color:transparent"><b class="small">만 14세 미만이면 보호자 동의가 필요해요</b><span class="small">다음 단계에서 보호자 휴대폰으로 동의를 받아요.${ageMax(by)>=14?' (태어난 해만으로는 만 14세가 됐는지 알 수 없어 동의를 받아요)':''}</span></div>`:''}
+   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="2" ${ok&&(adult||u.grade)?'':'disabled'}>다음</button>`,{back:false,tabs:false});}
+  if(s===2)return shell('보호자 동의 요청',`<div class="col" style="gap:2px"><b class="h2">보호자 동의를 받아 주세요</b><span class="small">개인정보보호법에 따라 만 14세 미만은 보호자가 동의해야 책 읽기를 시작할 수 있어요.</span></div>
+   <div class="col"><label class="h3" for="gp">보호자 휴대폰 번호</label><input id="gp" type="tel" placeholder="010-0000-0000" value="${esc(u.guardianPhone||'')}"><span class="small">보호자에게 동의 링크를 문자로 보내요. 이 번호는 동의를 받는 데만 써요. (시연에서는 보내지 않아요)</span></div>
+   <div class="card plain"><span class="small">동의 전에도 둘러볼 수 있어요: 책 찾기 · 예고편 · 책 정보</span><span class="small">동의하면 열려요: 읽기 시작 · 체크인 · 흔적</span></div>
+   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="3">동의 요청 보내기</button>`,{back:false,tabs:false});
  },
+
+ consent(){const u=S.user;const ck=!!ui.cid;
+  return shell('보호자 동의 (보호자 휴대폰)',`<div class="note">보호자가 문자 링크로 여는 웹 화면이에요 (시연).</div>
+   <div class="col" style="gap:2px"><b class="h2">책벗 보호자 동의</b><span class="small">「${esc(u.nick)}」(${u.by}년생)가 책벗 가입을 위해 동의를 요청했어요.</span></div>
+   <div class="card"><b class="h3">받는 정보</b><span class="small">태어난 해, 학년, 학교 이름(선택), 읽기 기록(체크인 · 읽은 시간 · 완독 기록), 흔적</span><b class="h3">쓰는 곳</b><span class="small">책 추천, 읽기 기록, 같은 학교급 또래 흔적</span><b class="h3">보관 기간</b><span class="small">미정 (법무 확인 후 확정)</span></div>
+   <button class="row opt ${ck?'sel':''}" data-a="cid"><span class="grow">보호자 본인 확인 (시연 · 실제 방법은 법무 확인 후 확정)</span><b>${ck?'✓':''}</b></button>
+   <div style="flex:1"></div><button class="btn" data-a="consentok" ${ck?'':'disabled'}>동의하기</button>`,{back:true,tabs:false});},
 
  home(){const r=reading();const g=S.goal;const tm=minutesOn(dk());const st=streak();
   let h=`<div class="chips"><span class="pill">${st>0?'연속 '+st+'일째':'오늘 첫 기록을 남겨 보세요'}</span>${g?`<button class="pill" style="border:0" data-a="goalsheet">오늘 ${tm} / ${g}분 <span class="tag">MVP 이후</span></button>`:''}</div>`;
   if(!r.length){h+=`<div class="card"><p class="h2" style="margin:0">지금 읽는 책이 없어요</p><p class="small" style="margin:0">책을 하나 골라 시작해 보세요. 완독 목표일만 정하면 돼요.</p><button class="btn" data-a="tab" data-v="books">책 고르러 가기</button></div>`;}
   else{const main=B(S.lastBook)&&bs(S.lastBook).status==='reading'?B(S.lastBook):r[0];const others=r.filter(b=>b!==main);const m=bs(main.id);const tot=main.chapters.length;const dd=diffDays(dk(),m.goalDate);
    h+=`<div class="card"><button class="row" style="border:0;background:none;padding:0;text-align:left;align-items:flex-start" data-a="book" data-v="${main.id}">${cover(main,72,102)}<div class="col grow"><span class="tiny">지금 읽는 책</span><span class="h2 serif">${esc(main.title)}</span><span class="small">${esc(main.author)}</span><div class="row between"><b class="num" style="font-size:13px">${m.chapter} / ${tot}장</b><span class="small num">${dd>=0?'완독 목표 D-'+dd:'목표일 '+(-dd)+'일 지남'}</span></div><div class="track"><i style="width:${m.chapter/tot*100}%"></i></div><span class="small acc">책 정보 · 미션 · 콘텐츠 보기 ›</span></div></button>
-    <button class="btn" data-a="timerstart" data-v="${main.id}">이어서 읽기 (타이머) <span class="tag" style="background:rgba(255,255,255,.25);color:inherit">MVP 이후</span></button>
-    <div class="btns"><button class="btn sec" data-a="checkin" data-v="${main.id}">읽은 곳 체크인</button><button class="btn sec" data-a="pagesheet" data-v="${main.id}">쪽만 기록</button></div></div>`;
+    ${readBtns(main)}
+    <button class="btn ghost" style="align-self:center;font-size:13px" data-a="pagesheet" data-v="${main.id}">쪽만 기록 <span class="tag">MVP 이후</span></button></div>`;
    if(others.length)h+=`<p class="h3" style="margin:4px 0 0">함께 읽는 책 ${others.length}권</p>`+others.map(b=>{const s2=bs(b.id);return `<button class="card row" style="text-align:left" data-a="book" data-v="${b.id}">${cover(b,38,54)}<div class="col grow"><b>${esc(b.title)}</b><span class="small num">${s2.chapter} / ${b.chapters.length}장</span><div class="track" style="height:5px"><i style="width:${s2.chapter/b.chapters.length*100}%"></i></div></div><span class="sub">›</span></button>`;}).join('');}
   {const ws=S.wish.map(id=>B(id)).filter(b=>b&&bs(b.id).status==='none');if(ws.length)h+=`<p class="h3" style="margin:4px 0 0">보고 싶어요 ${ws.length}권</p><div class="card" style="padding-block:4px"><div class="list">${ws.map(bookRow).join('')}</div></div>`;}
   h+=`<button class="card row" style="justify-content:center;border-style:dashed;color:var(--sub)" data-a="tab" data-v="books">+ 다음에 읽을 책 찾기</button>`;
   if(S.timer)h=`<button class="card soft row" data-a="go" data-v="timer"><b class="grow acc">읽는 중 · 타이머가 돌아가고 있어요</b><span class="acc">›</span></button>`+h;
+  if(locked())h=pendingCard()+h;
   return shell('홈',h);},
 
- books(){const f=ui.bookFilter||'mine';const g=S.user.grade;const kg=g==='성인'?'중3':g;
+ books(){const f=ui.bookFilter||'mine';const g=S.user.grade;const kg=kgOf(g);
   const row=bookRow;const poc=BOOKS.filter(b=>!b.listOnly&&!(b.adult&&g!=='성인'));const pop=BOOKS.filter(b=>b.listOnly&&b.grades.includes(kg)).sort(byPop);
   const bc=pop.slice(0,3);const total=BOOKS.filter(b=>!b.adult).length;
   let h=`<label class="search" for="q">${IC.books}<input id="q" type="search" placeholder="책 제목, 지은이, 갈래로 찾기" value="${esc(ui.q||'')}" autocomplete="off"></label><div id="results">${searchResults()}</div><div id="browse" ${ui.q?'hidden':''}>
@@ -557,8 +586,8 @@ const VIEWS={
   else h+=`<div class="note">콘텐츠가 없는 책이에요. 체크인과 기록만 남아요.</div>`;
   {const tv=visibleTraces(b,st.chapter).vis.filter(t=>!t.mine).length;const mn=S.traces.filter(t=>t.book===b.id).length;h+=cohortCard(b,st.chapter,true)+`<button class="card row" style="text-align:left" data-a="go" data-v="traces" data-w="${b.id}"><div class="col grow" style="gap:0"><b>흔적 · 떡밥</b><span class="small">읽은 곳까지 친구 흔적 ${tv}개 · 내 흔적 ${mn}개</span></div><span class="sub">›</span></button>`;
    const ms=marksOf(b.id);h+=`<div class="row between"><b class="h3">책갈피 ${ms.length}</b><span class="tiny">나만 봐요</span></div>`+(ms.length?ms.slice(-3).map(m=>markCard(m)).join('')+(ms.length>3?`<button class="linkbtn" data-a="go" data-v="marks">책갈피 전체 보기 ›</button>`:''):'')+markBtn(b.id);}
-  if(st.status==='reading')h+=`<button class="btn" data-a="timerstart" data-v="${b.id}">이어서 읽기 (타이머)</button><button class="btn sec" data-a="checkin" data-v="${b.id}">읽은 곳 체크인</button>`;
-  else if(st.status==='done'&&!st.confirmed)h+=`<button class="btn" data-a="go" data-v="review" data-w="${b.id}">한 줄 감상 남기고 ${b.card?'카드 받기':'완독 확인하기'}</button>`;
+  if(st.status==='reading')h+=readBtns(b);
+  else if(st.status==='done'&&!st.confirmed)h+=`<button class="btn" data-a="go" data-v="review" data-w="${b.id}">완독 기록 남기고 ${b.card?'카드 받기':'완독 확인하기'}</button>`;
   return shell(esc(b.title),h,{back:true,tabs:false});},
 
  before(){const b=B(route.id);const x=b.before;
@@ -572,7 +601,9 @@ const VIEWS={
    <div class="chips">${b.chapters.map((c,i)=>{const n=i+1;const dis=n<=st.chapter;return `<button class="chip ${sel===n?'on':''}" data-a="ckch" data-v="${n}" ${dis?'disabled style="opacity:.35"':''}>${esc(c)}</button>`;}).join('')}</div>
    ${sel===tot?'<div class="card soft"><b class="acc">마지막 장이에요. 체크인하면 완독으로 표시돼요.</b></div>':''}
    <div class="col"><label class="small" for="ckp">마지막으로 읽은 쪽 (선택)</label><input id="ckp" type="number" inputmode="numeric" placeholder="${b.pageEnds[sel-1]}"></div>
-   <div class="note">체크인하면 같은 곳을 지난 친구들의 흔적이 열리고, 내 흔적과 떡밥을 남길 수 있어요.</div>
+   <button class="btn sec" data-a="ckall" data-v="${b.id}">책을 다 읽었어요</button><span class="small" style="margin-top:-8px">누르면 마지막 장까지 읽은 것으로 기록하고 완독 기록으로 넘어가요.</span>
+   ${S.timer&&S.timer.book===b.id?`<div class="card plain"><span class="small">타이머가 ${hm(S.timer.start)}부터 돌아가고 있어요. 체크인하면 읽은 시간이 함께 저장돼요.</span></div>`:''}
+   <div class="note">체크인하면 같은 곳을 지난 친구들의 흔적이 열리고, 내 흔적을 한 칸 남길 수 있어요.</div>
    <button class="btn" data-a="cksave" data-v="${b.id}">체크인</button>`,{back:true,tabs:false});},
 
  quiz(){const b=B(route.id);const qs=b.quiz[route.ch]||[];const i=route.i||0;const q=qs[i];const pick=ui.qpick;const shown=ui.qshown;
@@ -600,17 +631,17 @@ const VIEWS={
  finish(){const b=B(route.id);const st=bs(b.id);const days=Math.max(1,diffDays(st.started,st.doneDate)+1);const min=S.sessions.filter(s=>s.book===b.id).reduce((a,s)=>a+s.min,0);
   const qa=Object.values(st.quiz);const qt=qa.reduce((a,x)=>a+x.t,0),qc=qa.reduce((a,x)=>a+x.c,0);const q=b.card&&b.card.quiet;
   return shell(q?'다 읽었어요':'완독',`${b.card?`<div style="width:150px;margin:6px auto;position:relative"><div style="filter:grayscale(1) blur(1.5px);opacity:.5">${cardFront(b,'small')}</div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span class="pill" style="background:var(--surface)">감상을 남기면 열려요</span></div></div>`:''}
-   <div class="col" style="align-items:center;text-align:center"><b class="h2 serif" style="font-size:21px">${q?'「'+esc(b.title)+'」를 끝까지 읽어 주어 고마워요':'「'+esc(b.title)+'」를 다 읽었어요!'}</b>${b.card?`<span class="small" style="color:${b.ink}">한 줄 감상을 남기면 ${q?'기억 카드':'카드'} 「${esc(b.card.name)}」과 칭호 「${esc(b.card.title)}」를 받아요</span>`:'<span class="small">한 줄 감상을 남기면 완독이 확인돼요</span>'}</div>
+   <div class="col" style="align-items:center;text-align:center"><b class="h2 serif" style="font-size:21px">${q?'「'+esc(b.title)+'」를 끝까지 읽어 주어 고마워요':'「'+esc(b.title)+'」를 다 읽었어요!'}</b>${b.card?`<span class="small" style="color:${b.ink}">한 줄을 남기면 ${q?'기억 카드':'카드'} 「${esc(b.card.name)}」과 칭호 「${esc(b.card.title)}」를 받아요</span>`:'<span class="small">한 줄을 남기면 완독이 확인돼요</span>'}</div>
    <div class="stat"><div><b>${days}일</b><span class="tiny">걸린 날</span></div><div><b>${min?Math.floor(min/60)+'시간 '+min%60+'분':st.checkins.length+'번'}</b><span class="tiny">${min?'읽은 시간':'체크인'}</span></div><div><b>${b.missions.length?missionCount(b)+' / '+b.missions.length:'-'}</b><span class="tiny">미션</span></div></div>
    ${qt?`<div class="card plain row between"><span class="small">챕터 퀴즈 결과 (다 읽은 뒤 모아서)</span><b class="num">${qt}개 중 ${qc}개 맞힘</b></div>`:''}
    ${q?'':`<div class="card" style="background:var(--warn-soft);border-color:transparent"><b class="small">다 읽은 너에게</b><span>${esc(cheer(b))}</span></div>`}
-   <button class="btn" data-a="go" data-v="review" data-w="${b.id}">감상 남기기</button><button class="btn sec" data-a="tab" data-v="home">나중에</button>`,{back:false,tabs:false});},
+   <button class="btn" data-a="go" data-v="review" data-w="${b.id}">완독 기록 남기기</button><button class="btn sec" data-a="tab" data-v="home">나중에</button>`,{back:false,tabs:false});},
 
  review(){const b=B(route.id);const st=bs(b.id);const v=ui.rv!=null?ui.rv:'';const sc=ui.rsc;const ok=validLine(v);
-  return shell('완독 후 떠들기',`<div class="col"><label class="h3" for="rvl">한 줄 감상 <span class="small">(필수 · 10자 이상)</span></label><textarea id="rvl" maxlength="120" placeholder="책을 덮고 가장 먼저 떠오른 생각">${esc(v)}</textarea><span class="small" id="rvh">${v?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'예: 규칙이 조금씩 바뀌는데 아무도 막지 못하는 게 무서웠다'}</span></div>
-   ${b.scenes.length?`<div class="col"><span class="h3">기억에 남는 장면 <span class="small">(선택)</span></span><span class="small">고르면 카드 뒷면에 「나의 장면」으로 새겨져요</span><div class="col">${b.scenes.map((s,i)=>`<button class="opt ${sc===i?'sel':''}" data-a="rsc" data-v="${i}">${esc(s)}</button>`).join('')}</div></div>`:''}
-   ${marksOf(b.id).length?`<div class="col"><span class="h3">내 책갈피에서 고르기 <span class="small">(선택)</span></span><span class="small">${b.card?'고르면 카드 뒷면 「나의 장면」에 내 책갈피 글귀가 새겨져요 (나만 봐요)':'고르면 완독 기록에 함께 남아요'}</span><div class="col">${marksOf(b.id).map(m=>`<button class="opt ${ui.rmk===m.id?'sel':''}" data-a="rmk" data-v="${m.id}" style="text-align:left"><span class="tiny">${m.page?m.page+'쪽':''}</span> ${esc(m.text.length>60?m.text.slice(0,60)+'…':m.text)}</button>`).join('')}</div></div>`:''}
-   <button class="btn" id="rvbtn" data-a="rsave" data-v="${b.id}" ${ok?'':'disabled'}>${b.card?'감상 남기고 카드 받기':'감상 남기기'}</button>`,{back:true,tabs:false});},
+  return shell('완독 기록',`<div class="col"><label class="h3" for="rvl">한 줄 감상 또는 가장 기억에 남는 문장 <span class="small">(필수 · 10자 이상)</span></label><span class="small" style="margin-top:-4px">둘 중 하나만 남기면 돼요. 카드 뒷면과 서재에 보여요.</span><textarea id="rvl" maxlength="120" placeholder="책을 덮고 떠오른 생각이나, 오래 남은 문장 하나">${esc(v)}</textarea><span class="small" id="rvh">${v?(ok?'좋아요':'10자 이상, 같은 글자 반복 없이 써 주세요'):'예: 규칙이 조금씩 바뀌는데 아무도 막지 못하는 게 무서웠다'}</span></div>
+   ${b.scenes.length?`<div class="col"><span class="h3">기억에 남는 장면 <span class="small">(선택)</span> <span class="tag">결정 필요</span></span><span class="small">고르면 카드 뒷면에 「나의 장면」으로 새겨져요</span><div class="col">${b.scenes.map((s,i)=>`<button class="opt ${sc===i?'sel':''}" data-a="rsc" data-v="${i}">${esc(s)}</button>`).join('')}</div></div>`:''}
+   ${marksOf(b.id).length?`<div class="col"><span class="h3">내 책갈피에서 고르기 <span class="small">(선택)</span> <span class="tag">MVP 이후</span></span><span class="small">${b.card?'고르면 카드 뒷면 「나의 장면」에 내 책갈피 글귀가 새겨져요 (나만 봐요)':'고르면 완독 기록에 함께 남아요'}</span><div class="col">${marksOf(b.id).map(m=>`<button class="opt ${ui.rmk===m.id?'sel':''}" data-a="rmk" data-v="${m.id}" style="text-align:left"><span class="tiny">${m.page?m.page+'쪽':''}</span> ${esc(m.text.length>60?m.text.slice(0,60)+'…':m.text)}</button>`).join('')}</div></div>`:''}
+   <button class="btn" id="rvbtn" data-a="rsave" data-v="${b.id}" ${ok?'':'disabled'}>${b.card?'남기고 카드 받기':'남기기'}</button>`,{back:true,tabs:false});},
 
  reward(){const b=B(route.id);const g=route.badges||[];const q=b.card&&b.card.quiet;
   if(!b.card)return shell('완독 확인',`<div class="card soft rise"><b class="h2">완독이 확인됐어요</b><span class="small">이 책은 카드가 없어요. 서재 책장에 꽂혔어요.</span></div>${g.length?badgeRow(g):''}<button class="btn" data-a="tab" data-v="shelf">내 서재 보기</button>`,{back:false,tabs:false});
@@ -623,10 +654,11 @@ const VIEWS={
 
  shelf(){const t=ui.shelfTab||'shelf';const done=BOOKS.filter(b=>bs(b.id).status==='done');
   let h=`<div class="seg"><button class="${t==='shelf'?'on':''}" data-a="st" data-v="shelf">책장</button><button class="${t==='cards'?'on':''}" data-a="st" data-v="cards">카드 · 뱃지</button></div>`;
-  if(t==='shelf'){const sel=ui.shelfSel&&done.find(b=>b.id===ui.shelfSel)||done[0];
-   h+=`<b class="h3">다 읽은 책 ${done.length}권</b><div class="shelf"><div class="shelf-row">${done.map(b=>`<button style="border:0;padding:0;background:none;outline:${sel===b?'2px solid var(--accent)':'none'};border-radius:6px" data-a="ssel" data-v="${b.id}">${cover(b,74,108)}</button>`).join('')}${Array.from({length:Math.max(0,5-done.length)}).map(()=>'<span class="slot"></span>').join('')}</div><div class="plank"></div></div>`;
-   if(sel){const st=bs(sel.id);h+=`<div class="card"><span class="small">${esc(sel.title)} · ${fmtDate(st.doneDate)} 다 읽음${sel.missions.length?' · 미션 '+missionCount(sel)+'/'+sel.missions.length:''}</span>${st.review?`<b class="serif" style="font-size:16px">"${esc(st.review.line)}"</b>`:'<span class="small">아직 한 줄 감상이 없어요</span>'}${st.review&&st.review.scene!=null?`<span class="small">기억에 남는 장면 · ${esc(sel.scenes[st.review.scene])}</span>`:''}${!st.confirmed?`<button class="btn sec" data-a="go" data-v="review" data-w="${sel.id}">한 줄 감상 남기기</button>`:sel.card?`<button class="btn ghost" data-a="st" data-v="cards">받은 카드 「${esc(sel.card.name)}」 보기 ›</button>`:''}</div>`;}
-   else h+=`<p class="small">아직 다 읽은 책이 없어요. 첫 책을 끝까지 읽으면 여기에 꽂혀요.</p>`;}
+  if(t==='shelf'){const rd=reading();const all=done.concat(rd);const sel=ui.shelfSel&&all.find(b=>b.id===ui.shelfSel)||all[0];
+   h+=`<b class="h3">책장 · 다 읽은 책 ${done.length}권${rd.length?' · 읽는 중 '+rd.length+'권':''}</b><div class="shelf"><div class="shelf-row">${all.map(b=>{const r=bs(b.id).status==='reading';const s2=bs(b.id);return `<button style="border:0;padding:0;background:none;outline:${sel===b?'2px solid var(--accent)':'none'};border-radius:6px;position:relative;${r?'opacity:.78':''}" data-a="ssel" data-v="${b.id}" aria-label="${esc(b.title)}${r?' (읽는 중)':''}">${cover(b,74,108)}${r?`<span style="position:absolute;top:-3px;right:8px;width:11px;height:30px;background:var(--accent);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)"></span><span style="position:absolute;left:0;bottom:0;height:5px;border-radius:0 0 0 6px;background:var(--accent);width:${s2.chapter/b.chapters.length*100}%"></span>`:''}</button>`;}).join('')}${Array.from({length:Math.max(0,5-all.length)}).map(()=>'<span class="slot"></span>').join('')}</div><div class="plank"></div></div>${rd.length?'<span class="tiny">책갈피 띠가 꽂힌 책은 아직 읽는 중이에요</span>':''}`;
+   if(sel&&bs(sel.id).status==='reading'){const st=bs(sel.id);const dd=diffDays(dk(),st.goalDate);h+=`<div class="card"><span class="small">${esc(sel.title)} · 읽는 중 · ${st.chapter} / ${sel.chapters.length}장 · ${dd>=0?'목표일까지 '+dd+'일':'목표일 '+(-dd)+'일 지남'}</span><button class="btn sec" data-a="book" data-v="${sel.id}">이어 읽기</button></div>`;}
+   else if(sel){const st=bs(sel.id);h+=`<div class="card"><span class="small">${esc(sel.title)} · ${fmtDate(st.doneDate)} 다 읽음${sel.missions.length?' · 미션 '+missionCount(sel)+'/'+sel.missions.length:''}</span>${st.review?`<b class="serif" style="font-size:16px">"${esc(st.review.line)}"</b>`:'<span class="small">아직 완독 기록이 없어요</span>'}${st.review&&st.review.scene!=null?`<span class="small">기억에 남는 장면 · ${esc(sel.scenes[st.review.scene])}</span>`:''}${!st.confirmed?`<button class="btn sec" data-a="go" data-v="review" data-w="${sel.id}">완독 기록 남기기</button>`:sel.card?`<button class="btn ghost" data-a="st" data-v="cards">받은 카드 「${esc(sel.card.name)}」 보기 ›</button>`:''}</div>`;}
+   else h+=`<p class="small">아직 책장이 비어 있어요. 책을 읽기 시작하면 여기에 꽂혀요.</p>`;}
   else{const withCard=BOOKS.filter(b=>b.card);const got=withCard.filter(b=>bs(b.id).cardGot);
    h+=`<div class="row between"><b class="h3">책 카드 ${got.length} / ${withCard.length}</b><span class="small">다 읽은 책마다 한 장</span></div><div class="cards">${withCard.map(b=>bookCard(b,false)).join('')}</div>`;
    h+=S.title?`<div class="card soft"><span class="small acc">지금 쓰는 칭호</span><b class="h2 serif acc">${esc(S.title)}</b>${got.length>1?`<div class="chips">${got.map(b=>`<button class="chip ${S.title===b.card.title?'on':''}" data-a="title" data-v="${esc(b.card.title)}">${esc(b.card.title)}</button>`).join('')}</div>`:''}</div>`:'';
@@ -640,7 +672,8 @@ const VIEWS={
    <div class="card" style="padding-block:4px"><div class="list">
     <button class="li" data-a="goalsheet"><div class="col grow" style="gap:0"><b>하루 읽기 목표 <span class="tag">MVP 이후</span></b><span class="small">${S.goal?S.goal+'분 · 오늘 '+tm+'분':'꺼져 있어요'}</span></div><span class="sub">›</span></button>
     <button class="li" data-a="focusdef"><div class="col grow" style="gap:0"><b>집중 모드 기본값 <span class="tag">MVP 이후</span></b><span class="small">타이머를 켜면 다른 앱 잠그기 (웹 시연에서는 실제로 잠기지 않아요)</span></div><span class="switch ${S.focusDefault?'on':''}"></span></button>
-    <button class="li" data-a="go" data-v="guardian"><div class="col grow" style="gap:0"><b>계정 · 보호자 <span class="tag">Should</span></b><span class="small">${u.guardian?'보호자 연결됨':'연결된 보호자 없음'}</span></div><span class="sub">›</span></button>
+    <div class="li"><div class="col grow" style="gap:0"><b>계정</b><span class="small">${esc(u.loginVia||'-')}로 가입 · ${u.by?u.by+'년생':''}${u.school?' · 학교 이름 입력함 (비공개)':''} · 보호자 동의 ${u.consent==='done'?'완료':u.consent==='pending'?'기다리는 중':'필요 없음'}</span></div></div>
+    <button class="li" data-a="go" data-v="guardian"><div class="col grow" style="gap:0"><b>보호자 리포트 · 연결 <span class="tag">MVP 이후</span></b><span class="small">${u.guardian?'보호자 연결됨':'연결된 보호자 없음'}</span></div><span class="sub">›</span></button>
     <div class="li"><div class="col grow" style="gap:0"><b>알림</b><span class="small">리마인드 · 읽기 패턴 알림 · 하루 최대 2개 (웹 시연에서는 보내지 않아요)</span></div></div>
    </div></div>
    <div class="card plain"><b class="h3">시연 도구</b><span class="small">오늘: ${fmtDate(dk())}${S.dayOffset?' (+'+S.dayOffset+'일)':''}</span>
@@ -706,12 +739,10 @@ const VIEWS={
   return shell('내 책갈피',ids.length?ids.map(id=>`<b class="h3" style="margin-top:4px">${esc(B(id).title)} · ${marksOf(id).length}개</b>${marksOf(id).map(m=>markCard(m)).join('')}`).join(''):'<div class="card plain"><b>아직 책갈피가 없어요</b><span class="small">책 정보나 타이머 화면의 「기록 남기기」로 마음에 드는 글귀를 찍어 남겨 보세요.</span></div>',{back:true,tabs:false});},
 
  timer(){const t=S.timer;if(!t)return shell('읽는 중','<p>타이머가 꺼져 있어요.</p><button class="btn" data-a="tab" data-v="home">홈으로</button>',{back:false,tabs:false});
-  const b=t.book?B(t.book):null;const tm=minutesOn(dk());
-  return shell('읽는 중 <span class="tag">MVP 이후</span>',`<div class="row" style="justify-content:center"><button class="chip on" data-a="bookchip">${b?esc(b.title):'책 없이'} ▾</button></div>
+  const b=t.book?B(t.book):null;const st=b?bs(b.id):null;
+  return shell('읽는 중',`<div class="col" style="align-items:center;gap:2px"><b class="serif h2">${b?esc(b.title):'책 없이'}</b>${b?`<span class="small num">${st.chapter} / ${b.chapters.length}장까지 읽음 · ${hm(t.start)} 시작</span>`:''}</div>
    <div class="clock"><b id="clk">00:00</b><span class="small">${t.pausedAt?'잠깐 멈춤':'읽는 중'}${S.speed?' · 빠르게':''}</span></div>
-   ${S.goal?`<div class="card plain row between"><span class="small">오늘 목표 ${S.goal}분</span><b class="num" id="goalnow">${tm} / ${S.goal}분</b></div>`:''}
-   <button class="card row ${t.focus?'soft':''}" style="text-align:left" data-a="focus"><div class="col grow" style="gap:0"><b class="${t.focus?'acc':''}">집중 모드 (iOS)</b><span class="small">${t.focus?'다른 앱이 잠겨 있어요 · 전화는 받을 수 있어요 (시연)':'켜면 읽는 동안 다른 앱을 잠가요 (시연)'}</span></div><span class="switch ${t.focus?'on':''}"></span></button>
-   ${b?markBtn(b.id,'기록 남기기 · 타이머는 계속 돌아가요'):'<span class="tiny" style="text-align:center">책을 고르면 기록 남기기를 쓸 수 있어요</span>'}
+   <span class="tiny" style="text-align:center">책 바꾸기 · 오늘 목표 · 집중 모드 · 기록 남기기는 MVP 이후예요</span>
    <div style="flex:1"></div><button class="btn" data-a="tend">그만 읽기</button><button class="btn sec" data-a="tpause">${t.pausedAt?'다시 읽기':'잠깐 멈춤'}</button>`,{back:false,tabs:false});}
 };
 
@@ -724,17 +755,17 @@ const MODALS={
 function fx(kind){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;let c=$('#fx');if(c)c.remove();c=document.createElement('canvas');c.id='fx';document.body.appendChild(c);const W=c.width=innerWidth,H=c.height=innerHeight;const x=c.getContext('2d');const cols=['#f2c94c','#ff7a59','#7b9bff','#5fd09a','#ffffff'];const P=Array.from({length:kind==='burst'?90:140},()=>({x:W/2,y:H*0.4,vx:(Math.random()-.5)*12,vy:-Math.random()*12-3,r:3+Math.random()*4,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6}));let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.a+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.globalAlpha=Math.max(0,1-t/110);x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore();});t++;if(t<120)requestAnimationFrame(f);else c.remove();})();}
 
 /* ---------- 시트 ---------- */
+function pendingCard(){return `<div class="card" style="background:var(--warn-soft);border-color:transparent"><b>보호자 동의를 기다리고 있어요</b><span class="small">${esc(S.user.guardianPhone||'보호자 휴대폰')}로 보냈어요. 동의 전에는 둘러보기만 할 수 있어요 (책 찾기 · 예고편 · 책 정보).</span><div class="btns"><button class="btn sec" data-a="resend">다시 보내기</button><button class="btn sec" data-a="go" data-v="consent">보호자 화면 (시연)</button></div></div>`;}
+function readBtns(b){const t=S.timer;const on=t&&t.book===b.id;return on?`<button class="btn" data-a="go" data-v="timer">읽는 중 · ${hm(t.start)}부터 · 타이머로</button><button class="btn sec" data-a="checkin" data-v="${b.id}">읽은 곳 체크인</button>`:`<button class="btn" data-a="timerstart" data-v="${b.id}">${bs(b.id).chapter?'이어서 읽기':'읽기 시작'}</button><button class="btn sec" data-a="checkin" data-v="${b.id}">읽은 곳 체크인</button>`;}
 const SHEETS={
+ locked(){return `<b class="h2">보호자 동의 후에 열려요</b><span class="small">만 14세 미만은 보호자가 동의해야 읽기 시작 · 체크인 · 흔적을 쓸 수 있어요. 지금은 책 찾기 · 예고편 · 책 정보를 둘러볼 수 있어요.</span><button class="btn" data-a="resend">보호자에게 다시 보내기</button><button class="btn sec" data-a="go" data-v="consent">보호자 화면 열기 (시연)</button>`;},
  marksrc(){return `<b class="h2">어떻게 남길까요?</b><div class="col"><button class="opt" data-a="markadd" data-v="${sheet.id}">사진 찍기 · 앨범에서 고르기</button><button class="opt" data-a="marksample" data-v="${sheet.id}">예시 페이지로 해 보기 (시연)</button><button class="opt" data-a="marktext" data-v="${sheet.id}">사진 없이 직접 쓰기</button></div><button class="btn ghost" data-a="closesheet">닫기</button>`;},
 
  goal(){const g=ui.goalPick!=null?ui.goalPick:(S.goal||10);return `<b class="h2">하루에 얼마나 읽어 볼까요?</b><span class="small">못 채운 날이 있어도 괜찮아요. 언제든 바꾸거나 끌 수 있어요. 쪽 · 장 같은 분량 목표는 없어요.</span><div class="chips">${[5,10,20,30,45].map(m=>`<button class="chip ${g===m?'on':''}" data-a="gpick2" data-v="${m}">${m}분</button>`).join('')}</div><div class="btns"><button class="btn sec" data-a="goaloff">목표 끄기</button><button class="btn" data-a="goalok">${g}분으로 정하기</button></div>`;},
  focusOff(){return `<b class="h2">정말 집중 모드를 끌까요?</b><span class="small">끄면 다른 앱을 쓸 수 있어요. 타이머는 계속 돌아가요.</span><button class="btn sec" id="hold" style="position:relative;overflow:hidden"><span id="holdfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent-soft)"></span><span style="position:relative">5초 길게 눌러 끄기</span></button><button class="btn" data-a="closesheet">계속 집중하기</button>`;},
- tend(){const t=S.timer;const r=reading();const bid=ui.endBook!==undefined?ui.endBook:t.book;const b=bid?B(bid):null;const st=b?bs(b.id):null;const pg=ui.endPage!=null?ui.endPage:(st?(st.lastPage||0):0);const min=elapsedMin();
-  const ch=b&&pg?chapterForPage(b,pg):0;const hint=b&&st&&ch>st.chapter;
-  return `<b class="h2">어떤 책을, 어디까지 읽었나요?</b>${r.length>1||!t.book?`<div class="chips">${r.map(x=>`<button class="chip ${bid===x.id?'on':''}" data-a="endbook" data-v="${x.id}">${esc(x.title)}</button>`).join('')}<button class="chip ${!bid?'on':''}" data-a="endbook" data-v="">책 없이</button></div>`:''}
-   ${b?`<div class="stepper"><button data-a="pg" data-v="-1" aria-label="쪽 줄이기">−</button><input id="pgin" type="number" inputmode="numeric" value="${pg}" aria-label="쪽"><button data-a="pg" data-v="1" aria-label="쪽 늘리기">+</button></div><span class="small" style="text-align:center">지난번 ${st.lastPage||0}쪽에서 이어서 · ${min}분${S.goal?' · 오늘 목표 '+S.goal+'분':''}</span>
-   <div id="pghint">${pgHint(b,st,pg)}</div>`:`<span class="small">책 없이 읽은 시간은 총 독서 시간에만 쌓이고 쪽은 기록하지 않아요. · ${min}분</span>`}
-   <div class="btns"><button class="btn sec" data-a="tsave" data-v="0">저장만 하기</button>${b?`<button class="btn" data-a="tsave" data-v="1">저장하고 체크인</button>`:''}</div>`;},
+ tend(){const t=S.timer;const b=t&&t.book?B(t.book):null;const min=elapsedMin();
+  return `<b class="h2">여기서 그만 읽을까요?</b><span class="small">${b?esc(b.title)+' · ':''}오늘 ${min}분 읽었어요 (${hm(t.start)} → ${hm(Date.now())})</span>
+   ${b?`<button class="btn" data-a="tck">장을 다 읽었어요 · 체크인</button>`:''}<button class="btn sec" data-a="tonly">장 중간이에요 · 시간만 저장</button><button class="btn ghost" style="align-self:center" data-a="sheetclose">계속 읽기</button>`;},
  page(){const b=B(sheet.id);const st=bs(b.id);const pg=ui.endPage!=null?ui.endPage:(st.lastPage||0);const ch=pg?chapterForPage(b,pg):0;const hint=ch>st.chapter;
   return `<b class="h2">타이머 없이 읽었나요?</b><span class="small">${esc(b.title)} · 쪽만 기록하고 시간은 남지 않아요</span><div class="stepper"><button data-a="pg" data-v="-1">−</button><input id="pgin" type="number" inputmode="numeric" value="${pg}"><button data-a="pg" data-v="1">+</button></div><div id="pghint">${pgHint(b,st,pg)}</div><div class="btns"><button class="btn sec" data-a="psave" data-v="0">저장</button><button class="btn" data-a="psave" data-v="1">저장하고 체크인</button></div>`;},
  goalchange(){const b=B(sheet.id);const st=bs(b.id);return `<b class="h2">완독 목표일 바꾸기</b><span class="small">지금 목표일 ${fmtDate(st.goalDate)}. 처음 정한 날은 ${fmtDate(st.originalGoal)}로 기록에 남아요.</span><div class="chips">${[3,7,14].map(d=>`<button class="chip" data-a="gcset" data-v="${d}">${d}일 미루기</button>`).join('')}</div><button class="btn sec" data-a="closesheet">닫기</button>`;},
@@ -844,13 +875,29 @@ function doCheckin(id,ch,page,note){const b=B(id);const st=bs(id);const prev=st.
  const qs=b.quiz[st.chapter];if(qs&&qs.length&&!st.quiz[st.chapter]){ui.qpick=null;ui.qshown=false;ui.qres={c:0,t:qs.length};replace('quiz',{id,ch:st.chapter,i:0,from:prev});}
  else replace('ckdone',{id,from:prev});}
 
+document.addEventListener('change',e=>{if(e.target.id==='by'){const y=parseInt(e.target.value,10);const sc=$('#sc');if(sc)S.user.school=sc.value;S.user.by=y>0?y:null;if(S.user.by&&isAdult(S.user.by))S.user.grade='';render();}});
+const LOCKED_ACTS=['tck','tonly','startbook','checkin','timerstart','pagesheet','readstart','ckall','cksave','marksheet'];
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,v=el.dataset.v,w=el.dataset.w;
+ if(locked()&&(LOCKED_ACTS.includes(a)||(a==='go'&&(v==='trace'||v==='marks')))){sheet={n:'locked'};render();return;}
  switch(a){
+  case 'login':{if(v==='아이디'){const id=(($('#lid')||{}).value||'').trim();const pin=(($('#lpin')||{}).value||'').trim();if(!id||!/^\d{4}$/.test(pin)){toast('아이디와 숫자 4자리 핀을 넣어 주세요');break;}S.user.loginVia='아이디(내부 검토)';}else S.user.loginVia=v;route={n:'onboard',step:1};render();break;}
+  case 'cid':ui.cid=!ui.cid;render();break;
+  case 'consentok':S.user.consent='done';save();ui.cid=false;tab('home');toast('보호자가 동의했어요. 이제 읽기를 시작할 수 있어요');break;
+  case 'resend':sheet=null;render();toast('보호자에게 동의 링크를 다시 보냈어요 (시연)');break;
+  case 'readstart':S.readStart={book:v,t:Date.now()};S.lastBook=v;save();render();toast(hm(S.readStart.t)+'부터 읽기 시작');break;
+  case 'tck':{const id=S.timer&&S.timer.book;const tm=endRead(id);save();sheet=null;stack=[{n:'home'}];route={n:'checkin',id};ui.ckCh=null;render();if(tm)toast('읽은 시간 '+tm.min+'분을 기록했어요');break;}
+  case 'tonly':{const id=S.timer&&S.timer.book;const tm=endRead(id);save();sheet=null;notifyBadges();if(id){stack=[{n:'home'}];route={n:'book',id};render();}else tab('home');if(tm)toast('읽은 시간 '+tm.min+'분만 저장했어요');break;}
+  case 'sheetclose':sheet=null;render();break;
+  case 'ckall':{const b=B(v);const st=bs(v);const tm=endRead(v);ui.ckCh=null;doCheckin(v,b.chapters.length,b.pageEnds[b.pageEnds.length-1],'');st.lastAll=true;save();replace('finish',{id:v});if(tm)toast('읽은 시간 '+tm.min+'분을 기록했어요');break;}
   case 'back':back();break;
   case 'tab':ui.flipped=false;tab(v);break;
   case 'go':if(v==='review'){ui.rv=null;ui.rsc=null;}go(v,w?{id:w}:{});break;
-  case 'ob':{const n=+v;if(n===2){const nm=($('#nm')||{}).value;S.user.name=(nm||'').trim()||'책읽는고래';}if(n===3){S.user.guardianPhone=(($('#gp')||{}).value||'').trim();S.onboarded=true;save();tab('home');toast('반가워요, '+S.user.name+'님');break;}route={n:'onboard',step:n};render();break;}
-  case 'grade':{const nm=$('#nm');if(nm)S.user.name=nm.value;S.user.grade=v;render();break;}
+  case 'ob':{const n=+v;
+   if(n===2){const sc=$('#sc');if(sc)S.user.school=sc.value.trim();const by=S.user.by;if(isAdult(by)){S.user.grade='성인';S.user.school='';}S.user.name=S.user.nick;
+    if(!needConsent(by)){S.user.consent='na';S.onboarded=true;save();tab('home');toast('반가워요, '+S.user.nick+'님');break;}}
+   if(n===3){const ph=(($('#gp')||{}).value||'').trim();if(!/^01\d[-\s]?\d{3,4}[-\s]?\d{4}$/.test(ph)){toast('보호자 휴대폰 번호를 확인해 주세요');break;}S.user.guardianPhone=ph;S.user.consent='pending';S.onboarded=true;save();tab('home');toast('보호자에게 동의 요청을 보냈어요 (시연)');break;}
+   route={n:'onboard',step:n};render();break;}
+  case 'grade':{const sc=$('#sc');if(sc)S.user.school=sc.value;S.user.grade=v;render();break;}
   case 'guardian':S.user.guardianPhone=(($('#gp')||{}).value||'');S.user.guardian=!S.user.guardian;render();break;
   case 'bf':ui.bookFilter=v;render();break;
   case 'book':go('book',{id:v});break;
@@ -859,7 +906,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
   case 'before':go('before',{id:v});break;
   case 'checkin':ui.ckCh=null;go('checkin',{id:v});break;
   case 'ckch':ui.ckCh=+v;render();break;
-  case 'cksave':{const b=B(v);const st=bs(v);const ch=Math.min(b.chapters.length,Math.max(ui.ckCh||0,st.chapter+1));const pg=parseInt(($('#ckp')||{}).value,10);const note=($('#ckn')||{}).value;ui.ckCh=null;doCheckin(v,ch,pg>0?pg:null,note);break;}
+  case 'cksave':{const b=B(v);const st=bs(v);const ch=Math.min(b.chapters.length,Math.max(ui.ckCh||0,st.chapter+1));const pg=parseInt(($('#ckp')||{}).value,10);const note=($('#ckn')||{}).value;ui.ckCh=null;const tm=endRead(v);doCheckin(v,ch,pg>0?pg:null,note);if(tm)toast('읽은 시간 '+hm(tm.start)+'~'+hm(tm.end)+' · '+tm.min+'분');break;}
   case 'qpick':if(!ui.qshown){ui.qpick=+v;render();}break;
   case 'qshow':{const b=B(route.id);const q=b.quiz[route.ch][route.i||0];ui.qshown=true;if(ui.qpick===q.a)ui.qres.c++;render();break;}
   case 'qnext':{const b=B(route.id);const qs=b.quiz[route.ch];const i=(route.i||0)+1;if(i<qs.length){ui.qpick=null;ui.qshown=false;route.i=i;render();}else{bs(b.id).quiz[route.ch]={c:ui.qres.c,t:ui.qres.t};save();replace('ckdone',{id:b.id,from:route.from});}break;}
@@ -877,7 +924,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
   case 'goalok':S.goal=ui.goalPick||S.goal||10;S.goalSet=true;save();sheet=null;render();toast('하루 '+S.goal+'분으로 정했어요');break;
   case 'goaloff':S.goal=null;S.goalSet=true;save();sheet=null;render();toast('하루 목표를 껐어요');break;
   case 'focusdef':S.focusDefault=!S.focusDefault;save();render();break;
-  case 'timerstart':{if(S.timer){go('timer');break;}S.timer={book:v||S.lastBook||null,start:Date.now(),paused:0,pausedAt:null,focus:S.focusDefault};if(v)S.lastBook=v;save();wakeOn();go('timer');if(!S.goalSet){ui.goalPick=null;sheet={n:'goal'};render();}break;}
+  case 'timerstart':{if(S.timer){go('timer');break;}S.timer={book:v||S.lastBook||null,start:Date.now(),paused:0,pausedAt:null,focus:false};if(v)S.lastBook=v;save();wakeOn();go('timer');break;}
   case 'tpause':{const t=S.timer;if(t.pausedAt){t.paused+=Date.now()-t.pausedAt;t.pausedAt=null;}else t.pausedAt=Date.now();save();render();break;}
   case 'focus':if(S.timer.focus){sheet={n:'focusOff'};render();setTimeout(bindHold,0);}else{S.timer.focus=true;save();render();toast('집중 모드를 켰어요 (시연)');}break;
   case 'bookchip':sheet={n:'bookchip'};render();break;
