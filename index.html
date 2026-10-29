@@ -361,8 +361,12 @@ function ageMin(by){return curYear()-by-1;}
 function ageMax(by){return curYear()-by;}
 function isAdult(by){return ageMin(by)>=19;}
 function needConsent(by){return ageMin(by)<14;}
-function locked(){return S.user.consent==='pending';}
-function kgOf(g){return (g==='성인'||g==='고등')?'중3':g==='초4 이하'?'초5':g;}
+function locked(){return !!S.guest&&!S.onboarded;}
+const G_U14=['초4 이하','초5','초6','중1','중2'];const G_O14=['중2','중3','고1','고2','고3','성인'];
+function gLabel(g){return g==='성인'?'학생이 아니에요 (성인)':g;}
+function maskPh(p){p=String(p||'');return p.length>=8?p.slice(0,3)+'-****-'+p.replace(/\D/g,'').slice(-4):p;}
+function afterConsent(){return /내부/.test(S.user.loginVia||'')?6:5;}
+function kgOf(g){return (g==='성인'||String(g).startsWith('고'))?'중3':g==='초4 이하'?'초5':g;}
 function hm(t){const d=new Date(t);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 function endRead(id){const t=S.timer;if(!t||(id&&t.book!==id))return null;const end=Date.now();const min=Math.max(1,elapsedMin());S.sessions.push({date:dk(),book:t.book,min,start:t.start,end});S.timer=null;try{wakeOff();}catch(e){}return {start:t.start,end,min};}
 const UNDER14=['초5','초6','중1'];
@@ -473,7 +477,7 @@ function tabbar(){const t=[['home','홈'],['books','도서'],['shelf','서재'],
 
 function render(){
  const app=$('#app');let h='';
- if(!S.onboarded&&route.n!=='onboard')route={n:'onboard',step:0};
+ if(!S.onboarded&&!S.guest&&route.n!=='onboard'&&route.n!=='consent')route={n:'onboard',step:0};
  if(S.timer&&!['timer'].includes(route.n)&&route.n!=='onboard'){}
  const V=VIEWS[route.n]||VIEWS.home;h=V();
  if(!sheet&&ui.badgeQ&&ui.badgeQ.length&&!['reward','quiz','onboard'].includes(route.n))sheet={n:'badgeview',ids:ui.badgeQ.splice(0)};
@@ -490,34 +494,47 @@ const VIEWS={
  onboard(){const s=route.step||0;const u=S.user;
   if(s===0)return `<main class="main notab"><div class="hero"><span class="pill">시연용 앱 · 콘텐츠는 예시</span><div class="logo">책벗</div><p class="sub" style="margin:0;font-size:16px">책 한 권을 끝까지, 같이 읽는 친구.<br>읽은 만큼 체크인하면 다음 장의 콘텐츠가 열려요.</p></div>
    <div style="flex:1"></div>
-   <div class="col" style="gap:8px"><button class="btn" style="background:#fee500;color:#191919" data-a="login" data-v="카카오">카카오로 시작하기</button><button class="btn" style="background:#000;color:#fff" data-a="login" data-v="Apple">Apple로 시작하기</button><button class="btn sec" data-a="login" data-v="이메일">이메일로 시작하기</button></div>
-   <span class="tiny" style="text-align:center">시연에서는 실제 로그인 없이 넘어가요. 기록은 이 기기에만 저장돼요.</span>
-   <button class="btn ghost" style="align-self:center" data-a="ob" data-v="9">내부 검토용 · 아이디 + 핀으로 시작</button></main>`;
+   <div class="col" style="gap:8px"><button class="btn" data-a="ob" data-v="1">가입하기</button><button class="btn sec" data-a="guestgo">둘러보기 (로그인 없이)</button><button class="btn ghost" style="align-self:center" data-a="loginold">이미 계정이 있어요 · 로그인</button></div>
+   <span class="tiny" style="text-align:center">시연에서는 실제 가입 · 인증 없이 넘어가요. 기록은 이 기기에만 저장돼요.</span>
+   <button class="btn ghost" style="align-self:center;font-size:12.5px;color:var(--sub)" data-a="ob" data-v="9">내부 검토용 · 아이디 + 핀으로 시작</button></main>`;
   if(s===9)return shell('내부 검토용 로그인',`<div class="note">프로토타입 검토(내부)에서만 쓰는 방식이에요. 실제 서비스에서는 쓰지 않아요.</div>
    <div class="col"><label class="h3" for="lid">아이디</label><input id="lid" type="text" maxlength="16" autocomplete="off" placeholder="영문 · 숫자"></div>
    <div class="col"><label class="h3" for="lpin">핀 4자리</label><input id="lpin" type="tel" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="0000"></div>
-   <div style="flex:1"></div><button class="btn" data-a="login" data-v="아이디">다음</button>`,{back:true,tabs:false});
-  if(s===1){const by=u.by;const ok=by&&by>=1920&&by<=curYear();const adult=ok&&isAdult(by);const minor=ok&&!adult;
-   return shell('가입 정보',`<div class="col" style="gap:2px"><b class="h2">시작하기 전에 몇 가지만 알려 주세요</b><span class="small">${esc(u.loginVia||'')}${u.loginVia?'로 가입 중':''}</span></div>
-   <div class="col"><label class="h3" for="by">태어난 해 <span class="small">(필수)</span></label><input id="by" type="number" inputmode="numeric" placeholder="예: 2013" value="${by||''}"></div>
-   ${minor?`<div class="col"><span class="h3">학년 <span class="small">(필수)</span></span><div class="chips">${MINOR_GRADES.map(g=>`<button class="chip ${u.grade===g?'on':''}" data-a="grade" data-v="${g}">${g}</button>`).join('')}</div><span class="small">학년에 맞춰 「나를 위한 추천」을 보여 주고, 흔적은 같은 학교급끼리만 보여요.</span></div>
-   <div class="col"><label class="h3" for="sc">학교 이름 <span class="small">(선택)</span></label><input id="sc" type="text" maxlength="20" placeholder="예: 한빛중학교" value="${esc(u.school||'')}"><span class="small">다른 사람에게는 보이지 않아요.</span></div>`:''}
-   ${adult?`<div class="card plain"><span class="small">만 19세 이상은 학년을 묻지 않아요. 성인용 추천과 흔적(성인끼리)을 보여 줘요.</span></div>`:''}
-   ${ok?`<div class="card"><span class="small">내 닉네임 · 자동으로 정해져요</span><b class="h2">${esc(u.nick)}</b><span class="small">흔적에는 이 이름만 보여요. 바꿀 수 없어요.</span></div>`:''}
-   ${ok&&needConsent(by)?`<div class="card" style="background:var(--warn-soft);border-color:transparent"><b class="small">만 14세 미만이면 보호자 동의가 필요해요</b><span class="small">다음 단계에서 보호자 휴대폰으로 동의를 받아요.${ageMax(by)>=14?' (태어난 해만으로는 만 14세가 됐는지 알 수 없어 동의를 받아요)':''}</span></div>`:''}
-   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="2" ${ok&&(adult||u.grade)?'':'disabled'}>다음</button>`,{back:false,tabs:false});}
-  if(s===2)return shell('보호자 동의 요청',`<div class="col" style="gap:2px"><b class="h2">보호자 동의를 받아 주세요</b><span class="small">개인정보보호법에 따라 만 14세 미만은 보호자가 동의해야 책 읽기를 시작할 수 있어요.</span></div>
-   <div class="col"><label class="h3" for="gp">보호자 휴대폰 번호</label><input id="gp" type="tel" placeholder="010-0000-0000" value="${esc(u.guardianPhone||'')}"><span class="small">보호자에게 동의 링크를 문자로 보내요. 이 번호는 동의를 받는 데만 써요. (시연에서는 보내지 않아요)</span></div>
-   <div class="card plain"><span class="small">동의 전에도 둘러볼 수 있어요: 책 찾기 · 예고편 · 책 정보</span><span class="small">동의하면 열려요: 읽기 시작 · 체크인 · 흔적</span></div>
-   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="3">동의 요청 보내기</button>`,{back:false,tabs:false});
+   <div style="flex:1"></div><button class="btn" data-a="login" data-v="아이디(내부 검토)">다음</button>`,{back:true,tabs:false});
+  if(s===1){const a=u.u14;return shell('가입하기',`<b class="h2">만 14세 미만인가요?</b>
+   <button class="opt ${a===true?'sel':''}" data-a="u14" data-v="1"><b>예, 만 14세 미만이에요</b><br><span class="small">보호자 동의를 받은 뒤 가입해요</span></button>
+   <button class="opt ${a===false?'sel':''}" data-a="u14" data-v="0"><b>아니오, 만 14세 이상이에요</b><br><span class="small">바로 계정을 만들어요</span></button>
+   <div class="card plain"><b class="small">왜 물어보나요?</b><span class="small">만 14세 미만은 법에 따라 보호자가 동의해야 가입할 수 있어요. 생일은 묻지 않아요.</span></div>
+   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="${a?2:afterConsent()}" ${a==null?'disabled':''}>다음</button>`,{back:true,tabs:false});}
+  if(s===2)return shell('가입하기',`<b class="h2">보호자 동의가 필요해요</b>
+   <div class="card" style="background:var(--warn-soft);border-color:transparent"><b class="small">만 14세 미만은 보호자가 동의해야 가입할 수 있어요</b><span class="small">부모님 등 보호자의 이름과 휴대폰 번호만 받아요. 동의를 받는 데만 써요. 동의 전에도 책은 둘러볼 수 있어요.</span></div>
+   <div class="col"><label class="h3" for="gname">보호자 이름</label><input id="gname" type="text" maxlength="20" placeholder="예: 김보호" value="${esc(u.guardianName||'')}"></div>
+   <div class="col"><label class="h3" for="gp">보호자 휴대폰 번호</label><input id="gp" type="tel" placeholder="010-0000-0000" value="${esc(u.guardianPhone||'')}"></div>
+   <div style="flex:1"></div><button class="btn" data-a="gnow">보호자가 옆에 있어요 · 지금 동의</button><button class="btn sec" data-a="gsms">보호자에게 문자 보내기</button>`,{back:true,tabs:false});
+  if(s===3)return shell('가입하기',`<b class="h2">보호자 동의를 기다리고 있어요</b>
+   <div class="card"><b class="small">${esc(u.guardianName)} 님(${esc(maskPh(u.guardianPhone))})에게 보냈어요</b><button class="btn ghost" style="align-self:flex-start;font-size:13px" data-a="resend">문자가 안 왔다면 다시 보내기 ›</button></div>
+   <div class="card plain"><b class="small">가입 전에도 둘러볼 수 있어요</b><span class="small">책 찾기 · 예고편 · 책 정보 (읽기 시작 · 체크인 · 흔적은 가입 후)</span></div>
+   <div class="card plain"><b class="small">보호자가 동의하면</b><span class="small">이 화면에서 바로 계정 만들기로 넘어가요.</span></div>
+   <div style="flex:1"></div><button class="btn sec" data-a="go" data-v="consent">보호자 화면 열기 (시연)</button><button class="btn" data-a="guestgo">둘러보기</button>`,{back:true,tabs:false});
+  if(s===5)return shell('계정 만들기',`<div class="col" style="gap:2px"><b class="h2">계정을 만들어요</b><span class="small">어떤 방법으로 로그인할까요?</span></div>
+   <div class="col" style="gap:8px"><button class="btn" style="background:#fee500;color:#191919" data-a="login" data-v="카카오">카카오로 만들기</button><button class="btn" style="background:#000;color:#fff" data-a="login" data-v="Apple">Apple로 만들기</button><button class="btn sec" data-a="login" data-v="이메일">이메일로 만들기</button><button class="btn sec" data-a="login" data-v="아이디">아이디로 만들기</button></div>
+   ${u.u14?'<span class="tiny">만 14세 미만의 기본 로그인 수단(아이디 · 이메일 우선 여부)은 정하는 중이에요.</span>':''}
+   <div style="flex:1"></div>`,{back:!u.u14,tabs:false});
+  if(s===6){const list=u.u14?G_U14:G_O14;const g=list.includes(u.grade)?u.grade:'';const student=g&&g!=='성인';
+   return shell('가입 정보',`<div class="col" style="gap:2px"><b class="h2">거의 다 됐어요</b><span class="small">${esc(u.loginVia||'')}${u.loginVia?'로 가입 중':''}</span></div>
+   <div class="col"><span class="h3">학년 <span class="small">(필수)</span></span><div class="chips">${list.map(x=>`<button class="chip ${g===x?'on':''}" data-a="grade" data-v="${x}">${gLabel(x)}</button>`).join('')}</div><span class="small">학년에 맞춰 「나를 위한 추천」을 보여 주고, 흔적은 같은 학교급(초 · 중 · 고 · 성인)끼리만 보여요.</span></div>
+   ${student?`<div class="col"><label class="h3" for="sc">학교 이름 <span class="small">(선택)</span></label><input id="sc" type="text" maxlength="20" placeholder="예: 한빛중학교" value="${esc(u.school||'')}"><span class="small">다른 사람에게는 보이지 않아요.</span></div>`:''}
+   <div class="card"><span class="small">내 닉네임 · 자동으로 정해져요</span><b class="h2">${esc(u.nick)}</b><span class="small">흔적에는 이 이름만 보여요. 바꿀 수 없어요.</span></div>
+   ${u.u14?`<div class="card" style="background:var(--warn-soft);border-color:transparent"><b class="small">보호자 ${esc(u.guardianName)} 님이 동의했어요</b><span class="small">가입이 끝나면 보호자로 자동 지정돼요.</span></div>`:''}
+   <div style="flex:1"></div><button class="btn" data-a="ob" data-v="7" ${g?'':'disabled'}>가입 완료</button>`,{back:false,tabs:false});}
  },
 
  consent(){const u=S.user;const ck=!!ui.cid;
-  return shell('보호자 동의 (보호자 휴대폰)',`<div class="note">보호자가 문자 링크로 여는 웹 화면이에요 (시연).</div>
-   <div class="col" style="gap:2px"><b class="h2">책벗 보호자 동의</b><span class="small">「${esc(u.nick)}」(${u.by}년생)가 책벗 가입을 위해 동의를 요청했어요.</span></div>
-   <div class="card"><b class="h3">받는 정보</b><span class="small">태어난 해, 학년, 학교 이름(선택), 읽기 기록(체크인 · 읽은 시간 · 완독 기록), 흔적</span><b class="h3">쓰는 곳</b><span class="small">책 추천, 읽기 기록, 같은 학교급 또래 흔적</span><b class="h3">보관 기간</b><span class="small">미정 (법무 확인 후 확정)</span></div>
-   <button class="row opt ${ck?'sel':''}" data-a="cid"><span class="grow">보호자 본인 확인 (시연 · 실제 방법은 법무 확인 후 확정)</span><b>${ck?'✓':''}</b></button>
-   <div style="flex:1"></div><button class="btn" data-a="consentok" ${ck?'':'disabled'}>동의하기</button>`,{back:true,tabs:false});},
+  return shell('보호자 동의',`<div class="note">${route.same?'보호자가 이 기기에서 직접 동의하는 화면이에요 (시연).':'보호자가 문자 링크로 여는 웹 화면이에요 (시연).'}</div>
+   <div class="col" style="gap:2px"><b class="h2">책벗 보호자 동의</b><span class="small">${esc(u.guardianName||'보호자')} 님, 자녀가 책벗 가입을 시작했어요. 동의하시면 자녀가 계정을 만들고, 보호자님이 자동으로 보호자로 지정돼요.</span></div>
+   <div class="card"><b class="h3">받는 정보</b><span class="small">자녀: 학년, 학교 이름(선택), 읽기 기록(체크인 · 읽은 시간 · 완독 기록), 흔적<br>보호자: 이름, 휴대폰 번호, 본인인증 결과(CI)</span><b class="h3">쓰는 곳</b><span class="small">동의 확인, 보호자 계정 연결(나중에 보호자가 가입하면 자동 연결), 책 추천과 읽기 기록, 같은 학교급 또래 흔적</span><b class="h3">보관 기간</b><span class="small">미정 (법무 확인 후 확정)</span></div>
+   <button class="row opt ${ck?'sel':''}" data-a="cid"><span class="grow">휴대폰 본인인증 (시연 · 실제 방법은 법무 확인 후 확정)</span><b>${ck?'✓':''}</b></button>
+   <div style="flex:1"></div><button class="btn" data-a="consentok" ${ck?'':'disabled'}>본인인증하고 동의하기</button>`,{back:true,tabs:false});},
 
  home(){const r=reading();const g=S.goal;const tm=minutesOn(dk());const st=streak();
   let h=`<div class="chips"><span class="pill">${st>0?'연속 '+st+'일째':'오늘 첫 기록을 남겨 보세요'}</span>${g?`<button class="pill" style="border:0" data-a="goalsheet">오늘 ${tm} / ${g}분 <span class="tag">MVP 이후</span></button>`:''}</div>`;
@@ -672,7 +689,7 @@ const VIEWS={
    <div class="card" style="padding-block:4px"><div class="list">
     <button class="li" data-a="goalsheet"><div class="col grow" style="gap:0"><b>하루 읽기 목표 <span class="tag">MVP 이후</span></b><span class="small">${S.goal?S.goal+'분 · 오늘 '+tm+'분':'꺼져 있어요'}</span></div><span class="sub">›</span></button>
     <button class="li" data-a="focusdef"><div class="col grow" style="gap:0"><b>집중 모드 기본값 <span class="tag">MVP 이후</span></b><span class="small">타이머를 켜면 다른 앱 잠그기 (웹 시연에서는 실제로 잠기지 않아요)</span></div><span class="switch ${S.focusDefault?'on':''}"></span></button>
-    <div class="li"><div class="col grow" style="gap:0"><b>계정</b><span class="small">${esc(u.loginVia||'-')}로 가입 · ${u.by?u.by+'년생':''}${u.school?' · 학교 이름 입력함 (비공개)':''} · 보호자 동의 ${u.consent==='done'?'완료':u.consent==='pending'?'기다리는 중':'필요 없음'}</span></div></div>
+    <div class="li"><div class="col grow" style="gap:0"><b>계정</b><span class="small">${esc(u.loginVia||'-')}로 가입 · ${u.u14?'만 14세 미만':'만 14세 이상'}${u.school?' · 학교 이름 입력함 (비공개)':''}${u.u14?' · 보호자 '+esc(u.guardianName||'')+' 님 (동의 완료)':''}</span></div></div>
     <button class="li" data-a="go" data-v="guardian"><div class="col grow" style="gap:0"><b>보호자 리포트 · 연결 <span class="tag">MVP 이후</span></b><span class="small">${u.guardian?'보호자 연결됨':'연결된 보호자 없음'}</span></div><span class="sub">›</span></button>
     <div class="li"><div class="col grow" style="gap:0"><b>알림</b><span class="small">리마인드 · 읽기 패턴 알림 · 하루 최대 2개 (웹 시연에서는 보내지 않아요)</span></div></div>
    </div></div>
@@ -755,10 +772,10 @@ const MODALS={
 function fx(kind){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;let c=$('#fx');if(c)c.remove();c=document.createElement('canvas');c.id='fx';document.body.appendChild(c);const W=c.width=innerWidth,H=c.height=innerHeight;const x=c.getContext('2d');const cols=['#f2c94c','#ff7a59','#7b9bff','#5fd09a','#ffffff'];const P=Array.from({length:kind==='burst'?90:140},()=>({x:W/2,y:H*0.4,vx:(Math.random()-.5)*12,vy:-Math.random()*12-3,r:3+Math.random()*4,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6}));let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.a+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.globalAlpha=Math.max(0,1-t/110);x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore();});t++;if(t<120)requestAnimationFrame(f);else c.remove();})();}
 
 /* ---------- 시트 ---------- */
-function pendingCard(){return `<div class="card" style="background:var(--warn-soft);border-color:transparent"><b>보호자 동의를 기다리고 있어요</b><span class="small">${esc(S.user.guardianPhone||'보호자 휴대폰')}로 보냈어요. 동의 전에는 둘러보기만 할 수 있어요 (책 찾기 · 예고편 · 책 정보).</span><div class="btns"><button class="btn sec" data-a="resend">다시 보내기</button><button class="btn sec" data-a="go" data-v="consent">보호자 화면 (시연)</button></div></div>`;}
+function pendingCard(){const u=S.user;return u.u14&&u.consent==='pending'?`<div class="card" style="background:var(--warn-soft);border-color:transparent"><b>가입 전 둘러보기 중 · 보호자 동의를 기다리고 있어요</b><span class="small">${esc(u.guardianName||'보호자')} 님(${esc(maskPh(u.guardianPhone))})에게 보냈어요. 동의하면 계정을 만들 수 있어요.</span><div class="btns"><button class="btn sec" data-a="resend">다시 보내기</button><button class="btn sec" data-a="go" data-v="consent">보호자 화면 (시연)</button></div></div>`:`<div class="card plain"><b>가입 전 둘러보기 중이에요</b><span class="small">책 찾기 · 예고편 · 책 정보를 볼 수 있어요. 읽기를 시작하려면 가입해 주세요.</span><button class="btn sec" data-a="signup">가입하기</button></div>`;}
 function readBtns(b){const t=S.timer;const on=t&&t.book===b.id;return on?`<button class="btn" data-a="go" data-v="timer">읽는 중 · ${hm(t.start)}부터 · 타이머로</button><button class="btn sec" data-a="checkin" data-v="${b.id}">읽은 곳 체크인</button>`:`<button class="btn" data-a="timerstart" data-v="${b.id}">${bs(b.id).chapter?'이어서 읽기':'읽기 시작'}</button><button class="btn sec" data-a="checkin" data-v="${b.id}">읽은 곳 체크인</button>`;}
 const SHEETS={
- locked(){return `<b class="h2">보호자 동의 후에 열려요</b><span class="small">만 14세 미만은 보호자가 동의해야 읽기 시작 · 체크인 · 흔적을 쓸 수 있어요. 지금은 책 찾기 · 예고편 · 책 정보를 둘러볼 수 있어요.</span><button class="btn" data-a="resend">보호자에게 다시 보내기</button><button class="btn sec" data-a="go" data-v="consent">보호자 화면 열기 (시연)</button>`;},
+ locked(){const u=S.user;return u.u14&&u.consent==='pending'?`<b class="h2">가입한 뒤에 열려요</b><span class="small">만 14세 미만은 보호자가 동의한 뒤 계정을 만들 수 있어요. 지금은 책 찾기 · 예고편 · 책 정보를 둘러볼 수 있어요.</span><button class="btn" data-a="resend">보호자에게 다시 보내기</button><button class="btn sec" data-a="go" data-v="consent">보호자 화면 열기 (시연)</button>`:`<b class="h2">가입한 뒤에 열려요</b><span class="small">읽기 시작 · 체크인 · 흔적은 가입한 뒤에 쓸 수 있어요.</span><button class="btn" data-a="signup">가입하기</button>`;},
  marksrc(){return `<b class="h2">어떻게 남길까요?</b><div class="col"><button class="opt" data-a="markadd" data-v="${sheet.id}">사진 찍기 · 앨범에서 고르기</button><button class="opt" data-a="marksample" data-v="${sheet.id}">예시 페이지로 해 보기 (시연)</button><button class="opt" data-a="marktext" data-v="${sheet.id}">사진 없이 직접 쓰기</button></div><button class="btn ghost" data-a="closesheet">닫기</button>`;},
 
  goal(){const g=ui.goalPick!=null?ui.goalPick:(S.goal||10);return `<b class="h2">하루에 얼마나 읽어 볼까요?</b><span class="small">못 채운 날이 있어도 괜찮아요. 언제든 바꾸거나 끌 수 있어요. 쪽 · 장 같은 분량 목표는 없어요.</span><div class="chips">${[5,10,20,30,45].map(m=>`<button class="chip ${g===m?'on':''}" data-a="gpick2" data-v="${m}">${m}분</button>`).join('')}</div><div class="btns"><button class="btn sec" data-a="goaloff">목표 끄기</button><button class="btn" data-a="goalok">${g}분으로 정하기</button></div>`;},
@@ -880,9 +897,14 @@ const LOCKED_ACTS=['tck','tonly','startbook','checkin','timerstart','pagesheet',
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,v=el.dataset.v,w=el.dataset.w;
  if(locked()&&(LOCKED_ACTS.includes(a)||(a==='go'&&(v==='trace'||v==='marks')))){sheet={n:'locked'};render();return;}
  switch(a){
-  case 'login':{if(v==='아이디'){const id=(($('#lid')||{}).value||'').trim();const pin=(($('#lpin')||{}).value||'').trim();if(!id||!/^\d{4}$/.test(pin)){toast('아이디와 숫자 4자리 핀을 넣어 주세요');break;}S.user.loginVia='아이디(내부 검토)';}else S.user.loginVia=v;route={n:'onboard',step:1};render();break;}
+  case 'login':{if(/내부/.test(v)){const id=(($('#lid')||{}).value||'').trim();const pin=(($('#lpin')||{}).value||'').trim();if(!id||!/^\d{4}$/.test(pin)){toast('아이디와 숫자 4자리 핀을 넣어 주세요');break;}S.user.loginVia=v;route={n:'onboard',step:1};render();break;}S.user.loginVia=v;route={n:'onboard',step:6};render();break;}
+  case 'u14':S.user.u14=v==='1';S.user.grade='';render();break;
+  case 'guestgo':S.guest=true;save();tab('home');toast('가입 전 둘러보기 중이에요');break;
+  case 'signup':sheet=null;S.guest=false;stack=[];route={n:'onboard',step:1};render();break;
+  case 'loginold':toast('시연에서는 가입부터 해 주세요');break;
+  case 'gnow':case 'gsms':{const nm=(($('#gname')||{}).value||'').trim();const ph=(($('#gp')||{}).value||'').trim();S.user.guardianName=nm;S.user.guardianPhone=ph;if(!nm){toast('보호자 이름을 넣어 주세요');break;}if(!/^01\d[-\s]?\d{3,4}[-\s]?\d{4}$/.test(ph)){toast('보호자 휴대폰 번호를 확인해 주세요');break;}S.user.consent='pending';save();if(a==='gnow'){ui.cid=false;go('consent',{same:1});}else{route={n:'onboard',step:3};render();toast('보호자에게 동의 링크를 보냈어요 (시연)');}break;}
   case 'cid':ui.cid=!ui.cid;render();break;
-  case 'consentok':S.user.consent='done';save();ui.cid=false;tab('home');toast('보호자가 동의했어요. 이제 읽기를 시작할 수 있어요');break;
+  case 'consentok':S.user.consent='done';S.user.consentAt=dk();S.guest=false;save();ui.cid=false;stack=[];sheet=null;route={n:'onboard',step:afterConsent()};render();toast('보호자가 동의했어요. 이제 계정을 만들어요');break;
   case 'resend':sheet=null;render();toast('보호자에게 동의 링크를 다시 보냈어요 (시연)');break;
   case 'readstart':S.readStart={book:v,t:Date.now()};S.lastBook=v;save();render();toast(hm(S.readStart.t)+'부터 읽기 시작');break;
   case 'tck':{const id=S.timer&&S.timer.book;const tm=endRead(id);save();sheet=null;stack=[{n:'home'}];route={n:'checkin',id};ui.ckCh=null;render();if(tm)toast('읽은 시간 '+tm.min+'분을 기록했어요');break;}
@@ -893,9 +915,7 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
   case 'tab':ui.flipped=false;tab(v);break;
   case 'go':if(v==='review'){ui.rv=null;ui.rsc=null;}go(v,w?{id:w}:{});break;
   case 'ob':{const n=+v;
-   if(n===2){const sc=$('#sc');if(sc)S.user.school=sc.value.trim();const by=S.user.by;if(isAdult(by)){S.user.grade='성인';S.user.school='';}S.user.name=S.user.nick;
-    if(!needConsent(by)){S.user.consent='na';S.onboarded=true;save();tab('home');toast('반가워요, '+S.user.nick+'님');break;}}
-   if(n===3){const ph=(($('#gp')||{}).value||'').trim();if(!/^01\d[-\s]?\d{3,4}[-\s]?\d{4}$/.test(ph)){toast('보호자 휴대폰 번호를 확인해 주세요');break;}S.user.guardianPhone=ph;S.user.consent='pending';S.onboarded=true;save();tab('home');toast('보호자에게 동의 요청을 보냈어요 (시연)');break;}
+   if(n===7){const sc=$('#sc');if(sc)S.user.school=sc.value.trim();if(S.user.grade==='성인')S.user.school='';S.user.name=S.user.nick;if(!S.user.u14)S.user.consent='na';else S.user.guardian=true;S.onboarded=true;S.guest=false;save();tab('home');toast(S.user.u14?'가입 완료 · '+S.user.guardianName+' 님이 보호자로 지정됐어요':'반가워요, '+S.user.nick+'님');break;}
    route={n:'onboard',step:n};render();break;}
   case 'grade':{const sc=$('#sc');if(sc)S.user.school=sc.value;S.user.grade=v;render();break;}
   case 'guardian':S.user.guardianPhone=(($('#gp')||{}).value||'');S.user.guardian=!S.user.guardian;render();break;
