@@ -1,7 +1,5 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>책벗 읽기 동선 프로토타입</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<style>:root{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0}</style></head><body>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="책벗"><meta name="theme-color" content="#ffffff"><title>책벗</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+</head><body>
 <style>
 /* Layout: 왼쪽 시나리오 패널 + 가운데 375×812 폰. 와이어프레임 톤(파랑 #2B6BE5, 회색 면)을 그대로 쓰는 단일 라이트 테마 */
 :root{
@@ -92,24 +90,29 @@ textarea{min-height:140px;resize:vertical}
 .toast{position:absolute;left:20px;right:20px;top:64px;background:var(--fg);color:#fff;border-radius:10px;padding:10px 14px;font-size:13px;z-index:9}
 .cover{width:120px;height:170px;border-radius:8px;background:var(--gray);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:12px;align-self:center}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .2s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.6}}}
+
+html,body{height:100%;margin:0;overscroll-behavior:none}
+body{background:#fff;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+button{touch-action:manipulation}
+.phone{width:100%;max-width:480px;height:100vh;height:100dvh;margin:0 auto;border:0;border-radius:0;box-shadow:none}
+@media (min-width:520px){body{background:var(--bg)}.phone{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+.hdr{height:auto;min-height:52px;padding-top:env(safe-area-inset-top,0px)}
+.hdr .menu{margin-left:auto;background:none;border:0;font-size:22px;line-height:1;padding:6px 8px;color:var(--mu);cursor:pointer}
+.bottom{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.sheet{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.peek{padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+.timer{padding-top:calc(28px + env(safe-area-inset-top,0px))}
+.pullbar{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.scroll{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px));-webkit-overflow-scrolling:touch}
+select,textarea{font-size:16px}
+.toast{top:calc(64px + env(safe-area-inset-top,0px))}
+.mlist{display:flex;flex-direction:column;gap:8px}
+.mlist button{font:inherit;font-size:15px;text-align:left;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--fg)}
+.mlist button.on{border-color:var(--blue);color:var(--blue);font-weight:700;background:var(--bs)}
 </style>
 
-<div class="stage">
-  <aside class="panel">
-    <h1>책벗 읽기 동선 프로토타입</h1>
-    <p>읽기 동선 검토안 v2와 Figma 「읽기 동선 v3」 와이어프레임 기준. 예시 도서 「동물농장」(본문 168쪽, 10장). 기록은 이 화면 안에서만 유지되고 새로고침하면 처음으로 돌아갑니다. 타임라인은 C안(오래된 순, 아래가 지금)이며 들어오면 맨 아래 「지금」으로 내려가 있습니다.</p>
-    <div class="grp"><b>시작 상태</b>
-      <button id="sc-new" data-sc="new">처음 읽는 책</button>
-      <button id="sc-mid" data-sc="mid">읽는 중 (96쪽, 8일째, 오늘 1번 읽음)</button>
-      <button id="sc-done" data-sc="done">다 읽은 책 (다시 읽기 전)</button>
-    </div>
-    <div class="grp"><b>시연 도구</b>
-      <label><input type="checkbox" id="fast" checked> 타이머 빨리 감기 (1초 = 1분)</label>
-    </div>
-    <div class="grp"><b>지금 화면</b><span class="sid" id="sid">R01</span></div>
-  </aside>
-  <div class="phone" id="phone" aria-live="polite"></div>
-</div>
+<div class="phone" id="phone" aria-live="polite"></div>
+<div id="sid" hidden></div>
 
 <script>
 const TOTAL=168, STARTS=[1,14,30,46,62,80,96,120,138,154];
@@ -128,14 +131,15 @@ const KNOW=[
  {k:'인물',t:'나폴레옹',d:'농장을 차지해 가는 돼지',at:0},{k:'인물',t:'스노볼',d:'풍차를 설계한 돼지',at:0},
  {k:'배경지식',t:'7계명과 그 변화',d:'읽은 곳까지 바뀐 문구',at:40},{k:'낱말',t:'선전',d:'생각을 퍼뜨리려는 말과 활동',at:60},
  {k:'배경지식',t:'풍차 전투',d:'두 번째 풍차를 둘러싼 싸움',at:119},{k:'인물',t:'복서의 마지막',d:'성실한 말 복서에게 일어난 일',at:153}];
-const TODAY=new Date(2026,10,12);
+const TODAY=(()=>{const d=new Date();d.setHours(0,0,0,0);return d})();
+let FAST=false;try{FAST=localStorage.getItem('chaekbeot-fast')==='1'}catch(e){}
 const fmtD=d=>`${d.getMonth()+1}월 ${d.getDate()}일`;
-const dayKey=d=>d.toISOString().slice(0,10);
+const dayKey=d=>{d=new Date(d);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
 const addD=(n)=>{const d=new Date(TODAY);d.setDate(d.getDate()+n);return d};
 const chOf=p=>{let c=0;STARTS.forEach((s,i)=>{if(p>=s)c=i+1});return c};
 const chDone=p=>p>=TOTAL?10:Math.max(0,chOf(p)-1);
 const mins=s=>{const m=Math.round(s/60);return m>=60?`${Math.floor(m/60)}시간 ${String(m%60).padStart(2,'0')}분`:`${m}분`};
-const clock=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+const clock=s=>{s=Math.floor(s);return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`};
 let S;
 function scenario(n){
   const base={tab:'info',page:0,round:1,completions:[],log:[],done:new Set(),seenKnow:new Set(),goal:null,started:false,reviews:[
@@ -156,7 +160,7 @@ function scenario(n){
   document.querySelectorAll('[data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc===n));
 }
 let tick=null;
-function startTick(){stopTick();tick=setInterval(()=>{if(!S.running)return;S.timer+=document.getElementById('fast').checked?60:1;const el=document.getElementById('clk');if(el)el.textContent=clock(S.timer);const el2=document.getElementById('clk2');if(el2)el2.textContent=clock(S.timer)},1000)}
+function startTick(){stopTick();tick=setInterval(()=>{const now=Date.now();if(!S.running){S.lastTs=null;return}if(S.lastTs)S.timer+=(now-S.lastTs)/1000*(FAST?60:1);S.lastTs=now;save();const el=document.getElementById('clk');if(el)el.textContent=clock(S.timer);const el2=document.getElementById('clk2');if(el2)el2.textContent=clock(S.timer)},1000)}
 function stopTick(){if(tick)clearInterval(tick);tick=null}
 const reads=()=>S.log.filter(l=>l.type==='read'&&l.round===undefined||l.type==='read');
 const roundReads=()=>S.log.filter(l=>l.type==='read'&&(l.round||1)===S.round);
@@ -177,9 +181,9 @@ function render(){
   else if(S.screen==='content'){[html,id]=content()}
   if(S.overlay){const [o,oid]=overlay();html+=o;id=oid}
   if(S.toast)html+=`<div class="toast">${S.toast}</div>`;
-  P.innerHTML=html;sid(id);bind(P);if(P.querySelector('.rail')&&!S.overlay){const sc=P.querySelector('.scroll');if(sc&&S._scrolled!==S.screen+S.tab+(S.pull?1:0)+S.log.length){sc.scrollTop=sc.scrollHeight;S._scrolled=S.screen+S.tab+(S.pull?1:0)+S.log.length}}
+  P.innerHTML=html;sid(id);bind(P);save();if(P.querySelector('.rail')&&!S.overlay){const sc=P.querySelector('.scroll');if(sc&&S._scrolled!==S.screen+S.tab+(S.pull?1:0)+S.log.length){sc.scrollTop=sc.scrollHeight;S._scrolled=S.screen+S.tab+(S.pull?1:0)+S.log.length}}
 }
-function header(t,back=true){return `<div class="hdr">${back?'<button class="back" data-a="noop" aria-label="뒤로">‹</button>':''}<span class="t">${t}</span></div>`}
+function header(t,back=true){return `<div class="hdr">${back?'<button class="back" data-a="back" aria-label="뒤로">‹</button>':''}<span class="t">${t}</span><button class="menu" data-a="menu" aria-label="프로토타입 메뉴">⋯</button></div>`}
 function tabsHtml(list,cur,act){return `<div class="tabs" role="tablist">${list.map(([k,l,n])=>`<button class="tab ${cur===k?'on':''}" data-a="${act}" data-v="${k}" role="tab">${l}${n?`<sup>${n}</sup>`:''}</button>`).join('')}</div>`}
 function homeTabs(cur,act='tab'){const nk=KNOW.filter(k=>knowOpen(k)&&k.at>0&&!S.seenKnow.has('_v'+k.t)).length;return tabsHtml([['info','책 정보'],['timeline','타임라인'],['know','책 속 지식',nk||''],['rev','감상','N']],cur,act)}
 function itemHtml(c,extra=''){const d=S.done.has(c.id);return `<button class="item" data-a="content" data-v="${c.id}"><span class="ic"></span><span class="grow" style="flex:1;min-width:0"><span class="k">${c.k} · ${d?'완료':c.m+'분'}</span><br><span class="tt">${c.t}</span></span>${extra}</button>`}
@@ -241,7 +245,7 @@ function fwrap(){
   const w=S.lastWrap;const todo=openContents().filter(c=>!S.done.has(c.id));
   let o=`<div style="font-size:26px;font-weight:700">끝까지 읽었어요</div><div class="mu">동물농장 · 본문 ${TOTAL}쪽</div>`+nowCard(w,'ok')+todayCard()+bookCard();
   if(todo.length)o+=`<span class="h">아직 안 본 콘텐츠 ${todo.length}</span><span class="mu">보고 싶은 것만 골라 보세요</span>`+todo.map(c=>itemHtml(c)).join('');
-  return [`<div class="scroll" style="padding-top:36px">${o}</div><div class="bottom"><button class="btn" data-a="fsum">완독 정리 보기</button></div>`,'R11'];
+  return [`<div class="scroll" style="padding-top:calc(36px + env(safe-area-inset-top,0px))">${o}</div><div class="bottom"><button class="btn" data-a="fsum">완독 정리 보기</button></div>`,'R11'];
 }
 function fsum(){const c=S.completions[S.completions.length-1];
   return [header('완독 정리',false)+`<div class="scroll"><div class="row" style="gap:14px"><div style="width:64px;height:92px;border-radius:6px;background:var(--gray)"></div><div><div style="font-size:20px;font-weight:700">동물농장</div><div class="mu">${fmtD(c.d)}에 ${c.round>1?c.round+'번째로 ':''}다 읽었어요</div></div></div>
@@ -257,6 +261,7 @@ function overlay(){const o=S.overlay;
   if(o==='back'){return [`<div class="overlay center"><div class="dialog"><span class="h" style="font-size:18px">지난번 ${S.page}쪽보다 앞이에요</span><span class="mu" style="font-size:14px">${S.pend.to}쪽으로 기록할까요? 앞부분을 다시 읽었다면 그대로 기록해도 돼요.</span><button class="btn" data-a="backok">이대로 기록</button><button class="btn sec" data-a="backno">다시 입력</button></div></div>`,'R07b']}
   if(o==='spoil'){return [`<div class="overlay center"><div class="dialog"><span class="h" style="font-size:18px">스포일러가 있어요</span><span class="mu" style="font-size:14px">「${S.spoil.t}」는 ${S.spoil.ch}장(${S.spoil.p}쪽)까지 읽고 보면 더 재밌어요.</span><button class="btn" data-a="close">나중에 볼게요</button><button class="btn sec" data-a="spoilok">그래도 볼래요</button></div></div>`,'R03b']}
   if(o==='review'){return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">감상 남기기</span><textarea id="revtxt2" placeholder="읽으면서 든 생각을 자유롭게 적어 보세요."></textarea><button class="btn" data-a="revpost">올리기</button><button class="btn sec" data-a="close">닫기</button></div></div>`,'R04 감상 쓰기']}
+  if(o==='menu'){const sc=[['new','처음 읽는 책'],['mid','읽는 중 (96쪽 · 8일째)'],['done','다 읽은 책']];return [`<div class="overlay"><div class="sheet"><span class="grab"></span><div class="row"><span class="h grow" style="font-size:18px">프로토타입 메뉴</span><button class="link" data-a="close" style="text-decoration:none">닫기</button></div><span class="mu">기록은 이 기기의 브라우저에만 저장돼요. 시작 상태를 바꾸면 기록이 처음으로 돌아가요.</span><b style="font-size:13px">시작 상태</b><div class="mlist">${sc.map(([k,l])=>`<button data-a="sc" data-v="${k}">${l}</button>`).join('')}</div><b style="font-size:13px">시연 도구</b><div class="mlist"><button class="${FAST?'on':''}" data-a="fast">타이머 빨리 감기 (1초 = 1분) · ${FAST?'켜짐':'꺼짐'}</button></div></div></div>`,'메뉴']}
   return ['',''];
 }
 // ---------- actions ----------
@@ -276,6 +281,10 @@ function readPage(){const v=parseInt(document.getElementById('pg').value,10);con
   if(!v||v<1){e.textContent='읽은 쪽을 입력해 주세요';return null}if(v>TOTAL){e.textContent=`이 책은 ${TOTAL}쪽까지예요`;return null}return v}
 const A={
  noop(){},
+ back(){if(S.screen==='content'){const f=S.from;S.screen=f==='timer'?'timer':f;if(f==='timer'){S.running=true;S.lastTs=Date.now()}render()}},
+ menu(){S.overlay='menu';render()},
+ sc(v){scenario(v);toast('시작 상태를 바꿨어요')},
+ fast(){FAST=!FAST;try{localStorage.setItem('chaekbeot-fast',FAST?'1':'0')}catch(e){}render()},
  kf(v){S.kf=v;render()},
  tab(v){S.tab=v;if(v==='know')KNOW.filter(knowOpen).forEach(k=>S.seenKnow.add('_v'+k.t));render()},
  ptab(v){S.ptab=v;render()},
@@ -305,7 +314,10 @@ const A={
 };
 function bind(P){P.querySelectorAll('[data-a]').forEach(el=>{const go=e=>{e.preventDefault();A[el.dataset.a](el.dataset.v,el)};el.addEventListener('click',go);if(el.getAttribute('role')==='button')el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go(e)})});
   const pk=document.getElementById('peek');if(pk){let y0=null;pk.addEventListener('pointerdown',e=>{y0=e.clientY});pk.addEventListener('pointerup',e=>{if(y0!==null&&y0-e.clientY>20){A.pull()}y0=null})}}
-document.querySelectorAll('[data-sc]').forEach(b=>b.addEventListener('click',()=>scenario(b.dataset.sc)));
-scenario('mid');
+function save(){try{localStorage.setItem('chaekbeot-proto',JSON.stringify(S,(k,v)=>v instanceof Set?{__set:[...v]}:(k==='toast'||k==='_scrolled')?undefined:v))}catch(e){}}
+function load(){try{const t=localStorage.getItem('chaekbeot-proto');if(!t)return null;return JSON.parse(t,(k,v)=>v&&v.__set?new Set(v.__set):(typeof v==='string'&&/^\d{4}-\d\d-\d\dT/.test(v))?new Date(v):v)}catch(e){return null}}
+(function init(){const s=load();if(s&&s.screen){S=s;S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&S.running){const el=document.getElementById('clk');if(el)el.textContent=clock(S.timer)}});
 </script>
+
 </body></html>
