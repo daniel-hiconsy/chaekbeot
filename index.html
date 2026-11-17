@@ -150,6 +150,54 @@ select,textarea{font-size:16px}
 .recap .play{width:30px;height:30px;border-radius:50%;background:#fff;color:#111216;display:flex;align-items:center;justify-content:center;font-size:12px;padding-left:2px}
 .recap .dur{position:absolute;right:6px;bottom:4px;font-size:10px;background:rgba(0,0,0,.6);padding:1px 4px;border-radius:3px}
 .recap .rt{display:flex;flex-direction:column;gap:2px;min-width:0}.recap .k{font-size:11px;font-weight:700;color:#9db8ff}.recap .mu{color:#b8bac3}
+
+/* v3 앱 틀: 홈 · 서재 · 기록 + 우측 상단 마이 */
+.ahdr{height:60px;display:flex;align-items:center;gap:6px;padding:0 20px;flex:none}
+.ahdr .t{font-weight:800;font-size:22px}.ahdr .t.brand{color:var(--blue)}
+.ahdr .menu{margin-left:auto;background:none;border:0;font-size:22px;line-height:1;padding:6px 8px;color:var(--mu);cursor:pointer}
+.av{width:34px;height:34px;border-radius:50%;background:var(--gray);border:0;font:inherit;font-size:11px;font-weight:700;color:var(--mu);cursor:pointer;flex:none}
+.tbar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;padding:8px 0 calc(10px + env(safe-area-inset-bottom,0px))}
+.tbar button{flex:1;background:none;border:0;font:inherit;font-size:11px;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px}
+.tbar i{width:22px;height:22px;border-radius:6px;background:var(--line);display:block}
+.tbar .on{color:var(--blue);font-weight:700}.tbar .on i{background:var(--blue)}
+.ascroll{flex:1;overflow-y:auto;padding:4px 20px 110px;display:flex;flex-direction:column;gap:14px}
+.sbox{display:flex;align-items:center;gap:8px;background:var(--gray);border-radius:10px;padding:11px 14px;color:var(--mu);border:1px solid transparent;font:inherit;width:100%;text-align:left;cursor:pointer}
+.sbox input{border:0;background:none;font:inherit;font-size:14px;flex:1;outline:none;color:var(--fg);min-width:0}
+.sbox.on{background:#fff;border-color:var(--blue)}
+.ash{display:flex;align-items:baseline;justify-content:space-between;margin-top:4px}.ash b{font-size:16px}
+.mini{width:56px;height:76px;border-radius:6px;background:#fff;flex:none}
+.recs{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.recs button{flex:none;width:92px;background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.recs .cv{width:92px;height:128px;border-radius:8px;background:var(--gray)}
+.recs span{font-size:12px;font-weight:700}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{font:inherit;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;border:0;background:var(--gray);color:var(--mu);cursor:pointer}
+.chips .on{background:var(--fg);color:#fff}
+.shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 10px}
+.shelf button{background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0}
+.shelf .cv{width:100%;aspect-ratio:3/4.2;border-radius:6px;background:var(--gray)}
+.shelf b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chip.ok{background:var(--ok);color:#1d7a3a}
+.res{display:flex;gap:12px;align-items:flex-start;background:none;border:0;padding:0;font:inherit;text-align:left;width:100%}
+.res .cv{width:48px;height:66px;border-radius:6px;background:var(--gray);flex:none}
+.res .rtx{display:flex;flex-direction:column;gap:4px;align-items:flex-start;flex:1;cursor:pointer}
+.mbtn{font:inherit;font-size:12px;font-weight:700;border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer}
+.streak{background:var(--bs);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.streak .k{font-size:12px;font-weight:700;color:var(--blue)}.streak .v{font-size:20px;font-weight:800}
+.wk{display:flex;justify-content:space-between}.wk span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--mu)}
+.wk i{width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid var(--line);display:block}.wk .on i{background:var(--blue);border-color:var(--blue)}
+.wk .td{font-weight:800;color:var(--fg)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats div{background:var(--gray);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.stats span{font-size:11px;color:var(--mu)}.stats b{font-size:16px}
+.cal{background:var(--gray);border-radius:12px;padding:10px;display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal span{font-size:10px;color:var(--mu);text-align:center}
+.cal i{height:24px;border-radius:5px;background:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;color:var(--mu)}
+.cal i.on{background:#9fbcf3;color:#fff;font-weight:700}.cal i.x{background:transparent}.cal i.td{outline:2px solid var(--blue)}
+.mgrp{background:var(--gray);border-radius:12px;display:flex;flex-direction:column}
+.mgrp button{display:flex;align-items:center;gap:8px;background:none;border:0;font:inherit;font-size:14px;padding:14px 16px;cursor:pointer;text-align:left}
+.mgrp button+button{border-top:1px solid #e6e6ea}.mgrp em{font-style:normal;font-size:12px;color:var(--mu)}
+.mlab{font-size:12px;font-weight:700;color:var(--mu);margin-top:6px}
 </style>
 
 <div class="phone" id="phone" aria-live="polite"></div>
@@ -197,7 +245,7 @@ function scenario(n){
     {n:'책읽는고래',p:96,t:'복서가 너무 성실해서 오히려 마음이 아팠어요. 열심히 일하면 정말 나아질까요?'},
     {n:'푸른연필',p:62,t:'7계명이 조금씩 바뀌는 게 소름 돋았어요. 다들 눈치를 못 챘을까?'},
     {n:'달빛토끼',p:168,t:'마지막 장면에서 돼지와 사람의 얼굴이 구별되지 않는 장면이 오래 남아요.'}],
-    screen:'home',overlay:null,timer:0,running:false,from:null,sessionStart:0,lastWrap:null,toast:null};
+    screen:'app',at:'home',overlay:null,timer:0,running:false,from:null,sessionStart:0,lastWrap:null,toast:null};
   const R=(d,from,to,m)=>({d:addD(d),type:'read',from,to,sec:m*60,round:1});
   const Cn=(d,id)=>({d:addD(d),type:'content',id});
   if(n==='mid'){Object.assign(base,{tab:'timeline',page:96,started:true,goal:null,done:new Set(['c0','c1','c2','c3'])});
@@ -221,10 +269,65 @@ const knowOpen=k=>S.page>=k.at||(S.round>1&&S.completions.length>0)||S.seenKnow.
 function bookSec(){return roundReads().reduce((a,l)=>a+l.sec,0)}
 function sid(id){document.getElementById('sid').textContent=id}
 function h(s){return s}
+
+// ---------- v3 앱 틀 (홈 · 서재 · 기록 · 마이) ----------
+const OTHER=[
+ {t:'어린 왕자',a:'생텍쥐페리',st:'read',p:42,T:170},{t:'갈매기의 꿈',a:'리처드 바크',st:'done',n:2},{t:'모모',a:'미하엘 엔데',st:'done',n:1},
+ {t:'우리들의 일그러진 영웅',a:'이문열',st:'want'},{t:'책 먹는 여우',a:'프란치스카 비어만',st:'want'}];
+const REC=['아몬드','시간을 파는 상점','완득이','긴긴밤','페인트'];
+function myBook(){const pct=Math.round(S.page/TOTAL*100);const n=S.completions.length;
+  if(S.page>=TOTAL&&n)return {st:'done',label:`완독 · ${n}번`,pct:100};
+  if(S.started||S.log.length)return {st:'read',label:`읽는 중 ${pct}%`,pct};
+  return {st:'want',label:'담은 책',pct:0};}
+function stChip(st,label){return `<span class="chip ${st==='read'?'b':st==='done'?'ok':''}">${label}</span>`}
+function ahdr(t,brand){return `<div class="ahdr"><span class="t ${brand?'brand':''}">${t}</span><button class="menu" data-a="menu" aria-label="프로토타입 메뉴">⋯</button><button class="av" data-a="my" aria-label="마이">마이</button></div>`}
+function tbar(){const cur=S.at==='search'?'home':S.at;return `<nav class="tbar">${[['home','홈'],['lib','서재'],['rec','기록']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-a="at" data-v="${k}"><i></i>${l}</button>`).join('')}</nav>`}
+function readDays(){return [...new Set(S.log.filter(l=>l.type==='read'||l.type==='content').map(l=>dayKey(l.d)))]}
+function streak(){const ds=new Set(readDays());let n=0;const d=new Date(TODAY);if(!ds.has(dayKey(d)))d.setDate(d.getDate()-1);while(ds.has(dayKey(d))){n++;d.setDate(d.getDate()-1)}return n}
+function appHome(){const b=myBook();const todo=[];
+  const t1=todoList()[0];if(t1)todo.push(`<button class="item" data-a="content" data-v="${t1.id}"><span style="flex:1;min-width:0"><span class="k">동물농장 · ${t1.k}</span><br><span class="tt">${t1.t}</span></span><span class="chip s">하기</span></button>`);
+  KNOW.filter(k=>k.id&&openSt(k).length>1).slice(0,1).forEach(k=>todo.push(`<button class="item" data-a="kd" data-v="${k.id}"><span style="flex:1;min-width:0"><span class="k">동물농장 · 책 속 지식</span><br><span class="tt">${k.subs?'7계명에 새 변화가 생겼어요':k.t+'의 새로운 모습이 열렸어요'}</span></span><span class="chip s">보기</span></button>`));
+  todo.push(`<button class="item" data-a="other" data-v="어린 왕자"><span style="flex:1;min-width:0"><span class="k">어린 왕자 · 이어 읽기</span><br><span class="tt">3일 동안 쉬었어요 · 42쪽부터</span></span><span class="chip s">열기</span></button>`);
+  const cta=b.st==='done'?`<button class="btn sec" data-a="book">완독 기록 보기</button>`:`<button class="btn" data-a="go">${b.st==='read'?'▶ 이어 읽기':'읽기 시작'}</button>`;
+  return [ahdr('책벗',true)+`<div class="ascroll"><button class="sbox" data-a="at" data-v="search">책 제목, 지은이로 찾기</button>
+  <div class="ash"><b>지금 읽는 책</b><span class="mu">2권</span></div>
+  <div class="card blue" style="gap:12px"><button class="res" data-a="book" style="cursor:pointer"><span class="mini"></span><span class="rtx"><b style="font-size:16px">동물농장</b><span class="mu">${b.st==='done'?`${S.completions.length}번째 완독 · ${TOTAL}쪽`:b.st==='read'?`${chOf(Math.max(S.page,1))}장 읽는 중 · ${S.page} / ${TOTAL}쪽`:`아직 읽기 전 · ${TOTAL}쪽`}</span><span class="bar" style="width:100%"><i style="width:${b.pct}%;display:block;height:100%;background:var(--blue)"></i></span></span></button>${cta}</div>
+  <div class="ash"><b>지금 할 일</b></div>${todo.slice(0,3).join('')}
+  <div class="ash"><b>추천 도서</b><button class="link" data-a="other" data-v="추천 도서" style="text-decoration:none">더 보기 ›</button></div>
+  <div class="recs">${REC.map(t=>`<button data-a="other" data-v="${t}"><i class="cv"></i><span>${t}</span></button>`).join('')}</div></div>`+tbar(),'H01'];}
+function appSearch(){const q=(S.q||'').trim();const all=[{t:'동물농장',a:'조지 오웰',me:1}].concat(OTHER,REC.map(t=>({t,a:'지은이',st:'none'})));
+  const res=q?all.filter(x=>(x.t+x.a).includes(q)):[];
+  const row=x=>{if(x.me){const b=myBook();return `<div class="res"><span class="cv"></span><button class="rtx" data-a="book" style="background:none;border:0;padding:0;font:inherit;text-align:left"><b>동물농장</b><span class="mu">조지 오웰</span>${stChip(b.st,b.label)}</button></div>`}
+    const st=S.added&&S.added.includes(x.t)?'want':x.st;const lab=st==='read'?`읽는 중 ${Math.round(x.p/x.T*100)}%`:st==='done'?`완독 · ${x.n}번`:st==='want'?'담은 책':'';
+    return `<div class="res"><span class="cv"></span><span class="rtx"><b>${x.t}</b><span class="mu">${x.a}</span>${lab?stChip(st,lab):`<button class="mbtn" data-a="add" data-v="${x.t}">+ 서재에 담기</button>`}</span></div>`};
+  return [ahdr('책 찾기',true)+`<div class="ascroll"><label class="sbox on"><input id="qin" value="${q.replace(/"/g,'&quot;')}" placeholder="책 제목, 지은이로 찾기" autocomplete="off">${q?'<button class="link" data-a="qclr" style="text-decoration:none">✕</button>':''}</label>
+  ${q?`<span class="mu">검색 결과 ${res.length}권</span>${res.map(row).join('')||'<span class="mu">찾는 책이 없어요</span>'}`:`<span class="mu">예: 동물, 오웰, 어린</span>`}</div>`+tbar(),'H02'];}
+function appLib(){const b=myBook();const added=(S.added||[]).filter(t=>!OTHER.some(o=>o.t===t)).map(t=>({t,st:'want'}));
+  const list=[{t:'동물농장',me:1,st:b.st,label:b.label}].concat(OTHER.map(o=>({t:o.t,st:o.st,label:o.st==='read'?`읽는 중 ${Math.round(o.p/o.T*100)}%`:o.st==='done'?`완독 · ${o.n}번`:'담은 책'})),added.map(x=>({t:x.t,st:'want',label:'담은 책'})));
+  const f=S.lf||'all';const cnt=k=>list.filter(x=>x.st===k).length;const shown=f==='all'?list:list.filter(x=>x.st===f);
+  return [ahdr('서재')+`<div class="ascroll"><div class="chips">${[['all',`전체 ${list.length}`],['read',`읽는 중 ${cnt('read')}`],['want',`담은 책 ${cnt('want')}`],['done',`완독 ${cnt('done')}`]].map(([k,l])=>`<button class="${f===k?'on':''}" data-a="lf" data-v="${k}">${l}</button>`).join('')}</div>
+  <div class="shelf">${shown.map(x=>`<button data-a="${x.me?'book':'other'}" data-v="${x.t}"><i class="cv"></i><b>${x.t}</b>${stChip(x.st,x.label)}</button>`).join('')}</div>${shown.length?'':'<span class="mu">이 칸에 꽂힌 책이 없어요</span>'}</div>`+tbar(),'L01'];}
+function appRec(){const ds=new Set(readDays());const n=streak();
+  const mon=new Date(TODAY);mon.setDate(mon.getDate()-((mon.getDay()+6)%7));const W='월화수목금토일';
+  const wk=[...Array(7)].map((_,i)=>{const d=new Date(mon);d.setDate(d.getDate()+i);const td=dayKey(d)===dayKey(TODAY);return `<span class="${ds.has(dayKey(d))?'on':''} ${td?'td':''}"><i></i>${W[i]}</span>`}).join('');
+  const inWk=l=>l.d>=mon;const wr=S.log.filter(l=>l.type==='read'&&inWk(l));const sec=wr.reduce((a,l)=>a+(l.sec||0),0),pg=wr.reduce((a,l)=>a+Math.max(0,l.to-l.from),0);
+  const wc=S.log.filter(l=>l.type==='complete'&&inWk(l)).length;
+  const m0=new Date(TODAY.getFullYear(),TODAY.getMonth(),1);const days=new Date(TODAY.getFullYear(),TODAY.getMonth()+1,0).getDate();const lead=(m0.getDay()+6)%7;
+  let cal=[...W].map(w=>`<span>${w}</span>`).join('')+[...Array(lead)].map(()=>'<i class="x"></i>').join('');
+  for(let i=1;i<=days;i++){const d=new Date(m0);d.setDate(i);cal+=`<i class="${ds.has(dayKey(d))?'on':''} ${i===TODAY.getDate()?'td':''}">${i}</i>`}
+  return [ahdr('기록')+`<div class="ascroll"><div class="streak"><span class="k">연속 기록</span><span class="v">${n?`${n}일째 읽고 있어요`:'오늘 읽으면 1일째예요'}</span><div class="wk">${wk}</div></div>
+  <div class="ash"><b>이번 주</b></div><div class="stats"><div><span>읽은 시간</span><b>${mins(sec)}</b></div><div><span>읽은 쪽</span><b>${pg}쪽</b></div><div><span>완독</span><b>${wc}권</b></div></div>
+  <div class="ash"><b>월별 기록</b><span class="mu">${TODAY.getMonth()+1}월</span></div><div class="cal">${cal}</div>
+  <div class="card dash"><b>리워드 · 뱃지 · 메달 · 칭호</b><span class="mu">별도 기획 중이라 자리만 잡아 두었어요</span></div>
+  <span class="mu">연속 기록의 MVP 포함 여부, 기록에서 책 홈으로 가는 경로는 미정이에요.</span></div>`+tbar(),'K01'];}
+function appMy(){const g=(l,items)=>`<span class="mlab">${l}</span><div class="mgrp">${items.map(([t,e])=>`<button data-a="other" data-v="${t}">${t}<span style="margin-left:auto;display:flex;gap:8px;align-items:center">${e?`<em>${e}</em>`:''}<span class="mu">›</span></span></button>`).join('')}</div>`;
+  return [`<div class="hdr"><button class="back" data-a="myback" aria-label="뒤로">‹</button><span class="t">마이</span></div><div class="ascroll" style="padding-top:16px;padding-bottom:40px"><div class="row" style="gap:14px"><span class="av" style="width:56px;height:56px"></span><span style="display:flex;flex-direction:column;gap:2px"><b style="font-size:17px">책읽는고래</b><span class="mu">중학생 · 내 정보 수정 ›</span></span></div>
+  ${g('계정',[['내 정보'],['보호자 연결','연결됨']])}${g('설정',[['알림','하루 2개까지'],['읽기 화면']])}${g('도움',[['자주 묻는 질문'],['약관 · 개인정보'],['로그아웃']])}</div>`,'M01'];}
 // ---------- render ----------
 function render(){
   const P=document.getElementById('phone');let html='';let id='';
-  if(S.screen==='home'){[html,id]=home()}
+  if(S.screen==='app'){[html,id]=({home:appHome,search:appSearch,lib:appLib,rec:appRec,my:appMy}[S.at||'home']||appHome)()}
+  else if(S.screen==='home'){[html,id]=home()}
   else if(S.screen==='timer'){[html,id]=timer()}
   else if(S.screen==='wrap'){[html,id]=wrap()}
   else if(S.screen==='fwrap'){[html,id]=fwrap()}
@@ -382,14 +485,22 @@ function readPage(){const v=parseInt(document.getElementById('pg').value,10);con
   if(!v||v<1){e.textContent='읽은 쪽을 입력해 주세요';return null}if(v>TOTAL){e.textContent=`이 책은 ${TOTAL}쪽까지예요`;return null}return v}
 const A={
  noop(){},
- back(){if(S.screen==='kd'){A.kback();return}if(S.screen==='fsum'&&S.fview!=null){A.fback();return}if(S.screen==='content'){const f=S.from;S.screen=f==='timer'?'timer':f;if(f==='home'&&S.retTodo){S.overlay='todo';S.retTodo=false}if(f==='timer'){S.running=true;S.lastTs=Date.now()}render()}},
+ at(v){S.at=v;S.screen='app';render();if(v==='search'){const i=document.getElementById('qin');if(i)i.focus()}},
+ my(){S.atPrev=S.at==='my'?'home':S.at;S.at='my';render()},myback(){S.at=S.atPrev||'home';render()},
+ book(){S.screen='home';S.overlay=null;S.tab=(S.started||S.log.length)?'timeline':'info';render()},
+ go(){S.tab='timeline';A.start()},
+ lf(v){S.lf=v;render()},
+ add(v){S.added=(S.added||[]).concat([v]);render();toast('서재에 담았어요')},
+ qclr(){S.q='';render();const i=document.getElementById('qin');if(i)i.focus()},
+ other(v){toast('프로토타입에서는 「동물농장」만 열려요')},
+ back(){if(S.screen==='home'){S.screen='app';S.overlay=null;render();return}if(S.screen==='kd'){A.kback();return}if(S.screen==='fsum'&&S.fview!=null){A.fback();return}if(S.screen==='content'){const f=S.from;S.screen=f==='timer'?'timer':f;if(f==='home'&&S.retTodo){S.overlay='todo';S.retTodo=false}if(f==='timer'){S.running=true;S.lastTs=Date.now()}render()}},
  menu(){S.overlay='menu';render()},
  sc(v){scenario(v);toast('시작 상태를 바꿨어요')},
  fast(){FAST=!FAST;try{localStorage.setItem('chaekbeot-fast',FAST?'1':'0')}catch(e){}render()},
  kf(v){S.kf=v;render()},
- kd(v){S.kid=v;S.screen='kd';if(S.kstage)delete S.kstage[v];render()},
+ kd(v){S.kFrom=S.screen==='app'?'app':'home';S.kid=v;S.screen='kd';if(S.kstage)delete S.kstage[v];render()},
  kst(v){if(!S.kstage)S.kstage={};S.kstage[S.kid]=+v;render()},
- kback(){S.screen='home';S.tab='know';render()},
+ kback(){if(S.kFrom==='app'){S.kFrom=null;S.screen='app';render();return}S.screen='home';S.tab='know';render()},
  spoilst(v,el){S.spoil={t:'다음 변화',ch:el.dataset.ch,p:el.dataset.p,st:v};S.overlay='spoil';render()},
  hint(v){S.hintMode=v;S.overlay=null;render();toast('힌트 방식을 바꿨어요')},
  tab(v){S.tab=v;if(v==='know')KNOW.filter(knowOpen).forEach(k=>S.seenKnow.add('_v'+k.t));render()},
@@ -433,10 +544,11 @@ const A={
  close(){S.overlay=null;render()}
 };
 function bind(P){P.querySelectorAll('[data-a]').forEach(el=>{const go=e=>{e.preventDefault();A[el.dataset.a](el.dataset.v,el)};el.addEventListener('click',go);if(el.getAttribute('role')==='button')el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go(e)})});
+  const qi=document.getElementById('qin');if(qi){qi.addEventListener('input',()=>{S.q=qi.value;clearTimeout(window.__q);window.__q=setTimeout(()=>{const p=qi.selectionStart;render();const n=document.getElementById('qin');if(n){n.focus();n.setSelectionRange(p,p)}},250)})}
   const pk=document.getElementById('peek');if(pk){let y0=null;pk.addEventListener('pointerdown',e=>{y0=e.clientY});pk.addEventListener('pointerup',e=>{if(y0!==null&&y0-e.clientY>20){A.pull()}y0=null})}}
-function save(){try{localStorage.setItem('chaekbeot-proto',JSON.stringify(S,(k,v)=>v instanceof Set?{__set:[...v]}:(k==='toast'||k==='_scrolled'||k==='_sk'||k==='tlOpen'||k==='tlAuto'||k==='tlLatest')?undefined:v))}catch(e){}}
-function load(){try{const t=localStorage.getItem('chaekbeot-proto');if(!t)return null;return JSON.parse(t,(k,v)=>v&&v.__set?new Set(v.__set):(typeof v==='string'&&/^\d{4}-\d\d-\d\dT/.test(v))?new Date(v):v)}catch(e){return null}}
-(function init(){const s=load();if(s&&s.screen){S=s;S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
+function save(){try{localStorage.setItem('chaekbeot-proto-v3',JSON.stringify(S,(k,v)=>v instanceof Set?{__set:[...v]}:(k==='toast'||k==='_scrolled'||k==='_sk'||k==='tlOpen'||k==='tlAuto'||k==='tlLatest')?undefined:v))}catch(e){}}
+function load(){try{const t=localStorage.getItem('chaekbeot-proto-v3');if(!t)return null;return JSON.parse(t,(k,v)=>v&&v.__set?new Set(v.__set):(typeof v==='string'&&/^\d{4}-\d\d-\d\dT/.test(v))?new Date(v):v)}catch(e){return null}}
+(function init(){try{localStorage.removeItem('chaekbeot-proto')}catch(e){}const s=load();if(s&&s.screen){S=s;if(!S.at)S.at='home';S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&S.running){const el=document.getElementById('clk');if(el)el.textContent=clock(S.timer)}});
 </script>
 
