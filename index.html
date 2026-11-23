@@ -116,6 +116,21 @@ textarea{min-height:140px;resize:vertical}
 .cover{width:120px;height:170px;border-radius:8px;background:var(--gray);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:12px;align-self:center}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .2s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.6}}}
 
+.card.gold{background:#fff8e6;border:1px solid #f0d894;padding:14px}.gk{font-size:12px;font-weight:700;color:#a8770c}
+.rpop{position:absolute;inset:0;z-index:6;background:linear-gradient(180deg,#2a2350,#14122a);color:#fff;display:flex;flex-direction:column;align-items:center;gap:12px;padding:calc(48px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px));cursor:pointer;overflow-y:auto}
+.rpop .rt{font-size:26px;font-weight:700;text-align:center}.rpop .rs{font-size:13px;color:#c9c6e0;text-align:center}.rpop .rhint{font-size:13px;color:#c9c6e0;margin-top:auto}
+.rbox{background:#fff;color:var(--fg);border-radius:14px;padding:12px;align-self:stretch;display:flex;flex-direction:column;gap:6px}.rbox>b{font-size:12px;color:var(--mu)}
+.mstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}.mstrip>div{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}.mstrip span{font-size:10px;color:var(--mu)}.mstrip b{font-size:11px;min-height:16px}.mstrip .off{opacity:.3}
+.rmedal{margin-top:8px}@media (prefers-reduced-motion:no-preference){.rmedal{animation:grow .9s ease-out}@keyframes grow{from{transform:scale(.4) rotate(-20deg);opacity:0}}.rpop.two .tcard,.rpop.two .tprompt,.rpop.two .thid{animation:drop .45s ease-out both}.rpop.two>:nth-child(3){animation-delay:.15s}.rpop.two>:nth-child(4){animation-delay:.3s}@keyframes drop{from{transform:translateY(-16px);opacity:0}}}
+.rpop.two .rhint,.rpop.two .rs{align-self:center;text-align:center}.rpop.two{align-items:stretch;padding-top:calc(32px + env(safe-area-inset-top,0px))}
+.tcard{background:#fff8e6;border:1px solid #f0d894;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;color:var(--fg)}.tcard b{font-size:17px}
+.tprompt{border:1px dashed rgba(255,255,255,.4);background:rgba(255,255,255,.08);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;color:#fff}.tprompt .pk{font-size:11px;font-weight:700;color:#9fc0ff}.tprompt span span:last-child{font-size:12px;color:#c9c6e0}
+.pbtn{font:inherit;font-weight:700;font-size:13px;border:0;border-radius:999px;padding:8px 14px;background:var(--blue);color:#fff;cursor:pointer}
+.thid{background:#efe6ff;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;color:var(--fg)}.hk{font-size:11px;font-weight:700;color:#6b3fc4}.star{color:#6b3fc4;font-size:22px}.star.big{font-size:40px;width:72px;height:72px;border-radius:50%;background:#efe6ff;display:flex;align-items:center;justify-content:center}.star.big.b{background:var(--bs);color:var(--blue)}
+.combo{background:var(--bs);color:var(--blue);font-weight:700;font-size:12px;border-radius:10px;padding:8px 12px}
+.tl{font:inherit;text-align:left;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;cursor:pointer;width:100%}.tl.on{border-color:#e2b12c;background:#fffbef}
+.ttg{font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;background:#fff2d6;color:#a8770c;white-space:nowrap}.ttg.b{background:var(--bs);color:var(--blue)}.ttg.v{background:#efe6ff;color:#6b3fc4}
+.optl{display:flex;flex-direction:column;gap:8px;width:100%}.optl button{font:inherit;font-size:15px;font-weight:700;border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;cursor:pointer;text-align:left}.optl button.on{border-color:var(--blue);background:var(--bs);color:var(--blue)}
 html,body{height:100%;margin:0;overscroll-behavior:none}
 body{background:#fff;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
 button{touch-action:manipulation}
@@ -151,10 +166,12 @@ select,textarea{font-size:16px}
 .recap .dur{position:absolute;right:6px;bottom:4px;font-size:10px;background:rgba(0,0,0,.6);padding:1px 4px;border-radius:3px}
 .recap .rt{display:flex;flex-direction:column;gap:2px;min-width:0}.recap .k{font-size:11px;font-weight:700;color:#9db8ff}.recap .mu{color:#b8bac3}
 
-/* v3 앱 틀: 홈 · 서재 · 기록 + 우측 상단 마이 */
+/* v3 앱 틀: 홈 · 서재 · 기록 + 우측 상단 나(내 얼굴 + 대표 칭호) */
 .ahdr{height:60px;display:flex;align-items:center;gap:6px;padding:0 20px;flex:none}
 .ahdr .t{font-weight:800;font-size:22px}.ahdr .t.brand{color:var(--blue)}
 .ahdr .menu{margin-left:auto;background:none;border:0;font-size:22px;line-height:1;padding:6px 8px;color:var(--mu);cursor:pointer}
+.me{display:flex;align-items:center;gap:6px;background:var(--gray);border:0;border-radius:999px;padding:3px;font:inherit;cursor:pointer;flex:none}.me .fc{width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center}.me .sh{font-size:11px;font-weight:700;color:#3a3a44;padding-right:7px}
+.lnk{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:1px solid #e6e6ea;background:#fff;border-radius:14px;padding:14px 16px;font:inherit;font-weight:700;cursor:pointer}
 .av{width:34px;height:34px;border-radius:50%;background:var(--gray);border:0;font:inherit;font-size:11px;font-weight:700;color:var(--mu);cursor:pointer;flex:none}
 .tbar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;padding:8px 0 calc(10px + env(safe-area-inset-bottom,0px))}
 .tbar button{flex:1;background:none;border:0;font:inherit;font-size:11px;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px}
@@ -249,21 +266,85 @@ const chDone=p=>p>=TOTAL?10:Math.max(0,chOf(p)-1);
 const mins=s=>{const m=Math.round(s/60);return m>=60?`${Math.floor(m/60)}시간 ${String(m%60).padStart(2,'0')}분`:`${m}분`};
 const clock=s=>{s=Math.floor(s);return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`};
 let S;
+// ---------- 완독 보상 (11/20 초안) ----------
+const G='<rect x="10" y="104" width="100" height="6" rx="3" fill="#B9D9A8"/>';
+const ST='#C9C2B5',OL='#6E6E78';
+const TOWER=`<path d="M38 104 L46 46 L74 46 L82 104 Z" fill="${ST}" stroke="${OL}" stroke-width="2"/><path d="M42 46 L60 26 L78 46 Z" fill="#D98C4A" stroke="${OL}" stroke-width="2"/><rect x="54" y="84" width="12" height="20" rx="6" fill="#fff" stroke="${OL}" stroke-width="2"/>`;
+const BLADES=`<g stroke="${OL}" stroke-width="2" fill="#8A6A4A"><path d="M60 40 L60 4 L70 6 L66 40 Z"/><path d="M60 40 L96 40 L94 50 L60 46 Z"/><path d="M60 40 L60 76 L50 74 L54 40 Z"/><path d="M60 40 L24 40 L26 30 L60 34 Z"/></g><circle cx="60" cy="40" r="4" fill="${OL}"/>`;
+const ART=[G+`<rect x="50" y="92" width="20" height="12" rx="2" fill="${ST}" stroke="${OL}" stroke-width="2"/>`,
+ G+`<rect x="34" y="92" width="52" height="12" rx="2" fill="${ST}" stroke="${OL}" stroke-width="2"/><rect x="42" y="82" width="36" height="10" rx="2" fill="${ST}" stroke="${OL}" stroke-width="2"/>`,
+ G+`<path d="M38 104 L44 62 L76 62 L82 104 Z" fill="${ST}" stroke="${OL}" stroke-width="2"/><line x1="41" y1="83" x2="79" y2="83" stroke="${OL}" stroke-width="1.5"/>`,
+ G+TOWER, G+TOWER+BLADES];
+const MEDAL={name:'풍차 메달',miles:[3,6,9],stages:[
+ {n:'첫 돌',grown:'풍차를 세울 첫 돌을 놓았어요',next:'3장까지 읽으면 주춧돌을 놓아요'},
+ {n:'주춧돌',grown:'풍차의 주춧돌을 놓았어요',next:'6장까지 읽으면 벽이 올라가요'},
+ {n:'올라가는 벽',grown:'풍차의 벽이 올라갔어요',next:'9장까지 읽으면 지붕을 얹어요'},
+ {n:'지붕 얹은 탑',grown:'풍차에 지붕을 얹었어요',next:'끝까지 읽으면 풍차가 돌아가요'},
+ {n:'돌아가는 풍차',grown:'풍차가 돌아가기 시작했어요',next:''}]};
+const artSvg=(i,sz)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 120 120" fill="none" aria-hidden="true">${ART[i]}</svg>`;
+const medalSvg=sz=>`<svg width="${sz}" height="${sz}" viewBox="0 0 160 160" fill="none" aria-hidden="true"><circle cx="80" cy="80" r="74" fill="#FFF6D8" stroke="#E2B12C" stroke-width="10"/><circle cx="80" cy="80" r="62" stroke="#F3D67A" stroke-width="2"/><g transform="translate(26 24) scale(0.9)">${TOWER+BLADES}</g></svg>`;
+const CHOICE={c1:[['계획을 세우는 스노볼','계획'],['밀어붙이는 나폴레옹','힘']],c4:[['머리 쓰는 일을 하니 괜찮다','이해'],['모두 똑같이 나눠야 한다','공평']],
+ c6:[['스노볼이 했다','믿음'],['나폴레옹이 꾸몄다','의심'],['폭풍 때문이다','바람']],c8:[['이제 구별이 안 된다','같음'],['그래도 다르다','다름']]};
+const TQ=['c1','c4'];
+const TMAP={'계획|이해':'머리 쓰는 동물을 믿는 설계자','계획|공평':'모두의 풍차를 그리는 설계자','힘|이해':'질서를 믿는 농장 관리인','힘|공평':'일한 만큼 나누자는 농장 관리인'};
+const BASE_T='동물농장의 마지막 회의까지 지켜본 동물';
+const HIDDEN=[{id:'h1',t:'7계명이 바뀌는 걸 지켜본 동물',why:'7계명이 바뀐 걸 알아챘어요'},{id:'h2',t:'모든 걸 알고 있던 당나귀 벤저민의 친구',why:'풍차도, 마지막 장면도 의심하며 봤어요'}];
+const stageOf=p=>{if(p<=0)return 0;if(p>=TOTAL)return 5;const c=chDone(p);return 1+MEDAL.miles.filter(m=>c>=m).length};
+// 단계별 날짜: 한 번의 기록으로 여러 단계를 넘으면 마지막 단계에만 날짜. 1단계는 첫 기록 날짜
+function medalDates(){const r1=S.log.filter(l=>l.type==='read'&&(l.round||1)===1);const d=[null,null,null,null,null];let reached=0;
+ r1.forEach((l,i)=>{const a=reached,b=Math.max(a,stageOf(l.to));if(i===0&&b>=1)d[0]=l.d;if(b>a){d[b-1]=l.d;reached=b}});return d}
+const medalStage=()=>{const r1=S.log.filter(l=>l.type==='read'&&(l.round||1)===1);return Math.max(0,...r1.map(l=>stageOf(l.to)))};
+const choices=()=>S.choice||(S.choice={});
+const hasT=id=>(S.titles||[]).some(t=>t.id===id);
+const cmdSeen=()=>S.seenSt instanceof Set&&[...S.seenSt].some(x=>/^cmd:[1-9]/.test(x));
+const ch7Steady=()=>{const e7=STARTS[7];return S.log.some(l=>l.type==='read'&&l.from<e7&&l.to>=e7&&stageOf(l.to)-stageOf(l.from)<=1)};
+function newTitles(atCompletion){const out=[];const done1=S.completions.some(c=>c.round===1);const ch=choices();
+ if(done1||atCompletion){if(!hasT('base'))out.push({id:'base',kind:'기본 칭호',t:BASE_T,why:'동물농장을 끝까지 읽었어요'});
+  if(!hasT('thought')&&TQ.every(q=>ch[q])){out.push({id:'thought',kind:'생각 칭호',t:TMAP[TQ.map(q=>ch[q]).join('|')],why:'내가 고른 생각: '+TQ.map(q=>ch[q]).join(' · ')})}}
+ if(!hasT('h1')&&ch7Steady()&&cmdSeen())out.push({id:'h1',kind:'숨은 칭호',t:HIDDEN[0].t,why:HIDDEN[0].why});
+ if(!hasT('h2')&&ch.c6==='의심'&&ch.c8==='같음')out.push({id:'h2',kind:'숨은 칭호',t:HIDDEN[1].t,why:HIDDEN[1].why});
+ return out}
+function grant(list){if(!S.titles)S.titles=[];list.forEach(t=>S.titles.push(Object.assign({d:TODAY},t)));if(list.length)S.repTitle=list[list.length-1].id}
+function combo(){const ch=choices();const ids=['c1','c4','c6','c8'];if(!ids.some(i=>ch[i]))return '';return ids.map(i=>ch[i]||'○').join(' · ')}
+// 칭호 작은 팝: 타이머 중이면 미뤄 둠
+function titlePop(list){if(!list.length)return;grant(list);if(S.screen==='timer'){S.pendPop=(S.pendPop||[]).concat(list);return}S.tpop=list;S.overlay='tpop'}
+function flushPop(){if(S.pendPop&&S.pendPop.length&&S.screen!=='timer'){S.tpop=(S.overlay==='tpop'&&S.tpop?S.tpop:[]).concat(S.pendPop);S.pendPop=null;S.overlay='tpop'}}
+function stripHtml(dark){const d=medalDates();const st=medalStage();return `<div class="mstrip ${dark?'dk':''}">${MEDAL.stages.map((s,i)=>`<div class="${i<st?'':'off'}">${artSvg(i,36)}<span>${s.n}</span><b>${i<st?(d[i]?relD(d[i]):'—'):''}</b></div>`).join('')}</div>`}
+function growCard(w){if(!w||w.to>=TOTAL||S.round>1)return '';const a=stageOf(w.from),b=stageOf(w.to);const was=S.log.filter(l=>l.type==='read'&&(l.round||1)===1).slice(0,-1).reduce((m,l)=>Math.max(m,stageOf(l.to)),0);if(b<=was)return '';const s=MEDAL.stages[b-1];
+ return `<div class="card gold" style="flex-direction:row;align-items:center;gap:12px">${artSvg(b-1,56)}<span style="flex:1;min-width:0"><span class="gk">메달이 자랐어요 · ${b}/5단계</span><br><b style="font-size:16px">${s.grown}</b><br><span class="mu">${s.next}</span></span></div>`}
+function rewardPop(){const step=S.rstep||1;const list=S.rlist||[];const first=!!S.rfirst;
+ if(step===1){return [`<div class="rpop" data-a="rnext" role="button" tabindex="0" aria-label="다음"><div class="rmedal">${medalSvg(200)}</div><div class="rt">${MEDAL.name}을 완성했어요</div><div class="rs">동물농장을 끝까지 읽었어요</div><div class="rbox"><b>풍차가 자란 길</b>${stripHtml()}</div><span class="rhint">화면을 누르면 칭호를 볼 수 있어요</span></div>`,'R13 보상 팝 · ① 메달']}
+ const ch=choices();const left=TQ.filter(q=>!ch[q]);const hasThought=list.some(t=>t.id==='thought');
+ const hid=list.filter(t=>t.kind==='숨은 칭호');const shownHid=hid.slice(0,1);
+ const card=t=>`<div class="tcard"><span class="gk">${t.kind}</span><b>${t.t}</b><span class="mu">${t.why}</span></div>`;
+ let o=list.filter(t=>t.kind!=='숨은 칭호').map(card).join('');
+ if(!hasThought){const q=CONTENTS.find(c=>c.id===left[0]);o+=`<div class="tprompt"><span style="flex:1;min-width:0"><span class="pk">생각 칭호</span><br><b>생각 ${left.length===1?'하나만':'두 가지를'} 더 고르면 칭호를 받아요</b><br><span>${q?q.t:''}</span></span><button class="pbtn" data-a="rpick" data-v="${left[0]}">고르기</button></div>`}
+ o+=shownHid.map(t=>`<div class="thid"><span class="star">✦</span><span style="flex:1;min-width:0"><span class="hk">숨은 칭호도 찾았어요</span><br><b>${t.t}</b></span>${hid.length>1?`<span class="hk">+${hid.length-1}</span>`:''}</div>`).join('');
+ return [`<div class="rpop two" data-a="rclose" role="button" tabindex="0" aria-label="닫기"><div class="row" style="gap:12px;align-self:stretch">${medalSvg(64)}<span><span class="hk" style="color:#F3D67A">${MEDAL.name}</span><br><b style="font-size:22px;color:#fff">칭호도 받았어요</b></span></div>${o}<span style="flex:1"></span>${first?'<span class="rs">받은 메달과 칭호는 「나」(오른쪽 위 내 얼굴)에서 다시 볼 수 있어요</span>':''}<span class="rhint">화면을 누르면 닫혀요</span></div>`,'R13 보상 팝 · ② 칭호']}
+function tpopHtml(){const l=S.tpop||[];const t=l[0];if(!t)return ['',''];const hid=t.kind==='숨은 칭호';
+ return [`<div class="overlay center" data-a="tclose2" role="button" tabindex="0"><div class="dialog" style="align-items:center;text-align:center"><span class="star big ${hid?'':'b'}">✦</span><span class="h" style="font-size:18px">${hid?'숨은 칭호를 찾았어요':'칭호를 받았어요'}</span><b style="color:${hid?'#6b3fc4':'var(--blue)'}">${t.t}</b><span class="mu">${t.why}</span><span class="mu" style="font-size:11px">누르면 닫혀요 · 「나」에 모여요${l.length>1?` · ${l.length-1}개 더`:''}</span></div></div>`,'R13b 칭호 작은 팝']}
+function rewardShelf(){const t=S.titles||[];const st=medalStage();const done1=S.completions.some(c=>c.round===1);if(!t.length&&!st)return `<div class="card dash"><b>완독 보상</b><span class="mu">책을 끝까지 읽으면 메달과 칭호를 받아요</span></div>`;
+ const rep=t.find(x=>x.id===S.repTitle)||t[t.length-1];const cb=combo();
+ return `<div class="ash"><b>완독 보상</b><span class="mu">메달 ${done1?1:0} · 칭호 ${t.length}</span></div>${rep?`<div class="tcard"><span class="gk">대표 칭호 · 동물농장</span><b>${rep.t}</b><span class="mu">칭호를 누르면 대표 칭호로 바꿔요</span></div>`:''}
+ <div class="row" style="gap:14px;align-items:center">${done1?medalSvg(64):artSvg(Math.max(0,st-1),64)}<span><b>${done1?MEDAL.name:'자라는 중 '+st+'/5'}</b><br><span class="mu">동물농장</span></span></div>
+ ${cb?`<div class="combo">동물농장 · 나의 생각 조합 · ${cb}</div>`:''}
+ ${t.map(x=>`<button class="tl ${x.id===(rep&&rep.id)?'on':''}" data-a="rep" data-v="${x.id}"><span style="flex:1;min-width:0"><b>${x.t}</b><br><span class="mu">동물농장 · ${relD(x.d)}</span></span><span class="ttg ${x.kind==='숨은 칭호'?'v':x.kind==='생각 칭호'?'b':''}">${x.kind.replace(' 칭호','')}</span></button>`).join('')}`}
+
 function scenario(n){
   const base={tab:'info',page:0,round:1,completions:[],log:[],done:new Set(),seenKnow:new Set(),goal:null,started:false,reviews:[
     {n:'책읽는고래',p:96,t:'복서가 너무 성실해서 오히려 마음이 아팠어요. 열심히 일하면 정말 나아질까요?'},
     {n:'푸른연필',p:62,t:'7계명이 조금씩 바뀌는 게 소름 돋았어요. 다들 눈치를 못 챘을까?'},
     {n:'달빛토끼',p:168,t:'마지막 장면에서 돼지와 사람의 얼굴이 구별되지 않는 장면이 오래 남아요.'}],
-    screen:'app',at:'home',overlay:null,timer:0,running:false,from:null,sessionStart:0,lastWrap:null,toast:null};
+    screen:'app',at:'home',overlay:null,choice:{},titles:[],repTitle:null,seenGuide:false,pendPop:null,timer:0,running:false,from:null,sessionStart:0,lastWrap:null,toast:null};
   const R=(d,from,to,m)=>({d:addD(d),type:'read',from,to,sec:m*60,round:1});
   const Cn=(d,id)=>({d:addD(d),type:'content',id});
-  if(n==='mid'){Object.assign(base,{tab:'timeline',page:96,started:true,goal:null,done:new Set(['c0','c1','c2','c3'])});
+  if(n==='mid'){Object.assign(base,{tab:'timeline',page:96,started:true,goal:null,done:new Set(['c0','c1','c2','c3']),choice:{c1:'계획'}});
     base.log=[{d:addD(-7),type:'start',round:1},R(-7,0,14,18),Cn(-7,'c0'),R(-6,14,30,22),R(-5,30,46,0),Cn(-5,'c1'),Cn(-4,'c2'),
       R(-3,46,62,25),R(-2,62,72,12),R(-2,72,80,9),R(-1,80,88,16),Cn(-1,'c3'),R(0,88,96,20)];}
   if(n==='done'){Object.assign(base,{tab:'timeline',page:168,started:true,goal:null,done:new Set(['c0','c1','c2','c3','c4','c5','c6','c7'])});
     base.log=[{d:addD(-12),type:'start',round:1},R(-12,0,30,34),Cn(-12,'c0'),Cn(-11,'c1'),R(-10,30,62,41),Cn(-10,'c2'),R(-8,62,96,38),Cn(-8,'c3'),Cn(-7,'c4'),
       R(-6,96,120,27),Cn(-6,'c5'),R(-5,120,138,22),Cn(-5,'c6'),R(-4,138,155,19),Cn(-4,'c7'),R(-3,155,168,15)];
-    base.completions=[{d:addD(-3),days:10,count:6,sec:196*60,vsGoal:null,round:1}];base.log.push({d:addD(-3),type:'complete',ref:0});}
+    base.completions=[{d:addD(-3),days:10,count:6,sec:196*60,vsGoal:null,round:1}];base.choice={c1:'계획',c4:'공평',c6:'의심'};base.seenGuide=true;base.titles=[{id:'base',kind:'기본 칭호',t:BASE_T,why:'동물농장을 끝까지 읽었어요',d:addD(-3)},{id:'thought',kind:'생각 칭호',t:TMAP['계획|공평'],why:'내가 고른 생각: 계획 · 공평',d:addD(-3)}];base.repTitle='thought';base.log.push({d:addD(-3),type:'complete',ref:0});}
   S=base;stopTick();render();
   document.querySelectorAll('[data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc===n));
 }
@@ -289,7 +370,9 @@ function myBook(){const pct=Math.round(S.page/TOTAL*100);const n=S.completions.l
   if(S.started||S.log.length)return {st:'read',label:`읽는 중 ${pct}%`,pct};
   return {st:'want',label:'담은 책',pct:0};}
 function stChip(st,label){return `<span class="chip ${st==='read'?'b':st==='done'?'ok':''}">${label}</span>`}
-function ahdr(t,brand){return `<div class="ahdr"><span class="t ${brand?'brand':''}">${t}</span><button class="menu" data-a="menu" aria-label="프로토타입 메뉴">⋯</button><button class="av" data-a="my" aria-label="마이">마이</button></div>`}
+function ahdr(t,brand){return `<div class="ahdr"><span class="t ${brand?'brand':''}">${t}</span><button class="menu" data-a="menu" aria-label="프로토타입 메뉴">⋯</button>${meBtn()}</div>`}
+function repT(){const t=S.titles||[];return t.find(x=>x.id===S.repTitle)||t[t.length-1]}
+function meBtn(){const r=repT();const sh=r?r.t.split(' ').pop():'';return `<button class="me" data-a="my" aria-label="나"><span class="fc">책</span>${sh?`<span class="sh">${sh}</span>`:''}</button>`}
 function tbar(){const cur=S.at==='search'?'home':S.at;return `<nav class="tbar">${[['home','홈'],['lib','서재'],['rec','기록']].map(([k,l])=>`<button class="${cur===k?'on':''}" data-a="at" data-v="${k}"><i></i>${l}</button>`).join('')}</nav>`}
 function readDays(){return [...new Set(S.log.filter(l=>l.type==='read'||l.type==='content').map(l=>dayKey(l.d)))]}
 function streak(){const ds=new Set(readDays());let n=0;const d=new Date(TODAY);if(!ds.has(dayKey(d)))d.setDate(d.getDate()-1);while(ds.has(dayKey(d))){n++;d.setDate(d.getDate()-1)}return n}
@@ -327,19 +410,22 @@ function appRec(){const ds=new Set(readDays());const n=streak();
   return [ahdr('기록')+`<div class="ascroll"><div class="streak"><span class="k">연속 기록</span><span class="v">${n?`${n}일째 읽고 있어요`:'오늘 읽으면 1일째예요'}</span><div class="wk">${wk}</div></div>
   <div class="ash"><b>이번 주</b></div><div class="stats"><div><span>읽은 시간</span><b>${mins(sec)}</b></div><div><span>읽은 쪽</span><b>${pg}쪽</b></div><div><span>완독</span><b>${wc}권</b></div></div>
   <div class="ash"><b>월별 기록</b><span class="mu">${TODAY.getMonth()+1}월</span></div><div class="cal">${cal}</div>
-  <div class="card dash"><b>리워드 · 뱃지 · 메달 · 칭호</b><span class="mu">별도 기획 중이라 자리만 잡아 두었어요</span></div>
-  <span class="mu">연속 기록의 MVP 포함 여부, 기록에서 책 홈으로 가는 경로는 미정이에요.</span></div>`+tbar(),'K01'];}
-function appMy(){const g=(l,items)=>`<span class="mlab">${l}</span><div class="mgrp">${items.map(([t,e])=>`<button data-a="other" data-v="${t}">${t}<span style="margin-left:auto;display:flex;gap:8px;align-items:center">${e?`<em>${e}</em>`:''}<span class="mu">›</span></span></button>`).join('')}</div>`;
-  return [`<div class="hdr"><button class="back" data-a="myback" aria-label="뒤로">‹</button><span class="t">마이</span></div><div class="ascroll" style="padding-top:16px;padding-bottom:40px"><div class="row" style="gap:14px"><span class="av" style="width:56px;height:56px"></span><span style="display:flex;flex-direction:column;gap:2px"><b style="font-size:17px">책읽는고래</b><span class="mu">중학생 · 내 정보 수정 ›</span></span></div>
-  ${g('계정',[['내 정보'],['보호자 연결','연결됨']])}${g('설정',[['알림','하루 2개까지'],['읽기 화면']])}${g('도움',[['자주 묻는 질문'],['약관 · 개인정보'],['로그아웃']])}</div>`,'M01'];}
+  <button class="lnk" data-a="my">완독 보상<span class="mu" style="font-weight:400">메달 ${S.completions.some(c=>c.round===1)?1:0} · 칭호 ${(S.titles||[]).length} · 나에서 보기 ›</span></button>
+  <span class="mu">이 기록 화면은 이전 안이에요. 새 기록 화면(시간 단위 · 독서 지도, 11/23 Figma 초안)은 리뷰 뒤에 옮겨요. 완독 보상은 「나」로 옮겼어요.</span></div>`+tbar(),'K01'];}
+function appMy(){const r=repT();
+  return [`<div class="hdr"><button class="back" data-a="myback" aria-label="뒤로">‹</button><span class="t">나</span></div><div class="ascroll" style="padding-top:12px;padding-bottom:40px"><div class="row" style="gap:14px;align-items:center"><span class="me" style="padding:0;background:none"><span class="fc" style="width:64px;height:64px;font-size:26px">책</span></span><span style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:0"><b style="font-size:18px">책읽는고래</b>${r?`<span class="gk" style="background:#FFF4D6;border-radius:999px;padding:3px 10px;align-self:flex-start;font-size:11px">대표 칭호 · ${r.t}</span>`:''}</span><button class="lnk" style="width:auto;padding:6px 12px;font-weight:400;font-size:12px" data-a="set">설정</button></div>
+  ${rewardShelf()}
+  <div class="card dash"><b>캐릭터 꾸미기 · 선물함</b><span class="mu">리워드 2단계에서 여기에 열려요 (자리만)</span></div></div>`,'M01'];}
+function appSet(){const g=(l,items)=>`<span class="mlab">${l}</span><div class="mgrp">${items.map(([t,e])=>`<button data-a="other" data-v="${t}">${t}<span style="margin-left:auto;display:flex;gap:8px;align-items:center">${e?`<em>${e}</em>`:''}<span class="mu">›</span></span></button>`).join('')}</div>`;
+  return [`<div class="hdr"><button class="back" data-a="setback" aria-label="뒤로">‹</button><span class="t">설정</span></div><div class="ascroll" style="padding-top:16px;padding-bottom:40px">
+  ${g('계정',[['내 정보'],['보호자 연결','연결됨']])}${g('설정',[['알림','하루 2개까지'],['읽기 화면']])}${g('도움',[['자주 묻는 질문'],['약관 · 개인정보'],['로그아웃']])}</div>`,'M01a'];}
 // ---------- render ----------
 function render(){
   const P=document.getElementById('phone');let html='';let id='';
-  if(S.screen==='app'){[html,id]=({home:appHome,search:appSearch,lib:appLib,rec:appRec,my:appMy}[S.at||'home']||appHome)()}
+  if(S.screen==='app'){[html,id]=({home:appHome,search:appSearch,lib:appLib,rec:appRec,my:appMy,set:appSet}[S.at||'home']||appHome)()}
   else if(S.screen==='home'){[html,id]=home()}
   else if(S.screen==='timer'){[html,id]=timer()}
   else if(S.screen==='wrap'){[html,id]=wrap()}
-  else if(S.screen==='fwrap'){[html,id]=fwrap()}
   else if(S.screen==='fsum'){[html,id]=fsum()}
   else if(S.screen==='content'){[html,id]=content()}
   else if(S.screen==='trailer'){[html,id]=trailer()}
@@ -464,17 +550,11 @@ function bookCard(){const pct=Math.round(S.page/TOTAL*100);return `<div style="d
 function wrap(){
   const w=S.lastWrap;const open=openContents();const fresh=open.filter(c=>!S.done.has(c.id)&&c.at>w.from&&c.at<=w.to),old=open.filter(c=>!S.done.has(c.id)&&!(c.at>w.from&&c.at<=w.to));
   const none=!fresh.length&&!old.length&&!KNOW.some(k=>k.id&&stChanged(k,w.from,w.to));const next=CONTENTS.find(c=>!unlocked(c));
-  let o=nowCard(w)+todayCard()+bookCard();
+  let o=nowCard(w)+growCard(w)+todayCard()+bookCard();
   if(none){o+=`<div class="card ok"><span class="h">열린 콘텐츠를 다 했어요</span><span class="mu">${next?`${chOf(next.at)}장까지 읽으면 새 콘텐츠가 열려요.`:'이 책의 콘텐츠를 모두 했어요.'}</span></div>`}
   else{o+=`<div class="card blue" style="gap:10px;padding:14px"><span class="h">책을 덮기 전에, 하나 해 볼까요?</span><span class="mu" style="margin-top:-6px">방금 읽은 부분과 이어지는 콘텐츠예요</span>`+KNOW.filter(k=>k.id&&stChanged(k,w.from,w.to)).map(k=>`<button class="item" data-a="kd" data-v="${k.id}"><span class="ic" style="background:${KC[k.k]}"></span><span style="flex:1;min-width:0"><span class="k">책 속 지식 · ${k.k}</span><br><span class="tt">${k.subs?'7계명에 새 변화가 생겼어요':k.t+'의 새로운 모습이 열렸어요'}</span></span><span class="chip s">보기</span></button>`).join('')+fresh.map(c=>itemHtml(c,'<span class="chip s">해 보기</span>')).join('')+(old.length?`<span class="mu" style="font-weight:700">전에 열린 콘텐츠</span>`+old.map(c=>itemHtml(c,'<span class="chip b">해 보기</span>')).join(''):'')+`</div>`}
   const bt=none?`<button class="btn" data-a="gohome">책 홈으로</button>`:`<button class="btn sec" data-a="gohome">완료</button>`;
   return [header('오늘 읽기',false)+`<div class="scroll">${o}</div><div class="bottom">${bt}</div>`,none?'R09b':'R09'];
-}
-function fwrap(){
-  const w=S.lastWrap;const todo=openContents().filter(c=>!S.done.has(c.id));
-  let o=`<div style="font-size:26px;font-weight:700">끝까지 읽었어요</div><div class="mu">동물농장 · 본문 ${TOTAL}쪽</div>`+nowCard(w,'ok')+todayCard()+bookCard();
-  if(todo.length)o+=`<span class="h">아직 안 본 콘텐츠 ${todo.length}</span><span class="mu">보고 싶은 것만 골라 보세요</span>`+todo.map(c=>itemHtml(c)).join('');
-  return [`<div class="scroll" style="padding-top:calc(36px + env(safe-area-inset-top,0px))">${o}</div><div class="bottom"><button class="btn" data-a="fsum">완독 정리 보기</button></div>`,'R11'];
 }
 function recapCard(){const d=S.done.has('recap');return `<button class="recap" data-a="recap"><span class="thumb"><span class="play">▶</span><span class="dur">3:00</span></span><span class="rt"><span class="k">되짚기 영상${d?' · 봤어요':''}</span><b>어떤 이야기였는지 다시 볼까요?</b><span class="mu">처음부터 끝까지, 3분 영상으로 정리했어요</span></span></button>`}
 function revPeek(){const o=S.reviews.filter(r=>!r.mine).sort((a,b)=>b.p-a.p).slice(0,2);if(!o.length)return '';const n=S.reviews.filter(r=>!r.mine).length;return `<div style="display:flex;flex-direction:column;gap:8px"><div class="row"><b class="grow" style="font-size:13px">먼저 읽은 친구들의 감상</b><span class="mu">${n}개</span></div>${o.map(r=>`<div class="card" style="padding:12px;gap:4px"><div class="row"><b style="font-size:13px">${r.n}</b><span class="mu">${r.p>=TOTAL?'다 읽고':chOf(r.p)+'장 읽을 때'}</span></div><div style="font-size:14px">${r.t}</div></div>`).join('')}</div>`}
@@ -482,12 +562,16 @@ function fsum(){const view=S.fview!=null;const c=view?S.completions[S.fview]:S.c
   const rv=S.revDone?`<div class="card" style="gap:6px"><b style="font-size:13px">남긴 감상</b><div>${S.revDone.replace(/</g,'&lt;')}</div><span class="mu">감상 탭에서 친구들도 볼 수 있어요</span></div>`:`<div class="revbox"><textarea id="revtxt" placeholder="가장 기억에 남는 장면이나 느낀 점을 자유롭게 적어 보세요."></textarea><div class="row" style="justify-content:space-between"><span class="mu">남긴 감상은 감상 탭에서 친구들도 볼 수 있어요</span><button class="smallbtn" data-a="revpost2">남기기</button></div></div>`;
   return [header('완독 정리',view)+`<div class="scroll"><div class="row" style="gap:14px"><div style="width:64px;height:92px;border-radius:6px;background:var(--gray)"></div><div><div style="font-size:20px;font-weight:700">동물농장</div><div class="mu">${fmtD(c.d)}에 ${c.round>1?c.round+'번째로 ':''}다 읽었어요</div></div></div>
   <div class="grid2"><div><span class="mu">읽은 기간</span><b>${c.days}일</b></div><div><span class="mu">읽은 횟수</span><b>${c.count}번</b></div><div><span class="mu">전체 시간</span><b>${mins(c.sec)}</b></div><div><span class="mu">읽은 쪽</span><b>${TOTAL}쪽</b></div></div>
-  ${recapCard()}${revPeek()}${view?'':`<span class="h">감상을 적어 보세요 (선택)</span>${rv}`}</div>
+  ${!view&&S.lastWrap&&S.lastWrap.to>=TOTAL?`<div class="card ok" style="padding:10px 14px"><span style="font-size:13px;font-weight:700;color:#2e965a">방금 ${S.lastWrap.sec!=null?mins(S.lastWrap.sec)+' · ':''}${S.lastWrap.from} → ${S.lastWrap.to}쪽, 마지막 쪽까지 읽었어요</span></div>`:''}
+  ${recapCard()}${!view&&todoList().filter(c=>c.id!=='recap').length?`<button class="tl" data-a="ov" data-v="todo"><span style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></span><b style="flex:1">아직 안 한 콘텐츠 ${todoList().filter(c=>c.id!=='recap').length}개</b><span class="mu">›</span></button>`:''}${revPeek()}${view?'':`<span class="h">감상을 적어 보세요 (선택)</span>${rv}`}</div>
   <div class="bottom">${view?'<button class="btn sec" data-a="fback">타임라인으로</button>':'<button class="btn" data-a="praise">완독한 나, 칭찬한다!</button>'}</div>`,view?'R12 (타임라인에서)':'R12'];}
 function trailer(){const end=S.tend;return [`<div class="trailer"><button class="tx" data-a="tclose" aria-label="닫기">✕</button>${end?`<div class="tend"><div class="mu" style="color:#c9cbd3">예고편 · 동물농장</div><div style="font-size:22px;font-weight:700;line-height:1.4">이야기가 궁금해졌다면,<br>지금 읽어 볼까요?</div><button class="btn" data-a="tstart">읽기 시작</button><button class="btn ghost" data-a="tclose">책 정보로 돌아가기</button></div>`:`<div class="tplay"><div class="tvid">▶</div><div class="tbar"><i></i></div><div class="row" style="justify-content:space-between;width:100%"><span style="color:#c9cbd3;font-size:12px">예고편 재생 중 · 0:43</span><button class="link" data-a="tskip" style="color:#c9cbd3">끝으로 건너뛰기</button></div></div>`}</div>`,end?'R01a 예고편 끝':'R01a 예고편']}
 function content(){const c=findC(S.cid);
+  if(CHOICE[c.id]){const cur=choices()[c.id];return [header(c.k)+`<div class="scroll"><span class="k" style="color:var(--blue);font-weight:700;font-size:12px">${c.k} · ${c.m}분</span><span class="h" style="font-size:20px">${c.t}</span><span class="mu">내 생각에 가까운 걸 골라 보세요. 정답은 없어요.</span><div class="optl">${CHOICE[c.id].map(([l,sh])=>`<button class="${cur===sh?'on':''}" data-a="pick" data-v="${c.id}:${sh}">${l}</button>`).join('')}</div><span class="mu" style="font-size:12px">기존 생각 고르기 화면을 그대로 써요(프로토타입은 고르면 바로 끝나요).</span>${S.from==='timer'?'<div class="card or"><span style="font-size:12px">타이머는 멈춰 있어요. 콘텐츠를 마치면 이어서 돌아요.</span></div>':''}</div>`,'R10 생각 고르기'];}
   return [header(c.k)+`<div class="scroll"><div class="card" style="min-height:360px;justify-content:center;align-items:center;text-align:center"><span class="k" style="color:var(--blue);font-weight:700;font-size:12px">${c.k} · ${c.m}분</span><span class="h">${c.t}</span><span class="mu">기존 콘텐츠 화면(생각 고르기·영상·강의·기억 게임)을 그대로 씁니다.</span></div>${S.from==='timer'?'<div class="card or"><span style="font-size:12px">타이머는 멈춰 있어요. 콘텐츠를 마치면 이어서 돌아요.</span></div>':''}</div><div class="bottom"><button class="btn" data-a="cdone">다 했어요</button></div>`,'R10'];}
 function overlay(){const o=S.overlay;
+  if(o==='reward')return rewardPop();
+  if(o==='tpop')return tpopHtml();
   if(o==='goal'){const sel=S.gsel||10;return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">언제까지 다 읽어 볼까요?</span><div class="chips">${[7,10,14,21,30].map(d=>`<button class="${d===sel?'on':''}" data-a="gsel" data-v="${d}">${d}일</button>`).join('')}</div><span class="mu">${relD(addD(sel))}까지 · 하루 분량은 정하지 않아요</span><button class="btn" data-a="goalok">이 날까지 읽기</button><button class="btn sec" data-a="goalskip">건너뛰기</button></div></div>`,'R05']}
   if(o==='todo'){const t=todoList();return [`<div class="overlay"><div class="sheet"><span class="grab"></span><div class="row"><span class="h grow" style="font-size:18px">아직 안 한 콘텐츠 ${t.length}개</span><button class="link" data-a="close" style="text-decoration:none">닫기</button></div>${t.length?t.map(c=>`<button class="item" data-a="content" data-v="${c.id}"><span class="ic"${c.id==='recap'?' style="background:#111216"':''}></span><span style="flex:1;min-width:0"><span class="k">${c.id==='recap'?'완독 · ':chAt(c.at)+'장 · '}${c.k} · ${c.m}분</span><br><span class="tt">${c.t}</span></span><span class="badge s">하기</span></button>`).join(''):'<span class="mu">모두 해 봤어요!</span>'}</div></div>`,'R02c 안 한 콘텐츠']}
   if(o==='endpage'){return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">몇 쪽까지 읽었어요?</span><span class="mu">오늘 ${mins(S.timer)} 읽었어요 · 지난번 ${S.page}쪽</span><div class="inp"><input id="pg" type="number" inputmode="numeric" min="1" max="${TOTAL}" value="" placeholder="${S.page||''}" aria-label="읽은 쪽"><span class="mu">/ ${TOTAL}쪽</span></div><span class="mu" id="err" style="color:#c0392b"></span><button class="btn" data-a="endday">기록하기</button><button class="btn sec" data-a="close">취소</button></div></div>`,'R07a 읽은 쪽 입력']}
@@ -508,8 +592,10 @@ function commit(to,sec,date){
   S.lastWrap={from,to,sec:sec===null?null:sec};S.page=to;S.running=false;stopTick();S.overlay=null;S.pend=null;
   if(to>=TOTAL){const rr=roundReads();const first=S.log.find(l=>l.type==='start'&&(l.round||1)===S.round);const startD=first?first.d:rr[0].d;
     const days=Math.round((d-startD)/864e5)+1;const vs=S.goal&&S.round===1?Math.round((S.goal-d)/864e5):null;
-    S.completions.push({d,days,count:rr.length,sec:rr.reduce((a,l)=>a+l.sec,0),vsGoal:vs,round:S.round});S.log.push({d,type:'complete',ref:S.completions.length-1});S.screen='fwrap'}
-  else S.screen='wrap';
+    S.completions.push({d,days,count:rr.length,sec:rr.reduce((a,l)=>a+l.sec,0),vsGoal:vs,round:S.round});S.log.push({d,type:'complete',ref:S.completions.length-1});S.screen='fsum';S.fview=null;
+    const isFirst=S.round===1&&S.completions.filter(c=>c.round===1).length===1;
+    if(isFirst){const nt=newTitles(true);grant(nt);S.rlist=(S.pendPop||[]).concat(nt);S.pendPop=null;S.rfirst=!(S.seenGuide);S.seenGuide=true;S.rstep=1;S.overlay='reward'}else titlePop(newTitles(false))}
+  else{S.screen='wrap';titlePop(newTitles(false));flushPop()}
   render();
 }
 function readPage(){const v=parseInt(document.getElementById('pg').value,10);const e=document.getElementById('err');
@@ -517,7 +603,7 @@ function readPage(){const v=parseInt(document.getElementById('pg').value,10);con
 const A={
  noop(){},
  at(v){S.at=v;S.screen='app';render();if(v==='search'){const i=document.getElementById('qin');if(i)i.focus()}},
- my(){S.atPrev=S.at==='my'?'home':S.at;S.at='my';render()},myback(){S.at=S.atPrev||'home';render()},
+ my(){if(S.at!=='my'&&S.at!=='set')S.atPrev=S.at;S.at='my';render()},myback(){S.at=S.atPrev||'home';render()},set(){S.at='set';render()},setback(){S.at='my';render()},
  book(){S.screen='home';S.overlay=null;S.tab=(S.started||S.log.length)?'timeline':'info';render()},
  go(){S.tab='timeline';A.start()},
  lf(v){S.lf=v;render()},
@@ -529,7 +615,7 @@ const A={
  sc(v){scenario(v);toast('시작 상태를 바꿨어요')},
  fast(){FAST=!FAST;try{localStorage.setItem('chaekbeot-fast',FAST?'1':'0')}catch(e){}render()},
  kf(v){S.kf=v;render()},
- kd(v){S.kFrom=S.screen==='app'?'app':'home';S.kid=v;S.screen='kd';if(S.kstage)delete S.kstage[v];render()},
+ kd(v){S.kFrom=S.screen==='app'?'app':'home';S.kid=v;S.screen='kd';if(S.kstage)delete S.kstage[v];render();const nl=newTitles(false);if(nl.length){titlePop(nl);render()}},
  kst(v){if(!S.kstage)S.kstage={};S.kstage[S.kid]=+v;render()},
  kback(){if(S.kFrom==='app'){S.kFrom=null;S.screen='app';render();return}S.screen='home';S.tab='know';render()},
  spoilst(v,el){S.spoil={t:'다음 변화',ch:el.dataset.ch,p:el.dataset.p,st:v};S.overlay='spoil';render()},
@@ -560,7 +646,8 @@ const A={
  backok(){const p=S.pend;commit(p.to,p.sec,p.d)},
  backno(){S.overlay=S.pend&&S.pend.timer?'endpage':'pageonly';S.pend=null;render()},
  content(v){S.retTodo=S.overlay==='todo';S.from=S.screen==='timer'?'timer':S.screen;if(S.from==='timer'){S.running=false}S.cid=v;S.screen='content';S.overlay=null;render()},
- cdone(){if(!S.done.has(S.cid))S.log.push({d:TODAY,type:'content',id:S.cid});S.done.add(S.cid);const f=S.from;if(f==='timer'){S.screen='timer';S.pull=false;S.running=true;render();toast('타이머가 다시 돌아요')}else if(f==='home'){S.screen='home';if(S.retTodo&&todoList().length)S.overlay='todo';S.retTodo=false;render()}else{S.screen=f;render()}},
+ cdone(){A._cdone();const nl=newTitles(false);if(nl.length){titlePop(nl);render()}},
+ _cdone(){if(!S.done.has(S.cid))S.log.push({d:TODAY,type:'content',id:S.cid});S.done.add(S.cid);const f=S.from;if(f==='timer'){S.screen='timer';S.pull=false;S.running=true;render();toast('타이머가 다시 돌아요')}else if(f==='home'){S.screen='home';if(S.retTodo&&todoList().length)S.overlay='todo';S.retTodo=false;render()}else{S.screen=f;render()}},
  gohome(){S.screen='home';S.tab='timeline';S.sessionFrom=null;render()},
  fsum(){S.fview=null;S.screen='fsum';render()},
  tlday(v){if(!(S.tlOpen instanceof Set))S.tlOpen=new Set();S.tlOpen.has(v)?S.tlOpen.delete(v):S.tlOpen.add(v);render()},
@@ -572,14 +659,20 @@ const A={
  spoilok(){if(S.spoil.st){if(!(S.peek instanceof Set))S.peek=new Set();S.peek.add(S.spoil.st);if(S.kstage)delete S.kstage[S.kid]}else S.seenKnow.add(S.spoil.t);S.overlay=null;render()},
  spoilrev(v){S.reviews[+v].shown=true;render()},
  ov(v){S.sessionFrom=S.page;S.overlay=v;render()},
- close(){S.overlay=null;render()}
+ close(){S.overlay=null;render()},
+ rnext(){S.rstep=2;render()},
+ rclose(){if(S.overlay!=='reward')return;S.overlay=null;S.rstep=1;render()},
+ rpick(v){S.overlay=null;S.rstep=1;S.from='fsum';S.cid=v;S.screen='content';render()},
+ tclose2(){const l=(S.tpop||[]).slice(1);if(l.length){S.tpop=l}else{S.overlay=null;S.tpop=null}render()},
+ rep(v){S.repTitle=v;render();toast('대표 칭호를 바꿨어요')},
+ pick(v){const [id,sh]=v.split(':');choices()[id]=sh;A.cdone()}
 };
 function bind(P){P.querySelectorAll('[data-a]').forEach(el=>{const go=e=>{e.preventDefault();A[el.dataset.a](el.dataset.v,el)};el.addEventListener('click',go);if(el.getAttribute('role')==='button')el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go(e)})});
   const qi=document.getElementById('qin');if(qi){qi.addEventListener('input',()=>{S.q=qi.value;clearTimeout(window.__q);window.__q=setTimeout(()=>{const p=qi.selectionStart;render();const n=document.getElementById('qin');if(n){n.focus();n.setSelectionRange(p,p)}},250)})}
   const pk=document.getElementById('peek');if(pk){let y0=null;pk.addEventListener('pointerdown',e=>{y0=e.clientY});pk.addEventListener('pointerup',e=>{if(y0!==null&&y0-e.clientY>20){A.pull()}y0=null})}}
 function save(){try{localStorage.setItem('chaekbeot-proto-v3',JSON.stringify(S,(k,v)=>v instanceof Set?{__set:[...v]}:(k==='toast'||k==='_scrolled'||k==='_sk'||k==='tlOpen'||k==='tlAuto'||k==='tlLatest')?undefined:v))}catch(e){}}
 function load(){try{const t=localStorage.getItem('chaekbeot-proto-v3');if(!t)return null;return JSON.parse(t,(k,v)=>v&&v.__set?new Set(v.__set):(typeof v==='string'&&/^\d{4}-\d\d-\d\dT/.test(v))?new Date(v):v)}catch(e){return null}}
-(function init(){try{localStorage.removeItem('chaekbeot-proto')}catch(e){}const s=load();if(s&&s.screen){S=s;if(!S.at||S.at==='my')S.at='home';if(S.screen!=='timer'){S.screen='app';S.overlay=null}S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
+(function init(){try{localStorage.removeItem('chaekbeot-proto')}catch(e){}const s=load();if(s&&s.screen){S=s;if(!S.at||S.at==='my'||S.at==='set')S.at='home';if(S.screen!=='timer'){S.screen='app';S.overlay=null}S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&S.running){const el=document.getElementById('clk');if(el)el.textContent=clock(S.timer)}});
 </script>
 
