@@ -198,6 +198,13 @@ select,textarea{font-size:16px}
 .mgrp button{display:flex;align-items:center;gap:8px;background:none;border:0;font:inherit;font-size:14px;padding:14px 16px;cursor:pointer;text-align:left}
 .mgrp button+button{border-top:1px solid #e6e6ea}.mgrp em{font-style:normal;font-size:12px;color:var(--mu)}
 .mlab{font-size:12px;font-weight:700;color:var(--mu);margin-top:6px}
+.story{font-size:13px;color:var(--mu);border-left:2px solid var(--line);padding-left:8px;margin-top:3px}
+.tgs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.tg{font-size:11px;font-weight:700;color:var(--blue);background:var(--bs);border-radius:999px;padding:2px 8px}
+.chr{gap:4px}.cht{display:flex;gap:8px;align-items:baseline}.cht b{font-size:15px;flex:none}.cht span{font-size:15px}
+.chr.latest .cht span{font-weight:700}.chl{font-size:12px;color:var(--mu)}.chl .badge{vertical-align:1px}
+.chps{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}.chp{font:inherit;font-size:11px;font-weight:700;border:0;border-radius:999px;padding:3px 9px;background:var(--bs);color:var(--blue);cursor:pointer}.chp.ok{background:var(--ok);color:#2e965a}
+.chr.grp::after{content:'';position:absolute;left:-22px;top:10px;bottom:-26px;width:2px;background:var(--blue)}
+.chr .drb{margin-top:6px}
 </style>
 
 <div class="phone" id="phone" aria-live="polite"></div>
@@ -232,6 +239,8 @@ const stChanged=(k,from,to)=>stagesOf(k).some(x=>x.i>0&&x.at>from&&x.at<=to);
 const TODAY=(()=>{const d=new Date();d.setHours(0,0,0,0);return d})();
 let FAST=false;try{FAST=localStorage.getItem('chaekbeot-fast')==='1'}catch(e){}
 const fmtD=d=>`${d.getMonth()+1}월 ${d.getDate()}일`;
+const relD=d=>{d=new Date(d);d.setHours(0,0,0,0);const n=Math.round((d-TODAY)/864e5);return n===0?'오늘':n===-1?'어제':n===1?'내일':(d.getFullYear()!==TODAY.getFullYear()?d.getFullYear()+'년 ':'')+fmtD(d)};
+const STORY={1:'메이저가 동물들을 모아 이상한 꿈 이야기를 꺼내요',2:'주인 존스를 몰아낸 날, 동물들이 가장 먼저 한 일',3:'돼지들만 일하지 않는 데는 이유가 있대요',4:'외양간에서 큰 싸움이 벌어져요',5:'스노볼과 나폴레옹이 풍차를 두고 부딪쳐요',6:'돼지들이 침대에서 자기 시작했어요',7:'애써 세운 풍차가 하룻밤 사이에 무너졌어요',8:'7계명 중 하나에 슬쩍 두 단어가 더해져요',9:'복서를 태운 차의 글씨를 벤저민만 알아챘어요',10:'창문 너머 얼굴들, 누가 돼지이고 누가 사람일까요'};
 const dayKey=d=>{d=new Date(d);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
 const addD=(n)=>{const d=new Date(TODAY);d.setDate(d.getDate()+n);return d};
 const chOf=p=>{let c=0;STARTS.forEach((s,i)=>{if(p>=s)c=i+1});return c};
@@ -337,7 +346,7 @@ function render(){
   else if(S.screen==='kd'){[html,id]=kdetail()}
   if(S.overlay){const [o,oid]=overlay();html+=o;id=oid}
   if(S.toast)html+=`<div class="toast">${S.toast}</div>`;
-  const o0=P.querySelector('.scroll');const st0=o0?o0.scrollTop:0;const sk0=S.screen+S.tab+(S.pull?1:0);P.innerHTML=html;sid(id);bind(P);save();const sc=P.querySelector('.scroll');if(sc){const key=S.screen+S.tab+(S.pull?1:0)+S.log.length;if(P.querySelector('.rail')&&!S.overlay&&S._scrolled!==key){const lt=sc.querySelector('.ms.cur')||sc.querySelector('.dr.latest');sc.scrollTop=lt?Math.min(sc.scrollHeight,lt.getBoundingClientRect().top-sc.getBoundingClientRect().top+sc.scrollTop-8):sc.scrollHeight;S._scrolled=key}else if(S._sk===sk0)sc.scrollTop=st0}S._sk=S.screen+S.tab+(S.pull?1:0);
+  const o0=P.querySelector('.scroll');const st0=o0?o0.scrollTop:0;const sk0=S.screen+S.tab+(S.pull?1:0);P.innerHTML=html;sid(id);bind(P);save();const sc=P.querySelector('.scroll');if(sc){const key=S.screen+S.tab+(S.pull?1:0)+S.log.length;if(P.querySelector('.rail')&&!S.overlay&&S._scrolled!==key){const lt=sc.querySelector('.ms.cur')||sc.querySelector('.chr.latest');sc.scrollTop=lt?Math.min(sc.scrollHeight,lt.getBoundingClientRect().top-sc.getBoundingClientRect().top+sc.scrollTop-8):sc.scrollHeight;S._scrolled=key}else if(S._sk===sk0)sc.scrollTop=st0}S._sk=S.screen+S.tab+(S.pull?1:0);
 }
 function header(t,back=true){return `<div class="hdr">${back?'<button class="back" data-a="back" aria-label="뒤로">‹</button>':''}<span class="t">${t}</span><button class="menu" data-a="menu" aria-label="프로토타입 메뉴">⋯</button></div>`}
 function tabsHtml(list,cur,act){return `<div class="tabs" role="tablist">${list.map(([k,l,n])=>`<button class="tab ${cur===k?'on':''}" data-a="${act}" data-v="${k}" role="tab">${l}${n?`<sup>${n}</sup>`:''}</button>`).join('')}</div>`}
@@ -356,41 +365,63 @@ function dayGroups(list){const m=[];list.forEach(l=>{if(l.type!=='read'&&l.type!
 function sl(lb,v,chip,act,val){const c=chip?`<span class="badge ${chip[1]||''}">${chip[0]}</span>`:'';return act?`<button class="sl" data-a="${act}" data-v="${val}"><span class="lb">${lb}</span><span class="v">${v}</span>${c}</button>`:`<div class="sl"><span class="lb">${lb}</span><span class="v">${v}</span>${c}</div>`}
 function dayRow(g,key){
   const isToday=dayKey(g.d)===dayKey(TODAY);const open=S.tlOpen.has(key);
-  const date=fmtDW(g.d)+(isToday?' · 오늘':'');let main,meta=[],cls='',ops=[],kn=[];
+  let date=relD(g.d);let main,meta=[],cls='',ops=[],kn=[],story='',tg=[];
   if(g.reads.length){const from=Math.min(...g.reads.map(x=>x.from)),to=Math.max(...g.reads.map(x=>x.to));
-    main=`${from} → ${to}쪽 · ${rng(Math.max(1,chOf(from+1)),Math.max(1,chAt(to)))}`;
-    const sec=g.reads.reduce((a,x)=>a+x.sec,0);meta.push(g.reads.every(x=>x.man||(!x.sec&&x.man===undefined))?'타이머 없이 기록':mins(sec));if(g.reads.length>1)meta.push(`${g.reads.length}번 읽음`);
-    if(g.reads.every(x=>(x.round||1)===1)){const inR=at=>g.reads.some(x=>at>x.from&&at<=x.to);ops=CONTENTS.filter(c=>inR(c.at));kn=KNOW.filter(k=>k.at>0&&inR(k.at));KNOW.filter(k=>k.id&&g.reads.some(x=>stChanged(k,x.from,x.to))).forEach(k=>kn.push(Object.assign({},k,{t:k.t+'(바뀜)'})))}
-    if(g.cons.length)meta.push(`콘텐츠 ${g.cons.length}`);
+    const a=chDone(from),b=chDone(to);
+    main=`${from}→${to}쪽 · `+(b>a?`${b-a>1?(a+1)+'~':''}${b}장을 다 읽었어요`:`${Math.min(10,b+1)}장 읽는 중`);if(b>a&&STORY[b])story=`${b}장 · ${STORY[b]}`;
+    const sec=g.reads.reduce((a,x)=>a+x.sec,0);date+=' · '+(g.reads.every(x=>x.man||(!x.sec&&x.man===undefined))?'타이머 없이':mins(sec));
+    if(g.reads.every(x=>(x.round||1)===1)){const inR=at=>g.reads.some(x=>at>x.from&&at<=x.to);ops=CONTENTS.filter(c=>inR(c.at));kn=KNOW.filter(k=>k.at>0&&inR(k.at));KNOW.filter(k=>k.id&&g.reads.some(x=>stChanged(k,x.from,x.to))).forEach(k=>kn.push(Object.assign({},k,{t:k.t+'(바뀜)',chg:1})))}
+    if(g.cons.length)tg.push(`콘텐츠 ${g.cons.length}`);
   }else{main='콘텐츠만 했어요';cls='con';const cnt={};g.cons.forEach(x=>{const k=findC(x.id).k;cnt[k]=(cnt[k]||0)+1});meta.push(Object.entries(cnt).map(([k,n])=>`${k} ${n}`).join(' · '))}
-  if(kn.length)meta.push(`책 속 지식 ${kn.length} 열림`);
+  kn.filter(k=>k.chg).forEach(k=>tg.push((k.subs?'7계명':k.t.replace('(바뀜)',''))+' 바뀜'));
   let body='';
-  if(open){g.reads.forEach((x,i)=>body+=sl(g.reads.length>1?`${i+1}번째`:'읽기',`${x.from} → ${x.to}쪽 · ${x.man||(!x.sec&&x.man===undefined)?'타이머 없이':mins(x.sec)}`));
+  if(open){
     g.cons.forEach(x=>{const c=findC(x.id);body+=sl('콘텐츠',`${c.k} · ${c.t}`,['했어요','ok'],'content',c.id)});
     ops.filter(c=>!g.cons.some(x=>x.id===c.id)).forEach(c=>{const d=S.done.has(c.id);body+=sl('열림',`${c.k} · ${c.t}`,d?['했어요','ok']:['하기','s'],'content',c.id)});
-    kn.forEach(k=>body+=sl('열림',`책 속 지식 · ${k.t}`,['보기'],'tab','know'))}
-  return `<div class="dr ${cls}${key===S.tlLatest?' latest':''}"><button class="drh" data-a="tlday" data-v="${key}" aria-expanded="${open}"><span class="dt"></span><span class="grow"><span class="dd ${isToday?'today':''}">${date}</span><b>${main}</b><span class="mu">${meta.join(' · ')}</span></span><span class="chev">${open?'⌃':'›'}</span></button>${open?`<div class="drb">${body}</div>`:''}</div>`;
+    kn.forEach(k=>body+=k.chg?sl('바뀜',k.subs?'7계명에 새 변화가 생겼어요':`${k.t.replace('(바뀜)','')}의 새로운 모습이 열렸어요`,['보기'],'kd',k.id):sl('열림',`책 속 지식 · ${k.t}`,['보기'],'tab','know'))}
+  return `<div class="dr ${cls}${key===S.tlLatest?' latest':''}"><button class="drh" data-a="tlday" data-v="${key}" aria-expanded="${open}"><span class="dt"></span><span class="grow"><span class="dd ${isToday?'today':''}">${date}</span><b>${main}</b>${story?`<span class="story">${story}</span>`:''}${meta.length?`<span class="mu">${meta.join(' · ')}</span>`:''}${tg.length?`<span class="tgs">${tg.map(t=>`<span class="tg">${t}</span>`).join('')}</span>`:''}</span><span class="chev">${open?'⌃':'›'}</span></button>${open?`<div class="drb">${body}</div>`:''}</div>`;
 }
 function timelineBody(){
-  if(!(S.tlOpen instanceof Set))S.tlOpen=new Set(S.tlOpen&&S.tlOpen.length?S.tlOpen:[]);
   if(!S.log.length){return `<div class="rail">${nodeHtml('지금','아직 읽은 곳이 없어요','<div class="mu">[읽기 시작]을 누르면 첫 기록이 여기에 쌓여요</div>','now')}</div>`}
-  const E=tlEntries();const done=S.page>=TOTAL;let o='';
-  {const cur=dayGroups(E.filter(l=>l.r===S.round));if(cur.length){const lk='r'+S.round+'-'+cur[cur.length-1].k;if(S.tlLatest!==lk){S.tlOpen.add(lk);S.tlLatest=lk}}}
+  const E=tlEntries();const done=S.page>=TOTAL;let o='';const r=S.round;
+  const rng=n=>`${STARTS[n-1]}~${(STARTS[n]||TOTAL+1)-1}쪽`;
+  // 지난 회차 완독(2번째 읽기부터): 맨 위 한 줄
+  S.completions.forEach((c,ci)=>{if(c.round<r)o+=`<div class="node okn"><span class="dt"></span><span class="nk">${relD(c.d)} · ${c.round}번째 완독</span><button class="sumlink" data-a="tlsum" data-v="${ci}">${c.round}번째 완독 정리 보기 ›</button></div>`});
+  // 이번 회차: 장마다 다 읽은 날
+  const fin={};E.filter(l=>l.type==='read'&&l.r===r).forEach(l=>{const a=chDone(l.from),b=chDone(l.to);for(let n=a+1;n<=b;n++)if(!fin[n])fin[n]={d:l.d,k:dayKey(l.d)}});
+  const maxDone=Math.max(0,...Object.keys(fin).map(Number));
+  const readingCh=(!done&&S.page>0&&!STARTS.includes(S.page)&&chDone(S.page)+1>maxDone)?chDone(S.page)+1:0;
+  const expandCh=readingCh||maxDone;
+  const fp=farPage();
+  const cdone=id=>{const l=S.log.find(x=>x.type==='content'&&x.id===id);return l?l.d:null};
+  const rowsTo=Math.max(maxDone,readingCh);
+  for(let n=1;n<=rowsTo;n++){
+    const f=fin[n];let doneTxt='';let grp=false;
+    if(f){const nx=fin[n+1];grp=!!(nx&&nx.k===f.k);if(!grp){let a=n;while(a>1&&fin[a-1]&&fin[a-1].k===f.k)a--;doneTxt=`${relD(f.d)} · ${a<n?a+'~':''}${n}장을 다 읽었어요`}}
+    const cs=CONTENTS.filter(c=>chOf(c.at)===n&&unlocked(c));
+    const ks=KNOW.filter(k=>k.id&&stagesOf(k).some(x=>x.i>0&&chOf(x.at)===n&&x.at<=fp));
+    const isExp=n===expandCh;
+    let chips='';
+    if(!isExp){chips=cs.map(c=>{const d=S.done.has(c.id);const cd=cdone(c.id);const dt=d&&cd&&(!f||dayKey(cd)!==f.k)?` · ${relD(cd)}`:'';return `<button class="chp ${d?'ok':''}" data-a="content" data-v="${c.id}">${c.k} ${d?'했어요':'해 보기'}${dt}</button>`}).join('')+ks.map(k=>`<button class="chp" data-a="kd" data-v="${k.id}">${k.subs?'7계명':k.t} 바뀜</button>`).join('');}
+    let body=n===readingCh?`<span class="chl"><span class="badge s">읽는 중</span> ${rng(n)} 중 ${S.page}쪽까지</span>`:'';
+    if(doneTxt)body+=`<span class="chl">${doneTxt}</span>`;
+    if(chips)body+=`<span class="chps">${chips}</span>`;
+    if(isExp&&(cs.length||ks.length)){body+=`<div class="drb">${cs.map(c=>tlSub(c,(()=>{const cd=cdone(c.id);return cd?relD(cd):'열림'})())).join('')}${ks.map(k=>sl('바뀜',k.subs?'7계명에 새 변화가 생겼어요':`${k.t}의 새로운 모습이 열렸어요`,['보기'],'kd',k.id)).join('')}</div>`}
+    o+=`<div class="node chr${grp?' grp':''}${isExp?' latest':''}"><span class="dt"></span><div class="cht"><b>${n}장</b><span>${STORY[n]||''}</span></div>${body}</div>`;
+  }
+  // 다시 읽는 중: 아직 다시 읽지 않은 장
+  if(r>1&&!done){const from=Math.max(rowsTo,chDone(S.page))+1;if(from<=10)o+=`<div class="node next"><span class="dt"></span><span class="mu">${from===10?'10장':from+'~10장'} · ${r-1}번째에 읽은 이야기</span></div>`}
+  // 완독 표시(이번 회차)
+  const ci=S.completions.findIndex(c=>c.round===r);
+  if(ci>=0&&done){const c=S.completions[ci];const todo=todoList();o+=`<div class="node okn ms cur"><span class="dt"></span><span class="nk">${relD(c.d)} · 완독</span><div class="nt">${r}번째 완독 · 끝까지 읽었어요</div><div class="mgrid"><div><span class="mu">읽은 기간</span><b>${c.days}일</b></div><div><span class="mu">읽은 횟수</span><b>${c.count}번</b></div><div><span class="mu">전체 시간</span><b>${mins(c.sec)}</b></div><div><span class="mu">읽은 쪽</span><b>${TOTAL}쪽</b></div></div>${todo.length?`<button class="todoline" data-a="ov" data-v="todo"><span class="tdot"></span><span style="flex:1">아직 안 한 콘텐츠 ${todo.length}개가 있어요</span><span>›</span></button>`:''}<button class="sumlink" data-a="tlsum" data-v="${ci}">완독 정리 보기 ›</button></div>`}
   const todo=todoList();
   const latest=[...todo].filter(c=>c.id!=='recap').sort((a,b)=>b.at-a.at)[0]||todo[0];
-  const todoCard=()=>{if(!todo.length)return '';const ev=S.log.find(l=>l.type==='read'&&latest.at>l.from&&latest.at<=l.to);return `<div class="card blue" style="gap:8px;padding:12px"><b style="font-size:12px;color:var(--blue)">이어서 할 수 있어요</b>${tlSub(latest,ev?fmtD(ev.d)+' 열림':'열림')}${todo.length>1?`<button class="todoline in" data-a="ov" data-v="todo">외 ${todo.length-1}개 더 보기 ›</button>`:''}</div>`};
-  const todoLine=()=>todo.length?`<button class="todoline" data-a="ov" data-v="todo"><span class="tdot"></span><span style="flex:1">아직 안 한 콘텐츠 ${todo.length}개가 있어요</span><span>›</span></button>`:'';
-  for(let r=1;r<=S.round;r++){const list=E.filter(l=>l.r===r);const days=dayGroups(list);const ci=S.completions.findIndex(c=>c.round===r);
-    if(r>1)o+=`<div class="rlabel">${r}번째 읽기</div>`;
-    const ck=ci>=0?dayKey(S.completions[ci].d):null;let placed=false;
-    const ms=()=>{const c=S.completions[ci];const isCur=r===S.round&&done;return `<div class="node okn ms${isCur?' cur':''}"><span class="dt"></span><span class="nk">${fmtD(new Date(c.d))} · 완독</span><div class="nt">${r}번째 완독 · 끝까지 읽었어요</div><div class="mgrid"><div><span class="mu">읽은 기간</span><b>${c.days}일</b></div><div><span class="mu">읽은 횟수</span><b>${c.count}번</b></div><div><span class="mu">전체 시간</span><b>${mins(c.sec)}</b></div><div><span class="mu">읽은 쪽</span><b>${TOTAL}쪽</b></div></div>${isCur?todoLine():''}<button class="sumlink" data-a="tlsum" data-v="${ci}">완독 정리 보기 ›</button></div>`};
-    days.forEach(g=>{o+=dayRow(g,'r'+r+'-'+g.k);if(ck&&g.k===ck){o+=ms();placed=true}});
-    if(ci>=0&&!placed)o+=ms()}
   if(!done){const pct=Math.round(S.page/TOTAL*100);
-    let nowB=`${progress()}<div class="row"><span class="mu grow">${S.page} / ${TOTAL}쪽 · ${pct}%</span></div>`+todoCard();
-    o+=nodeHtml('지금',`${S.page}쪽 · ${Math.max(1,chAt(S.page))}장 읽는 중${S.round>1?` · ${S.round}번째`:''}`,nowB,'now')}
+    let nowB=`${progress()}<div class="row"><span class="mu grow">${S.page} / ${TOTAL}쪽 · ${pct}%</span></div>`;
+    if(todo.length){const cd=cdone(latest.id);nowB+=`<div class="card blue" style="gap:8px;padding:12px"><b style="font-size:12px;color:var(--blue)">이어서 할 수 있어요</b>${tlSub(latest,'열림')}${todo.length>1?`<button class="todoline in" data-a="ov" data-v="todo">외 ${todo.length-1}개 더 보기 ›</button>`:''}</div>`}
+    o+=nodeHtml('지금',`${S.page}쪽 · ${Math.min(10,chDone(S.page)+1)}장 ${S.page===0||STARTS.includes(S.page)?'시작 전':'읽는 중'}${r>1?` · ${r}번째`:''}`,nowB,'now')}
   const next=CONTENTS.find(c=>!unlocked(c));
-  if(next&&!done){const ch=chOf(next.at);const cnt=CONTENTS.filter(c=>chOf(c.at)===ch).length+KNOW.filter(k=>k.at>0&&chOf(k.at)===ch).length;o+=nodeHtml('다음',`${ch}장에서는`,`<div class="card dash" style="padding:12px"><span style="color:var(--fg);font-weight:500">${TEASE[ch]}</span><span class="mu">${ch}장을 다 읽으면 콘텐츠·책 속 지식 ${cnt}개가 열려요</span></div>`,'next')}
+  if(next&&!done&&r===1){const ch=chOf(next.at);const cnt=CONTENTS.filter(c=>chOf(c.at)===ch).length+KNOW.filter(k=>k.at>0&&chOf(k.at)===ch).length;o+=nodeHtml('다음',`${ch}장에서는`,`<div class="card dash" style="padding:12px"><span style="color:var(--fg);font-weight:500">${TEASE[ch]}</span><span class="mu">${ch}장을 다 읽으면 콘텐츠·책 속 지식 ${cnt}개가 열려요</span></div>`+(ch<10?`<div class="mu" style="margin-top:8px">${ch+1===10?'10장':(ch+1)+'~10장'} · 남은 이야기 ${10-ch}장</div>`:''),'next')}
   return `<div class="rail a">${o}</div>`;
 }
 const KC={'등장인물':'var(--or)','배경지식':'var(--bs)','어휘':'var(--ok)','책 속 사건':'#efe6ff'},KF={'등장인물':'#a85a12','배경지식':'var(--blue)','어휘':'#2e965a','책 속 사건':'#6b3fc4'};
@@ -457,10 +488,10 @@ function trailer(){const end=S.tend;return [`<div class="trailer"><button class=
 function content(){const c=findC(S.cid);
   return [header(c.k)+`<div class="scroll"><div class="card" style="min-height:360px;justify-content:center;align-items:center;text-align:center"><span class="k" style="color:var(--blue);font-weight:700;font-size:12px">${c.k} · ${c.m}분</span><span class="h">${c.t}</span><span class="mu">기존 콘텐츠 화면(생각 고르기·영상·강의·기억 게임)을 그대로 씁니다.</span></div>${S.from==='timer'?'<div class="card or"><span style="font-size:12px">타이머는 멈춰 있어요. 콘텐츠를 마치면 이어서 돌아요.</span></div>':''}</div><div class="bottom"><button class="btn" data-a="cdone">다 했어요</button></div>`,'R10'];}
 function overlay(){const o=S.overlay;
-  if(o==='goal'){const sel=S.gsel||10;return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">언제까지 다 읽어 볼까요?</span><div class="chips">${[7,10,14,21,30].map(d=>`<button class="${d===sel?'on':''}" data-a="gsel" data-v="${d}">${d}일</button>`).join('')}</div><span class="mu">${fmtD(addD(sel))}까지 · 하루 분량은 정하지 않아요</span><button class="btn" data-a="goalok">이 날까지 읽기</button><button class="btn sec" data-a="goalskip">건너뛰기</button></div></div>`,'R05']}
+  if(o==='goal'){const sel=S.gsel||10;return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">언제까지 다 읽어 볼까요?</span><div class="chips">${[7,10,14,21,30].map(d=>`<button class="${d===sel?'on':''}" data-a="gsel" data-v="${d}">${d}일</button>`).join('')}</div><span class="mu">${relD(addD(sel))}까지 · 하루 분량은 정하지 않아요</span><button class="btn" data-a="goalok">이 날까지 읽기</button><button class="btn sec" data-a="goalskip">건너뛰기</button></div></div>`,'R05']}
   if(o==='todo'){const t=todoList();return [`<div class="overlay"><div class="sheet"><span class="grab"></span><div class="row"><span class="h grow" style="font-size:18px">아직 안 한 콘텐츠 ${t.length}개</span><button class="link" data-a="close" style="text-decoration:none">닫기</button></div>${t.length?t.map(c=>`<button class="item" data-a="content" data-v="${c.id}"><span class="ic"${c.id==='recap'?' style="background:#111216"':''}></span><span style="flex:1;min-width:0"><span class="k">${c.id==='recap'?'완독 · ':chAt(c.at)+'장 · '}${c.k} · ${c.m}분</span><br><span class="tt">${c.t}</span></span><span class="badge s">하기</span></button>`).join(''):'<span class="mu">모두 해 봤어요!</span>'}</div></div>`,'R02c 안 한 콘텐츠']}
   if(o==='endpage'){return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">몇 쪽까지 읽었어요?</span><span class="mu">오늘 ${mins(S.timer)} 읽었어요 · 지난번 ${S.page}쪽</span><div class="inp"><input id="pg" type="number" inputmode="numeric" min="1" max="${TOTAL}" value="" placeholder="${S.page||''}" aria-label="읽은 쪽"><span class="mu">/ ${TOTAL}쪽</span></div><span class="mu" id="err" style="color:#c0392b"></span><button class="btn" data-a="endday">기록하기</button><button class="btn sec" data-a="close">취소</button></div></div>`,'R07a 읽은 쪽 입력']}
-  if(o==='pageonly'){return [`<div class="overlay"><div class="sheet"><span class="grab"></span><div class="row"><span class="h grow" style="font-size:18px">${plabel()}</span><button class="link" data-a="close" style="text-decoration:none">닫기</button></div><span class="mu">타이머 없이 읽은 부분의 페이지를 입력해주세요.</span><div class="inp"><input id="pg" type="number" inputmode="numeric" min="1" max="${TOTAL}" value="${S.page||''}" aria-label="읽은 쪽"><span class="mu">/ ${TOTAL}쪽</span></div><label class="mu" for="dsel">읽은 날</label><select id="dsel">${[0,-1,-2,-3,-4,-5,-6].map(n=>`<option value="${n}">${fmtD(addD(n))}${n===0?' (오늘)':''}</option>`).join('')}</select><span class="mu">최근 7일 안에서 바꿀 수 있어요</span><span class="mu" id="err" style="color:#c0392b"></span><button class="btn" data-a="pagesave">기록하기</button></div></div>`,'R08']}
+  if(o==='pageonly'){return [`<div class="overlay"><div class="sheet"><span class="grab"></span><div class="row"><span class="h grow" style="font-size:18px">${plabel()}</span><button class="link" data-a="close" style="text-decoration:none">닫기</button></div><span class="mu">타이머 없이 읽은 부분의 페이지를 입력해주세요.</span><div class="inp"><input id="pg" type="number" inputmode="numeric" min="1" max="${TOTAL}" value="${S.page||''}" aria-label="읽은 쪽"><span class="mu">/ ${TOTAL}쪽</span></div><label class="mu" for="dsel">읽은 날</label><select id="dsel">${[0,-1,-2,-3,-4,-5,-6].map(n=>`<option value="${n}">${relD(addD(n))}</option>`).join('')}</select><span class="mu">최근 7일 안에서 바꿀 수 있어요</span><span class="mu" id="err" style="color:#c0392b"></span><button class="btn" data-a="pagesave">기록하기</button></div></div>`,'R08']}
   if(o==='back'){return [`<div class="overlay center"><div class="dialog"><span class="h" style="font-size:18px">지난번 ${S.page}쪽보다 앞이에요</span><span class="mu" style="font-size:14px">${S.pend.to}쪽으로 기록할까요? 앞부분을 다시 읽었다면 그대로 기록해도 돼요.</span><button class="btn" data-a="backok">이대로 기록</button><button class="btn sec" data-a="backno">다시 입력</button></div></div>`,'R07b']}
   if(o==='spoil'){return [`<div class="overlay center"><div class="dialog"><span class="h" style="font-size:18px">스포일러가 있어요</span><span class="mu" style="font-size:14px">${S.spoil.st?'다음 모습은 조금 더 읽고 보면 더 재밌어요.':`「${S.spoil.t}」는 ${S.spoil.ch}장(${S.spoil.p}쪽)까지 읽고 보면 더 재밌어요.`}</span><button class="btn" data-a="close">나중에 볼게요</button><button class="btn sec" data-a="spoilok">그래도 볼래요</button></div></div>`,'R03b']}
   if(o==='review'){return [`<div class="overlay"><div class="sheet"><span class="grab"></span><span class="h" style="font-size:18px">감상 남기기</span><textarea id="revtxt2" placeholder="읽으면서 든 생각을 자유롭게 적어 보세요."></textarea><button class="btn" data-a="revpost">올리기</button><button class="btn sec" data-a="close">닫기</button></div></div>`,'R04 감상 쓰기']}
@@ -548,7 +579,7 @@ function bind(P){P.querySelectorAll('[data-a]').forEach(el=>{const go=e=>{e.prev
   const pk=document.getElementById('peek');if(pk){let y0=null;pk.addEventListener('pointerdown',e=>{y0=e.clientY});pk.addEventListener('pointerup',e=>{if(y0!==null&&y0-e.clientY>20){A.pull()}y0=null})}}
 function save(){try{localStorage.setItem('chaekbeot-proto-v3',JSON.stringify(S,(k,v)=>v instanceof Set?{__set:[...v]}:(k==='toast'||k==='_scrolled'||k==='_sk'||k==='tlOpen'||k==='tlAuto'||k==='tlLatest')?undefined:v))}catch(e){}}
 function load(){try{const t=localStorage.getItem('chaekbeot-proto-v3');if(!t)return null;return JSON.parse(t,(k,v)=>v&&v.__set?new Set(v.__set):(typeof v==='string'&&/^\d{4}-\d\d-\d\dT/.test(v))?new Date(v):v)}catch(e){return null}}
-(function init(){try{localStorage.removeItem('chaekbeot-proto')}catch(e){}const s=load();if(s&&s.screen){S=s;if(!S.at)S.at='home';S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
+(function init(){try{localStorage.removeItem('chaekbeot-proto')}catch(e){}const s=load();if(s&&s.screen){S=s;if(!S.at||S.at==='my')S.at='home';if(S.screen!=='timer'){S.screen='app';S.overlay=null}S.toast=null;render();if(S.screen==='timer')startTick()}else scenario('mid')})();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&S.running){const el=document.getElementById('clk');if(el)el.textContent=clock(S.timer)}});
 </script>
 
